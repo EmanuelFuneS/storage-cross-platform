@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../components/**/*.{ts,tsx}";
+@source "../components/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+
+@theme {
+    --color-background: #2463eb;
+    --color-foreground: #f1f3f9;
+    --color-primary: #2463eb;
+    --color-secondary: #475569;
+    --color-tertiary: #0f172a;
+    --color-surface: #f1f3f9;
+    --color-error: #ef4444;
+    --color-elevated: #e9ebf2;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-backround: #0f172a;
+        --color-foreground: #e9ebf2;
+    }
+}
