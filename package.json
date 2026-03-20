@@ -1,12 +1,13 @@
 {
-  "name": "storageRepo",
+  "name": "storage-repo",
   "private": true,
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check-types": "turbo run check-types",
+    "clean": "rm -rf node_modules/ && rm -rf apps/*/node_modules && rm -rf packages/*/node_modules && rm -rf packages/*/dist && rm -rf apps/*/dist && rm -rf apps/*/.next && rm -rf .turbo/ && rm -rf .turbo/ &&  rm -rf pnpm-lock.yaml"
   },
   "devDependencies": {
     "prettier": "^3.8.1",

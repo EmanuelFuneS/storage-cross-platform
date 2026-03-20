@@ -1,8 +1,8 @@
 import { type JSX } from "react";
 
 interface CardProps {
-  children: React.ReactElement;
-  className: string;
+  children: React.ReactNode;
+  className?: string;
 }
 
 export function Card({ className, children }: CardProps): JSX.Element {
