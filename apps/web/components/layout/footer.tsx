@@ -4,7 +4,7 @@ type Props = {}
 
 const Footer = (props: Props) => {
   return (
-    <footer>
+    <footer className='flex justify-between'>
         <div>logo</div>
         <div>product list</div>
         <div>resource</div>
