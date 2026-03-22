@@ -12,7 +12,8 @@
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
     "db:studio": "npx drizzle-kit studio",
-    "seed:plans": "node --env-file=.env --import tsx/esm db/seeds/plans.ts"
+    "seed:plans": "node --env-file=.env --import tsx/esm db/seeds/plans.ts",
+    "seed:users": "node --env-file=.env --import tsx/esm db/seeds/users.ts" 
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
