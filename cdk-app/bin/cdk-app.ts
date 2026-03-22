@@ -2,6 +2,7 @@
 import * as cdk from "aws-cdk-lib/core";
 import { CdkAppStack } from "../lib/cdk-app-stack";
 import { Ec2Stack } from "../lib/stacks/ec2-stack";
+import { RdsStack } from "../lib/stacks/rds-stack";
 
 const app = new cdk.App();
 /*new CdkAppStack(app, "cdk-stack-test", {
@@ -20,8 +21,17 @@ new CdkAppStack(app, "cdk-stack-prod", {
   },
 });*/
 
-new Ec2Stack(app, "ec2-stack", {
+/* new Ec2Stack(app, "ec2-stack", {
   stackName: "ec2-stack",
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
+ */
+
+new RdsStack(app, "rds-stack", {
+  stackName: "rds-stack",
   env: {
     account: process.env.CDK_DEFAULT_ACCOUNT,
     region: process.env.CDK_DEFAULT_REGION,
