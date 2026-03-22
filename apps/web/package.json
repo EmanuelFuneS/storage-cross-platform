@@ -11,10 +11,12 @@
     "check-types": "next typegen && tsc --noEmit",
     "db:generate": "npx drizzle-kit generate",
     "db:migrate": "npx drizzle-kit migrate",
-    "db:studio": "npx drizzle-kit studio"
+    "db:studio": "npx drizzle-kit studio",
+    "seed:plans": "node --env-file=.env --import tsx/esm db/seeds/plans.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
+    "@hookform/resolvers": "^5.2.2",
     "@repo/env": "workspace:*",
     "@repo/ui": "workspace:*",
     "bcryptjs": "^3.0.3",
@@ -26,7 +28,9 @@
     "pg": "^8.20.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "reflect-metadata": "^0.2.2"
+    "react-hook-form": "^7.72.0",
+    "reflect-metadata": "^0.2.2",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -40,6 +44,7 @@
     "dotenv": "^17.3.1",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9.39.1",
+    "tsx": "^4.21.0",
     "typescript": "5.9.2"
   }
 }
