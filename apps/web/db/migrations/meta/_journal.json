@@ -8,6 +8,20 @@
       "when": 1774034669810,
       "tag": "0000_orange_tyrannus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1774198319929,
+      "tag": "0001_flaky_rage",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774203976463,
+      "tag": "0002_aberrant_warbound",
+      "breakpoints": true
     }
   ]
 }
