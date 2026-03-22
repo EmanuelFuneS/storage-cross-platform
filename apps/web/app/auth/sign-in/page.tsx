@@ -1,11 +1,11 @@
 import React from 'react'
-import { signIn } from 'next-auth/react'
+import LoginForm from './_components/loginForm'
 
-type Props = {}
-
-const Page = (props: Props) => {
+const Page = () => {
   return (
-    <div>login</div>
+    <div>
+      <LoginForm />
+    </div>
   )
 }
 
