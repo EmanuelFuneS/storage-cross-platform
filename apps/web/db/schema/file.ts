@@ -1,4 +1,5 @@
 import {
+  bigint,
   boolean,
   integer,
   pgTable,
@@ -16,7 +17,7 @@ export const filesTable = pgTable("files", {
   folderId: uuid().references(() => foldersTable.id),
   name: varchar().notNull(),
   type: varchar().notNull(),
-  size: integer().notNull(),
+  size: bigint({mode: "number"}).notNull(),
   s3_key: varchar().notNull(),
   is_deleted: boolean().default(false),
 
