@@ -1,6 +1,6 @@
-import Features from '@/components/feature'
-import Hero from '@/components/hero'
-import Pricing from '@/components/pricing'
+import Features from '@/app/(main)/_components/feature'
+import Hero from '@/app/(main)/_components/hero'
+import Pricing from '@/app/(main)/_components/pricing'
 import React from 'react'
 
 const Page = () => {

@@ -1,4 +1,7 @@
 import {z} from "zod";
+import * as dotenv from "dotenv"
+
+dotenv.config({path: "../../.env"});
 
 const schemaEnv = z.object({
     //environment

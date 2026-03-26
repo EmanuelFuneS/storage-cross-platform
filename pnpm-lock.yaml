@@ -130,9 +130,6 @@ importers:
       '@types/react-dom':
         specifier: 19.2.2
         version: 19.2.2(@types/react@19.2.2)
-      dotenv:
-        specifier: ^17.3.1
-        version: 17.3.1
       drizzle-kit:
         specifier: ^0.31.10
         version: 0.31.10
@@ -179,6 +176,9 @@ importers:
 
   packages/env:
     dependencies:
+      dotenv:
+        specifier: ^17.3.1
+        version: 17.3.1
       zod:
         specifier: ^3.24.2
         version: 3.25.76
