@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import globalEnv from "@repo/env";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -38,7 +39,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
-  secret: process.env.AUTH_SECRET,
+  secret: globalEnv.AUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

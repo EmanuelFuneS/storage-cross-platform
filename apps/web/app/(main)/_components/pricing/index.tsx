@@ -1,13 +1,15 @@
 import Typography from "@workspace/ui/components/typography";
 import React from "react";
-import FeatureCard from "../card-items/featureCard";
-import PricingCard from "../card-items/pricingCard";
+import PricingCard from "@/components/card-items/pricingCard";
 
 type Props = {};
 
 const Pricing = (props: Props) => {
   return (
-    <section id="pricing" className="flex-1 flex flex-col items-center justify-center min-h-screen py-15">
+    <section
+      id="pricing"
+      className="flex-1 flex flex-col items-center justify-center min-h-screen m-10 lg:m-5 py-15"
+    >
       <Typography as="h3" type="headline">
         Simple, transparent pricing
       </Typography>
@@ -15,7 +17,7 @@ const Pricing = (props: Props) => {
         Choose the plan that fits your digital life.
       </Typography>
 
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex flex-col lg:flex-row justify-between items-center my-10 gap-4">
         <PricingCard
           plan="basic"
           price={0}
