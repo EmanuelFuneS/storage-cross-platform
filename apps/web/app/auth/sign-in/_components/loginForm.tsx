@@ -8,6 +8,7 @@ import { Card } from "@workspace/ui/components/card";
 import Typography from "@workspace/ui/components/typography";
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
+import router from "next/router";
 const LoginForm = () => {
   const {
     register,
@@ -21,7 +22,16 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<ILoginForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
+    console.log(data);
+    await signIn("credentials", {
+      redirect: true,
+      email: data.email,
+      password: data.password,
+    });
+
+    router.push('/dashboard');
+  };
 
   return (
     <Card className=" lg:w-1/3 h-3/4 rounded-2xl bg-amber-200 p-10 ">
@@ -40,14 +50,26 @@ const LoginForm = () => {
           <Typography as="label" type="body">
             Email
           </Typography>
-          <input className="bg-blue-50 rounded-lg h-10" type="text" />
+          <input
+           
+            type="text"
+            {...register("email", {
+              required: true,
+            })}
+          />
           {errors.email && <p>{errors.email.message}</p>}
         </div>
         <div className="flex flex-col space-y-2">
           <Typography as="label" type="body">
             Password
           </Typography>
-          <input className="bg-blue-50 rounded-lg h-10" type="text" />
+          <input
+           
+            type="text"
+            {...register("password", {
+              required: true,
+            })}
+          />
           {errors.password && <p>{errors.password?.message}</p>}
         </div>
         <Link href={""}>

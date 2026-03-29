@@ -7,7 +7,7 @@ import ThemeToggle from "../theme-toggle";
 
 const Navbar = () => {
   return (
-    <nav className="flex items-center justify-around  h-20">
+    <nav className="flex items-center justify-around h-20 bg-elevated dark:bg-secondary">
       <div>
         <Typography as="p" type="title">
           logo

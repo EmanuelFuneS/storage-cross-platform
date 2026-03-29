@@ -23,7 +23,7 @@ const Hero = () => {
           <Button>View Demo</Button>
         </div>
       </div>
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center min-h-full bg-orange-700">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center min-h-full">
         <Image src={heroImg} alt="Hero app" priority />
       </div>
     </section>

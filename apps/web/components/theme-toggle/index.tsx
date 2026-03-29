@@ -26,19 +26,19 @@ const ThemeToggle = ({ size }: ThemeToggleProps) => {
     localStorage.setItem("theme", newTheme);
     document.documentElement.classList.toggle("dark");
   };
-  console.log("mount")
-  if (!mounted) return <div className="w-9.25 h-9.25" />;
+  console.log(mounted);
+  if (!mounted) return <div className="w-9.25 h-9.25">Loading</div>;
 
   return (
-    <div onClick={changeTheme} className="bg-amber-50 w-30 h-30">
+    <div onClick={changeTheme} className="">
       {theme === "dark" ? (
         <Moon
-          size={size || 37}
+          size={size || 25}
           className="hover:scale-115 transform transition-transform duration-300"
         />
       ) : (
         <SunDim
-          size={size || 37}
+          size={size || 25}
           className="hover:scale-115 transform transition-transform duration-300"
         />
       )}

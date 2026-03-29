@@ -12,7 +12,7 @@ interface PricingCardProps {
 
 const PricingCard = ({ plan, price, features }: PricingCardProps) => {
   return (
-    <Card className="w-85 min-h-100 flex flex-col justify-start p-5 rounded-xl bg-blue-700 hover:scale-105">
+    <Card className="w-85 min-h-100 flex flex-col justify-start p-5 rounded-xl">
       <div className="m-1 py-6">
         <Typography as="p" type="title">
           {plan.toUpperCase()}

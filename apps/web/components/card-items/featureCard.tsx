@@ -10,7 +10,7 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ title, children }: FeatureCardProps) => {
   return (
-    <Card className="w-80 lg:w-full h-70 p-6 flex flex-col justify-between rounded-xl  bg-blue-700">
+    <Card className="w-80 lg:w-full h-70 p-6 flex flex-col justify-between" >
       <div className="my-5">image</div>
       <div className="my-5">
         <Typography as="p" type="title">
