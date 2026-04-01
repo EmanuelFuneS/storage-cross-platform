@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib/core";
-import { CdkAppStack } from "../lib/cdk-app-stack";
-import { Ec2Stack } from "../lib/stacks/ec2-stack";
-import { RdsStack } from "../lib/stacks/rds-stack";
+import { CdkAppStack } from "../lib/utils/cdk-app-stack";
+import { Ec2Stack } from "../lib/utils/ec2-stack";
+import { RdsStack } from "../lib/utils/rds-stack";
 
 const app = new cdk.App();
 /*new CdkAppStack(app, "cdk-stack-test", {
