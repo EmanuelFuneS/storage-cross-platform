@@ -1,6 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import * as cdk from "aws-cdk-lib/core";
-import { Ec2Stack } from "../lib/stacks/ec2-stack";
+import { Ec2Stack } from "../lib/utils/ec2-stack";
 
 test("Check InstanceType and SSH keyname", () => {
   const app = new cdk.App();
