@@ -2,9 +2,7 @@ import Typography from "@workspace/ui/components/typography";
 import React from "react";
 import PricingCard from "@/components/card-items/pricingCard";
 
-type Props = {};
-
-const Pricing = (props: Props) => {
+const Pricing = () => {
   return (
     <section
       id="pricing"
@@ -19,12 +17,12 @@ const Pricing = (props: Props) => {
 
       <div className="w-full flex flex-col lg:flex-row justify-between items-center my-10 gap-4">
         <PricingCard
-          plan="basic"
+          plan="Free"
           price={0}
           features={["5GB Secure Storage", "Basic Sharing", "Mobile Access"]}
         />
         <PricingCard
-          plan="pro"
+          plan="Pro"
           price={12}
           features={[
             "10GB Cloud Storage",
@@ -34,7 +32,7 @@ const Pricing = (props: Props) => {
           ]}
         />
         <PricingCard
-          plan="business"
+          plan="Company"
           price={0}
           features={[
             "Unlimited Storage",
