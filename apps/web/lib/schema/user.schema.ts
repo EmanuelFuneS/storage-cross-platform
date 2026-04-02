@@ -8,10 +8,10 @@ export const loginFormSchema = z.object({
 export type ILoginForm = z.infer<typeof loginFormSchema>;
 
 export const registerFromSchema = z.object({
-  name: z.string(),
-  email: z.string(),
-  password: z.string(),
-  planId: z.string(),
+  name: z.string().nonempty(),
+  email: z.string().nonempty(),
+  password: z.string().nonempty(),
+  planId: z.string().nonempty(),
 });
 
 export type IRegisterForm = z.infer<typeof registerFromSchema>;
