@@ -5,7 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 interface PricingCardProps {
-  plan: "basic" | "pro" | "business";
+  plan: "Free" | "Pro" | "Company";
   price: number;
   features: string[];
 }
@@ -22,15 +22,15 @@ const PricingCard = ({ plan, price, features }: PricingCardProps) => {
         </Typography>
       </div>
       <div className="w-full">
-        <Button className="w-full hover:bg-blue-300">
-          <Link href="/auth/sign-up">
-            {plan === "basic"
+        <Link href={`/auth/sign-up?plan=${plan}`} className="w-full">
+          <Button className="w-full hover:bg-blue-300">
+            {plan === "Free"
               ? "Get started"
-              : plan === "pro"
+              : plan === "Pro"
                 ? "Choose Pro"
                 : "Contact Sales"}
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </div>
       <div className="flex flex-col space-y-4 my-5">
         {features.map((feat, idx) => (

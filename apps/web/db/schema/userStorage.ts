@@ -6,7 +6,7 @@ export const usersStorageTable = pgTable(
   "usersStorage",
   {
     id: uuid().primaryKey().defaultRandom(),
-    userId: uuid().references(() => usersTable.id),
+    userId: uuid().references(() => usersTable.id, { onDelete: "cascade" }),
     capacity: bigint({ mode: "number" }),
     used: bigint({ mode: "number" }),
 

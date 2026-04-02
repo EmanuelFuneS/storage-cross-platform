@@ -41,12 +41,12 @@ const LoginForm = () => {
   };
 
   return (
-    <div className=" lg:w-1/3 h-3/4 rounded-2x bg-elevated dark:bg-secondary rounded-2xl p-10 ">
+    <Card className="lg:w-1/3 h-3/4 p-6">
       <Typography as="h1" type="headline">
-        Welcome
+        Welcome 
       </Typography>
-      <Typography as="p" type="title">
-        Pleas complete form for Login
+      <Typography as="p" type="body">
+        Please complete form for Login
       </Typography>
       <form
         action=""
@@ -54,7 +54,7 @@ const LoginForm = () => {
         className="flex flex-col space-y-10 gap-4 my-5 py-5"
       >
         <div className="flex flex-col h-15 space-y-2">
-          <Typography as="label" type="body">
+          <Typography as="span" type="body">
             Email
           </Typography>
           <input
@@ -71,7 +71,7 @@ const LoginForm = () => {
           )}
         </div>
         <div className="flex flex-col h-15 space-y-2">
-          <Typography as="label" type="body">
+          <Typography as="span" type="body">
             Password
           </Typography>
           <input
@@ -87,7 +87,7 @@ const LoginForm = () => {
             </Typography>
           )}
         </div>
-        <div className="my-2">
+        <div className="flex flex-col space-y-2">
           <Link href={""}>
             <Typography as="p" type="body">
               Forgot Password
@@ -108,7 +108,7 @@ const LoginForm = () => {
         <Button>Github</Button>
       </div>
       <Logout />
-    </div>
+    </Card>
   );
 };
 

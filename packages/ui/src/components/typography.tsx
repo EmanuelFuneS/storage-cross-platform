@@ -7,17 +7,22 @@ const typeText: Record<string, string> = {
   body: "text-sm font-normal",
 };
 
+type TypeText = "display" | "headline" | "title" | "body";
+type as = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+
+export interface TypographyProps {
+  children: React.ReactNode;
+  as: as;
+  className?: string;
+  type: TypeText;
+}
+
 function Typography({
   children,
   as,
   className,
   type,
-}: {
-  children: React.ReactNode;
-  as: string;
-  className?: string;
-  type: string;
-}): JSX.Element {
+}: TypographyProps): JSX.Element {
   switch (as) {
     case "h1":
       return <h1 className={`${className} ${typeText[type]}`}>{children}</h1>;

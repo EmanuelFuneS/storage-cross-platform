@@ -22,6 +22,7 @@ export async function POST(req: Request) {
         name,
         email,
         password: hashed,
+        planId,
         role: "client",
       })
       .returning();
