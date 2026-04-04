@@ -36,12 +36,20 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: true });
 }
 
-//get files by user
-
-//delte file (trash) soft delete
-
 //get deleted soft files
+export async function GET(req: Request) {
+  const session = await getServerSession(authOptions);
 
-//restore file by id
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-//restore files if partenfolder is deleted
+  const deleteFiles = await db.query.filesTable.findMany({
+    where: eq(filesTable.is_deleted, true),
+  });
+
+  return NextResponse.json({ ok: true, data: deleteFiles });
+}
+
+
+
+//restore group file
