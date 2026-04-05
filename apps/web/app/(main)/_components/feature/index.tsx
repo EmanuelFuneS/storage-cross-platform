@@ -1,4 +1,4 @@
-import { Card } from "@workspace/ui/components/card";
+import { Card } from "@workspace/ui/components";
 import Typography from "@workspace/ui/components/typography";
 import React from "react";
 import FeatureCard from "@/components/card-items/featureCard";

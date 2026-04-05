@@ -1,4 +1,4 @@
-import { Button } from "@workspace/ui/components/button";
+import { Button } from "@workspace/ui/components";
 import { signOut } from "next-auth/react";
 import React from "react";
 

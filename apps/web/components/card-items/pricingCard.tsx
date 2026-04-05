@@ -1,6 +1,5 @@
-import { Button } from "@workspace/ui/components/button";
-import { Card } from "@workspace/ui/components/card";
-import Typography from "@workspace/ui/components/typography";
+import { Typography, Card, Button } from "@workspace/ui/components";
+
 import Link from "next/link";
 import React from "react";
 
