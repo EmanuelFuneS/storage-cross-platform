@@ -7,7 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-export const Button = ({ children, className, onClick }: ButtonProps) => {
+export default function Button({ children, className, onClick }: ButtonProps) {
   return (
     <button
       className={`${className} cursor-pointer py-2 px-4 mx-auto bg-background dark:bg-primary rounded-xl shadow-lg text-foreground`}
@@ -16,4 +16,4 @@ export const Button = ({ children, className, onClick }: ButtonProps) => {
       {children}
     </button>
   );
-};
+}
