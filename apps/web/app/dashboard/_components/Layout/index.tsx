@@ -1,17 +1,24 @@
+"use client";
 import Link from "next/link";
 import React, { JSX } from "react";
 import {
+  CloudDownloadIcon,
   Trash,
   Star,
-  Clock,
-  FileExclamationPoint,
-  DatabaseBackup,
+  ClockFading,
+  Folder,
+  HardDrive,
+  UsersRound,
+  cn,
 } from "@workspace/ui/lib";
 import ThemeToggle from "@/components/theme-toggle";
 import Card from "@workspace/ui/components/card";
-import { Separator } from "@workspace/ui/components";
+import { Button, Separator, Typography } from "@workspace/ui/components";
+import Image from "next/image";
+import AppIcon from "@/public/box.png";
+import { usePathname } from "next/navigation";
 
-interface LayoutAdminProps {
+interface LayoutDashboardProps {
   children: React.ReactNode;
 }
 
@@ -23,60 +30,108 @@ interface Route {
 
 const asideRoutes: Route[] = [
   {
-    path: "/recent",
+    path: "/dashboard",
+    name: "My Files",
+    icon: Folder,
+  },
+  {
+    path: "/dashboard/recent",
     name: "Recent",
-    icon: Clock,
+    icon: ClockFading,
   },
   {
-    path: "/shared",
+    path: "/dashboard/shared",
     name: "Shared",
-    icon: FileExclamationPoint,
+    icon: UsersRound,
   },
   {
-    path: "/starred",
+    path: "/dashboard/starred",
     name: "Starred",
     icon: Star,
   },
   {
-    path: "/storage",
+    path: "/dashboard/storage",
     name: "Storage",
-    icon: DatabaseBackup,
+    icon: HardDrive,
   },
   {
-    path: "/trash",
+    path: "/dashboard/trash",
     name: "Trash",
     icon: Trash,
   },
 ];
 
-const LayoutAdmin = ({ children }: LayoutAdminProps) => {
+const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
+  const pathname = usePathname();
+
+  /* const segments = pathname?.split("/").filter(Boolean) || [];
+  const [basePath, ...slug] = segments; */
+
   return (
     <div className="w-full h-screen flex">
-      <aside className="bg-blue-600 ">
+      <aside className="hidden lg:block">
         <Card
           border={false}
           scale={false}
           className="flex flex-col p-10 w-100 h-full"
         >
-          <div className="h-30">
-            auth information
+          <div className="h-30 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              {/* <Image src={AppIcon} alt="Logo app" className="w-15 h-15" /> */}
+              <div className="bg-primary dark:bg-tertiary text-white py-4 px-3 rounded-2xl">
+                <CloudDownloadIcon size={40} className="text-elevated" />
+              </div>
+              <div>
+                <Typography as="h1" type="title">
+                  Storage Dashboard
+                </Typography>
+                <Typography as="p" type="body">
+                  Plan Selected
+                </Typography>
+              </div>
+            </div>
             <ThemeToggle />
           </div>
-          <Separator />
+
           <div className="flex flex-col space-y-10">
-            {asideRoutes.map((el: Route, idx: number) => (
-              <div key={idx} className="flex space-x-2">
-                <el.icon />
-                <Link href={el.path}>{el.name}</Link>
-              </div>
-            ))}
+            {asideRoutes.map((el: Route, idx: number) => {
+              const isSelected = pathname === asideRoutes[idx]?.path!;
+
+              return (
+                <Link
+                  key={idx}
+                  href={`${el.path}`}
+                  className={cn(
+                    "rounded-xl hover:text-white hover:bg-primary hover:dark:bg-tertiary",
+                    isSelected
+                      ? "bg-primary dark:bg-tertiary text-white"
+                      : "hover:bg-primary",
+                  )}
+                >
+                  <div className="flex items-center space-x-2 h-12 p-6 ">
+                    <el.icon />
+                    <Typography as="p" type="body">
+                      {el.name}
+                    </Typography>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
-          <div className="my-auto">settings route</div>
+
+          <Card
+            scale={false}
+            border={true}
+            className="bg-card-nested dark:bg-card-nested my-auto p-5"
+          >
+            storage bar porcentage storage space
+            <Button className="w-full my-5 dark:bg-tertiary">Upgrade Plan</Button>
+          </Card>
         </Card>
       </aside>
-      <main className="bg-orange-700 p-10 w-full ">{children}</main>
+      <main className="p-10 w-full ">{children}</main>
     </div>
   );
 };
 
-export default LayoutAdmin;
+export default LayoutDashboard;
