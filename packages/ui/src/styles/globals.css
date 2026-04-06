@@ -8,7 +8,7 @@
 
 @theme {
     --color-background: #f1f3f9;
-    --color-foreground: #0f172a ;
+    --color-foreground: #0f172a;
     --color-primary: #2463eb;
     --color-secondary: #475569;
     --color-tertiary: #0f172a;
@@ -16,12 +16,23 @@
     --color-error: #ef4444;
     --color-elevated: #e9ebf2;
     --ring: #2463eb;
-}
 
+    --color-card: #e9ebf2;          /* elevated */
+    --color-card-nested: #dde0ea;   /* un paso más oscuro que elevated */
+    --color-muted: #f8fafc;         /* para textos/fondos secundarios */
+    --color-accent: #2463eb1a;      /* primary con opacidad */
+    --color-popover: #ffffff;       /* blanco puro para popovers */
+}
 
 .dark {
     --color-background: #0f172a;
     --color-foreground: #e9ebf2;
+
+    --color-card: #475569;          /* un paso más claro que background */
+    --color-card-nested: #1e293b;   /* secondary */
+    --color-muted: #334155;         /* entre background y secondary */
+    --color-accent: #2463eb33;      /* primary con opacidad */
+    --color-popover: #1e293b;       /* mismo que card */
 }
 
 @layer base {
@@ -29,6 +40,6 @@
         @apply border-dashed;
     }
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground w-full min-w-full;
     }
 }

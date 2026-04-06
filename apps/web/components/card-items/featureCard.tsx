@@ -1,6 +1,6 @@
 "use client";
-import { Card } from "@workspace/ui/components/card";
-import Typography from "@workspace/ui/components/typography";
+import { Typography, Card } from "@workspace/ui/components";
+
 import React from "react";
 
 interface FeatureCardProps {
@@ -10,7 +10,7 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ title, children }: FeatureCardProps) => {
   return (
-    <Card className="w-80 lg:w-full h-70 p-6 flex flex-col justify-between" >
+    <Card className="w-80 lg:w-full h-70 p-6 flex flex-col justify-between">
       <div className="my-5">image</div>
       <div className="my-5">
         <Typography as="p" type="title">

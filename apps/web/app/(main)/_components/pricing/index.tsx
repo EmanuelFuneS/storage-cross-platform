@@ -1,4 +1,4 @@
-import Typography from "@workspace/ui/components/typography";
+import { Typography } from "@workspace/ui/components";
 import React from "react";
 import PricingCard from "@/components/card-items/pricingCard";
 

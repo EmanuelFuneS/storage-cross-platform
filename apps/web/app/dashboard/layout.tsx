@@ -1,5 +1,4 @@
-import Footer from "@/components/layout/footer";
-import Navbar from "@/components/layout/navbar";
+import LayoutDashboard from "./_components/Layout";
 
 export default function DashboardLayout({
   children,
@@ -7,10 +6,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <body>
-      <main className="w-full max-w-6xl mx-auto grow flex-1 flex flex-col min-h-0">
-        {children}
-      </main>
+    <body className="w-full min-w-full">
+      <LayoutDashboard>{children}</LayoutDashboard>
     </body>
   );
 }

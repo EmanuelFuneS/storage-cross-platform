@@ -1,13 +1,15 @@
 "use client";
-import { Button } from "@workspace/ui/components/button";
-import Typography from "@workspace/ui/components/typography";
+import { Button, Typography } from "@workspace/ui/components";
 import React from "react";
 import heroImg from "@/public/hero_app.png";
 import Image from "next/image";
 
 const Hero = () => {
   return (
-    <section id="home" className="flex-1 flex flex-col lg:flex-row min-h-screen m-10 lg:m-5 py-15">
+    <section
+      id="home"
+      className="flex-1 flex flex-col lg:flex-row min-h-screen m-10 lg:m-5 py-15"
+    >
       <div className="w-full lg:w-1/2 min-h-full flex flex-col items-start text-center lg:text-start justify-center space-y-4">
         <Typography as="h1" type="display">
           Your files, everywhere

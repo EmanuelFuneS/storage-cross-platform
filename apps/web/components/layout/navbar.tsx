@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@workspace/ui/components/button";
-import Typography from "@workspace/ui/components/typography";
+import { Button, Typography } from "@workspace/ui/components";
+
 import Link from "next/link";
 import React from "react";
 import ThemeToggle from "../theme-toggle";
