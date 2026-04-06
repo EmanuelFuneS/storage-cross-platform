@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { cn } from "../lib";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -10,7 +11,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({ children, className, onClick }: ButtonProps) {
   return (
     <button
-      className={`${className} cursor-pointer py-2 px-4 mx-auto bg-background dark:bg-primary rounded-xl shadow-lg text-foreground`}
+      className={cn(
+        `cursor-pointer py-2 px-4 mx-auto bg-primary dark:bg-secondary text-elevated rounded-xl shadow-lg`,
+        className,
+      )}
       onClick={onClick}
     >
       {children}
