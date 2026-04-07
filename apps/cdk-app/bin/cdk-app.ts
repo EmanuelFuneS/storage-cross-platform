@@ -5,22 +5,36 @@ import { Ec2Stack } from "../lib/utils/ec2-stack";
 import { RdsStack } from "../lib/utils/rds-stack";
 import { NetworkStack } from "../lib/stacks/network-stack";
 import { DBStack } from "../lib/stacks/db-stack";
+import { AppStack } from "../lib/stacks/app-stack";
+import { StorageStack } from "../lib/stacks/storage-stack";
 
 const app = new cdk.App();
 
-const network = new NetworkStack(app, "network-stack", {
+const env = {
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region: process.env.CDK_DEFAULT_REGION,
+};
+
+const networkStack = new NetworkStack(app, "network-stack", {
   stackName: "network-stack",
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION,
-  },
+  env,
 });
 
-new DBStack(app, "db-stack", {
-  vpc: network.vpc,
+const dbStack = new DBStack(app, "db-stack", {
   stackName: "db-stack",
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION,
-  },
+  vpc: networkStack.vpc,
+  env,
+});
+
+const storageStack = new StorageStack(app, "storage-stack", {
+  stackName: "storage-stack",
+  env,
+});
+//StorageStack
+new AppStack(app, "storage-app-stack", {
+  env,
+  vpc: networkStack.vpc,
+  sotrageBucket: storageStack.storageBucket,
+  db: dbStack.db,
+  dbSecurityGroup: dbStack.dbSecurityGroup,
 });
