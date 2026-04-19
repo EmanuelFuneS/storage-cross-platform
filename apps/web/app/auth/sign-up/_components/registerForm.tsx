@@ -2,11 +2,10 @@
 import useRegisterUser from "@/lib/hooks/useRegisterUser";
 import { IRegisterForm, registerFromSchema } from "@/lib/schema/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@workspace/ui/components/button";
-import { Card } from "@workspace/ui/components/card";
+import Button from "@workspace/ui/components/button";
+import Card from "@workspace/ui/components/card";
 import Input from "@workspace/ui/components/input";
 import Typography from "@workspace/ui/components/typography";
-import { int } from "drizzle-orm/mysql-core";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -48,7 +47,7 @@ const RegisterForm = ({ planId }: RegisterFormProps) => {
   console.log("Form:", getValues()); */
 
   return (
-    <Card scale={false} className="lg:w-1/3 h-3/4 p-6">
+    <Card scale={false} className="w-full p-6">
       <Typography as="h1" type="headline">
         Welcome
       </Typography>
