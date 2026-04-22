@@ -53,12 +53,12 @@ jobs:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: ${{ github.sha }}
-          run: |
-            docker build \
-              -f apps/web/Dockerfile \
-              -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-              .
-            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        run: |
+          docker build \
+            -f apps/web/Dockerfile \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: CDK Diff
         working-directory: apps/cdk-app
