@@ -26,7 +26,7 @@ const ThemeToggle = ({ size }: ThemeToggleProps) => {
     localStorage.setItem("theme", newTheme);
     document.documentElement.classList.toggle("dark");
   };
-  console.log(mounted);
+
   if (!mounted) return <div className="w-9.25 h-9.25">Loading</div>;
 
   return (
