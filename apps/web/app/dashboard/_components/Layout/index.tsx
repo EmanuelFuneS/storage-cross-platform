@@ -78,7 +78,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
           <div className="h-30 flex items-center justify-between">
             <div className="flex items-center space-x-2">
               {/* <Image src={AppIcon} alt="Logo app" className="w-15 h-15" /> */}
-              <div className="bg-primary dark:bg-tertiary text-white py-4 px-3 rounded-2xl">
+              <div className="bg-primary dark:bg-primary text-white py-4 px-3 rounded-2xl">
                 <CloudDownloadIcon size={40} className="text-elevated" />
               </div>
               <div>
@@ -102,9 +102,9 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
                   key={idx}
                   href={`${el.path}`}
                   className={cn(
-                    "rounded-xl hover:text-white hover:bg-primary hover:dark:bg-tertiary",
+                    "rounded-xl hover:text-white hover:bg-primary hover:dark:bg-primary",
                     isSelected
-                      ? "bg-primary dark:bg-tertiary text-white"
+                      ? "bg-primary dark:bg-primary text-white"
                       : "hover:bg-primary",
                   )}
                 >
@@ -125,11 +125,13 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
             className="bg-card-nested dark:bg-card-nested my-auto p-5"
           >
             storage bar porcentage storage space
-            <Button className="w-full my-5 dark:bg-tertiary">Upgrade Plan</Button>
+            <Button className="w-full my-5">
+              Upgrade Plan
+            </Button>
           </Card>
         </Card>
       </aside>
-      <main className="p-10 w-full ">{children}</main>
+      <main className="p-2 lg:p-10 w-full ">{children}</main>
     </div>
   );
 };
