@@ -15,6 +15,16 @@ COPY apps/web ./apps/web
 RUN pnpm install --frozen-lockfile
 
 WORKDIR /app/apps/web
+
+ENV DB_HOST=localhost \
+    DB_PORT=5432 \
+    DB_PASSWORD=password \
+    DB_USER=user \
+    DB_NAME=db \
+    PRESIGNED_LAMBDA_URL=http://placeholder \
+    AUTH_SECRET=placeholder_secret_123 \
+    DATABASE_URL=postgresql://user:pass@localhost:5432/db
+
 RUN pnpm build
 
 FROM node:20-alpine AS runner
