@@ -97,3 +97,24 @@ export async function PATH(
 
   return NextResponse.json({ ok: true });
 }
+
+//get folders by user
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ folderId: string }> },
+) {
+  const { folderId } = await params;
+  const session = await getServerSession(authOptions);
+
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const folders = await db.query.foldersTable.findMany({
+    where: and(
+      eq(foldersTable.userId, session.user.id),
+      eq(foldersTable.parentId, folderId),
+    ),
+  });
+
+  return NextResponse.json(folders);
+}

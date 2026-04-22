@@ -23,17 +23,16 @@ export async function GET(req: Request) {
 //create folder for user
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  const { userId, name, parentId } = await req.json();
+  const { name, parentId } = await req.json();
 
   if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   await db.insert(foldersTable).values({
-    userId: userId,
+    userId: session.user.id,
     name: name,
     parentId: parentId,
   });
 
   return NextResponse.json({ ok: true });
 }
-
