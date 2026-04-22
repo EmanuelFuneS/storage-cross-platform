@@ -3,7 +3,7 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
-COPY packages.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 COPY packages/ui ./packages/ui
 COPY packages/env ./packages/env
@@ -21,6 +21,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+
 
 COPY apps/web/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
