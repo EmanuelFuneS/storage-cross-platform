@@ -45,17 +45,14 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push image to ECR
-        id: build-image
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./apps/web/Dockerfile
           push: true
-          tags: ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}
-          # Optional but very useful:
-          # cache-from: type=gha
-          # cache-to: type=gha,mode=max
+          tags: ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}, ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+
 
       - name: CDK Diff
         working-directory: apps/cdk-app
