@@ -35,7 +35,6 @@ const RegisterForm = ({ planId }: RegisterFormProps) => {
   });
 
   const onSubmit: SubmitHandler<IRegisterForm> = async (data) => {
-    console.log("Form Data:", data);
     try {
       await mutate(data);
       router.push("/auth/sign-in");
@@ -43,8 +42,6 @@ const RegisterForm = ({ planId }: RegisterFormProps) => {
       console.error("Registration Error:", error);
     }
   };
-  /* console.log("Errors:", errors);
-  console.log("Form:", getValues()); */
 
   return (
     <Card scale={false} className="w-full p-6">

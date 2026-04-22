@@ -9,7 +9,7 @@ import useGetPlanIdByName from "@/lib/hooks/useGetPlansByName";
 import Link from "next/link";
 
 const Page = () => {
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams();
   const planName = searchParams.get("plan") || "basic";
 
   const { data } = useGetPlanIdByName({ name: planName });
