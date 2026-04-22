@@ -44,7 +44,7 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push
+      - name: Build and push Docker Image
         uses: docker/build-push-action@v6
         with:
           # Al estar en el root, el contexto y el file son locales al inicio
