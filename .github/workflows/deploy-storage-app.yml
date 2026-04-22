@@ -70,4 +70,4 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET}}
-        run: pnpm cdk deploy storage-app-stack --all --require-approval never
+        run: pnpm cdk deploy storage-app-stack --require-approval never
