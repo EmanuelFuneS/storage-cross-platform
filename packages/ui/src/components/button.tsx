@@ -12,7 +12,7 @@ export default function Button({ children, className, onClick }: ButtonProps) {
   return (
     <button
       className={cn(
-        `cursor-pointer py-2 px-4 mx-auto bg-primary dark:bg-secondary text-elevated rounded-xl shadow-lg`,
+        `cursor-pointer py-2 px-4 mx-auto bg-primary dark:bg-primary text-elevated rounded-xl shadow-lg`,
         className,
       )}
       onClick={onClick}

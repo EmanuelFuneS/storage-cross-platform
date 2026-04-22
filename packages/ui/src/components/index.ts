@@ -4,5 +4,6 @@ import Code from "./code";
 import Input from "./input";
 import Separator from "./separator";
 import Typography from "./typography";
+import Modal from "./modal";
 
-export { Button, Card, Code, Input, Separator, Typography };
+export { Button, Card, Code, Input, Separator, Typography, Modal };

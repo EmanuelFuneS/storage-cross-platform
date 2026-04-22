@@ -17,7 +17,7 @@ export default function Card({
 }: CardProps): JSX.Element {
   return (
     <div
-      className={`${className} ${scale && "hover:scale-105  transform transition-transform duration-300"} ${rounded && "rounded-xl"} ${border && "border-gray-700"}  flex flex-col justify-center  bg-elevated dark:bg-secondary shadow-2xl`}
+      className={`${className} ${scale && "hover:scale-105  transform transition-transform duration-300"} ${rounded && "rounded-xl"} ${border && "border-gray-700"}  flex flex-col justify-center  bg-elevated dark:bg-card shadow-2xl`}
     >
       {children}
     </div>
