@@ -5,6 +5,7 @@ import { Presigned } from "../constructs/presigned";
 
 export class StorageStack extends cdk.Stack {
   public readonly storageBucket: StorageBucket;
+  public readonly presignedUrl: string;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -17,6 +18,8 @@ export class StorageStack extends cdk.Stack {
     const presigned = new Presigned(this, "PresignedUrl", {
       bucket: this.storageBucket.bucket,
     });
+
+    this.presignedUrl = presigned.functionUrl.url;
 
     new cdk.CfnOutput(this, "PresignedFunctionUrl", {
       value: presigned.functionUrl.url,

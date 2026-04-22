@@ -28,7 +28,7 @@ export class AppService extends Construct {
       imageTag,
       cpu = 512,
       memory = 1024,
-      containerPort = 80,
+      containerPort = 3000,
       environment = {},
       secrets = {},
     } = props;
@@ -43,8 +43,8 @@ export class AppService extends Construct {
     );
 
     taskDefinition.addContainer("StorageContainer", {
-      //image: ecs.ContainerImage.fromEcrRepository(repository, imageTag),
-      image: ecs.ContainerImage.fromRegistry("nginx:latest"),
+      image: ecs.ContainerImage.fromEcrRepository(repository, imageTag),
+      //image: ecs.ContainerImage.fromRegistry("nginx:latest"),
       portMappings: [{ containerPort }],
       environment,
       secrets,

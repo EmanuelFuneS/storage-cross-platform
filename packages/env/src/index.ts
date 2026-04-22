@@ -13,11 +13,17 @@ const schemaEnv = z.object({
   DB_USER: z.string(),
   DB_NAME: z.string(),
   //web
-  NEXT_PUBLIC_API_URL: z.string(),
-  NEXT_PUBLIC_PRESIGNED_URL: z.string(),
+  PRESIGNED_LAMBDA_URL: z.string(),
   AUTH_SECRET: z.string(),
 
   DATABASE_URL: z.string(),
+}).transform((data)=>{
+  if(!data.DATABASE_URL && data.DB_USER){
+    return {
+      ...data,
+      DATABASE_URL: `postgress://${data.DB_USER}:${data.DB_PASSWORD}@${data.DB_HOST}:${data.DB_PORT}/${data.DB_NAME}`
+    }
+  }
 });
 
 const globalEnv = schemaEnv.parse(process.env);
