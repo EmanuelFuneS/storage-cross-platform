@@ -18,17 +18,17 @@ const networkStack = new NetworkStack(app, "network-stack", {
   env,
 });
 
+const storageStack = new StorageStack(app, "storage-stack", {
+  stackName: "storage-stack",
+  env,
+});
+
 const dbStack = new DBStack(app, "db-stack", {
   stackName: "db-stack",
   vpc: networkStack.vpc,
   env,
 });
 
-const storageStack = new StorageStack(app, "storage-stack", {
-  stackName: "storage-stack",
-  env,
-});
-//StorageStack
 new AppStack(app, "storage-app-stack", {
   env,
   vpc: networkStack.vpc,

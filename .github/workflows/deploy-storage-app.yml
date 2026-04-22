@@ -14,8 +14,8 @@ jobs:
     name: Build & Deploy Storage APP
     runs-on: ubuntu-latest
     permissions:
-      id-token: write 
-      contents: read  
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout
@@ -40,6 +40,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: CDK Diff
+        working-directory: apps/cdk-app
+        run: pnpm cdk diff --all
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+
+      - name: CDK Deploy Base (Network & Storage)Stacks
+        working-directory: apps/cdk-app
+        run: pnpm cdk deploy network-stack storage-stack db-stack --require-approval never
+
       - name: Login to amazon ECR
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
@@ -47,23 +58,16 @@ jobs:
       - name: Build and push Docker Image
         uses: docker/build-push-action@v6
         with:
-          context: . 
-          file: ./Dockerfile 
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ steps.ecr-login.outputs.registry }}/storage-app:${{ github.sha }}
             ${{ steps.ecr-login.outputs.registry }}/storage-app:latest
-
-      - name: CDK Diff 
-        working-directory: apps/cdk-app
-        run: pnpm cdk diff --all
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-          AUTH-SECRET: ${{ secrets.AUTH_SECRET }}
 
       - name: CDK DEPLOY
         working-directory: apps/cdk-app
         env:
           IMAGE_TAG: ${{ github.sha }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET}}
-        run: pnpm cdk deploy --all --require-approval never
+        run: pnpm cdk deploy storage-app-stack --all --require-approval never
