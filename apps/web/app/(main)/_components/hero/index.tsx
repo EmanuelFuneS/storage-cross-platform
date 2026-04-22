@@ -5,25 +5,6 @@ import heroImg from "@/public/hero_app.png";
 import Image from "next/image";
 
 const Hero = () => {
-  /*  useEffect(() => {
-    const testFetch = async () => {
-      const result = await fetch(
-        "https://s03-26-equipo-14-web-app-development.onrender.com/embed",
-        {
-          method: "Get",
-          headers: {
-            'x-embed-key': 'cms-api-key:DRAG954HBGPTuML0KvR0_g:Wt1_pWvPMg22Y0x6r6poJcNygqyVUU9FDTVJ-F60XeqW2o9Nkuux4ND_1XvHah3m8OL93JRPyv1cHO0dreVWYFLPk-QhGQlTlIEQ1PAF8WgwdZnf6Km4vKQu_rcx_CpWqQ2vx4RJT9Rx-VqjNjunIQ'
-          }
-        },
-      );
-    };
-    //testear con apikey
-    //testear sin apikey
-    //testear con un string random
-
-    testFetch();
-  }, []); */
-
   return (
     <section
       id="home"
