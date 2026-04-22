@@ -48,14 +48,14 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          # El contexto debe ser la raíz para que vea /packages
+          # Al estar en el root, el contexto y el file son locales al inicio
           context: . 
-          # Ruta relativa DESDE la raíz hacia el archivo
-          file: apps/web/Dockerfile 
+          file: ./Dockerfile 
           push: true
           tags: |
             ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}
             ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+
 
 
 
