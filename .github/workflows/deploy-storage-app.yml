@@ -1,0 +1,76 @@
+name: Deploy Storage App
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/cdk-app/**"
+      - "apps/cdk/**"
+
+jobs:
+  release:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      #AWS
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_DEV_ARN }}
+          aws-region: ${{ secrets.AWS_REGION}}
+
+      - name: Login to amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image to ECR
+        id: build-image
+        working-directory: apps/web
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            -f apps/web/Dockerfile \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+            .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: CDK Diff
+        working-directory: apps/cdk-app
+        run: pnpm cdk diff --all
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          AUTH-SECRET: ${{ secrets.AUTH_SECRET }}
+
+      - name: CDK DEPLOY
+        working-directory: apps/cdk-app
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET}}
+        run: pnpm cdk deploy --all --require-approval never
