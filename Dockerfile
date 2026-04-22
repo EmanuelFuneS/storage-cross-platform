@@ -12,6 +12,9 @@ COPY packages/typescript-config ./packages/typescript-config
 
 COPY apps/web ./apps/web
 
+COPY apps/web/drizzle ./apps/web/drizzle
+COPY apps/web/drizzle.config.ts ./apps/web/drizzle.config.ts
+
 RUN pnpm install --frozen-lockfile
 
 WORKDIR /app/apps/web
@@ -41,7 +44,7 @@ COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder /app/apps/web/public ./apps/web/public
 
 COPY --from=builder /app/apps/web/drizzle ./drizzle
-COPY --from=builder /app/apps/web/drizzle.config.ts ./ 
+COPY --from=builder /app/apps/web/drizzle.config.ts ./
 
 RUN npm install -g drizzle-kit pg
 

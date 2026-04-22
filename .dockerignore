@@ -1,0 +1,43 @@
+# Dependencias y logs
+node_modules
+.pnpm-store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js y builds
+.next
+out
+dist
+build
+.turbo
+
+# Infraestructura y CDK
+cdk.out
+.cdk.staging
+.terraform
+.aws
+
+# Archivos de entorno y secretos (VITAL)
+.env
+.env.*
+!.env.example
+secrets.json
+*.pem
+
+# Git y herramientas de desarrollo
+.git
+.gitignore
+.github
+.vscode
+.idea
+README.md
+LICENSE
+
+# Docker y logs de sistema
+docker-compose.yml
+Dockerfile
+.dockerignore
+.DS_Store
+Thumbs.db
