@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - ".github/orkflows/**"
       - "apps/cdk-app/**"
       - "apps/cdk/**"
 
