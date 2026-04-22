@@ -51,8 +51,8 @@ jobs:
           file: ./Dockerfile 
           push: true
           tags: |
-            ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}
-            ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+            ${{ steps.ecr-login.outputs.registry }}/storage-app:${{ github.sha }}
+            ${{ steps.ecr-login.outputs.registry }}/storage-app:latest
 
       - name: CDK Diff 
         working-directory: apps/cdk-app
