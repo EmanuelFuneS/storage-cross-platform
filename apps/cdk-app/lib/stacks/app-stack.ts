@@ -3,6 +3,7 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as ecr from "aws-cdk-lib/aws-ecr";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import * as secretmanager from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { AppService } from "../constructs/app-service";
 import { PostgresDatabase } from "../constructs/postgres-db";
@@ -12,10 +13,10 @@ interface AppStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
   db: PostgresDatabase;
   dbSecurityGroup: ec2.ISecurityGroup;
+  dbSecret: secretmanager.ISecret;
   sotrageBucket: StorageBucket;
   imageTag: string;
   presignedUrl: string;
-  databaseUrl: ecs.Secret;
   repository: ecr.IRepository;
 }
 
@@ -29,7 +30,7 @@ export class AppStack extends cdk.Stack {
       sotrageBucket,
       imageTag,
       presignedUrl,
-      databaseUrl,
+      dbSecret,
       repository,
     } = props;
 
@@ -48,13 +49,11 @@ export class AppStack extends cdk.Stack {
         AUTH_SECRET: process.env.AUTH_SECRET || "default-dev-token",
       },
       secrets: {
-        DATABASE_URL: databaseUrl,
-        DB_SECRET: ecs.Secret.fromSecretsManager(db.secret),
-        DB_USER: ecs.Secret.fromSecretsManager(db.secret, "username"),
-        DB_PASS: ecs.Secret.fromSecretsManager(db.secret, "password"),
-        DB_HOST: ecs.Secret.fromSecretsManager(db.secret, "host"),
-        DB_PORT: ecs.Secret.fromSecretsManager(db.secret, "port"),
-        DB_NAME: ecs.Secret.fromSecretsManager(db.secret, "dbname"),
+        DB_USER: ecs.Secret.fromSecretsManager(dbSecret, "username"),
+        DB_PASS: ecs.Secret.fromSecretsManager(dbSecret, "password"),
+        DB_HOST: ecs.Secret.fromSecretsManager(dbSecret, "host"),
+        DB_PORT: ecs.Secret.fromSecretsManager(dbSecret, "port"),
+        DB_NAME: ecs.Secret.fromSecretsManager(dbSecret, "dbname"),
       },
     });
 
