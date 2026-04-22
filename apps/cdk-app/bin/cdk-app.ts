@@ -32,11 +32,11 @@ const dbStack = new DBStack(app, "db-stack", {
 new AppStack(app, "storage-app-stack", {
   env,
   vpc: networkStack.vpc,
-  sotrageBucket: storageStack.storageBucket,
-  imageTag: imageTag,
-  presignedUrl: storageStack.presignedUrl,
   db: dbStack.db,
   dbSecurityGroup: dbStack.dbSecurityGroup,
-  databaseUrl: dbStack.databaseUrlSecret,
+  dbSecret: dbStack.dbSecret,
+  imageTag: imageTag,
+  sotrageBucket: storageStack.storageBucket,
+  presignedUrl: storageStack.presignedUrl,
   repository: storageStack.repository,
 });
