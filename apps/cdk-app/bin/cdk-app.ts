@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib/core";
-import { CdkAppStack } from "../lib/utils/cdk-app-stack";
-import { Ec2Stack } from "../lib/utils/ec2-stack";
-import { RdsStack } from "../lib/utils/rds-stack";
 import { NetworkStack } from "../lib/stacks/network-stack";
 import { DBStack } from "../lib/stacks/db-stack";
 import { AppStack } from "../lib/stacks/app-stack";
@@ -41,4 +38,5 @@ new AppStack(app, "storage-app-stack", {
   db: dbStack.db,
   dbSecurityGroup: dbStack.dbSecurityGroup,
   databaseUrl: dbStack.databaseUrlSecret,
+  repository: storageStack.repository,
 });

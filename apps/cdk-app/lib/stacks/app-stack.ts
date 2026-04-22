@@ -16,20 +16,22 @@ interface AppStackProps extends cdk.StackProps {
   imageTag: string;
   presignedUrl: string;
   databaseUrl: ecs.Secret;
+  repository: ecr.IRepository;
 }
 
 export class AppStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AppStackProps) {
     super(scope, id, props);
 
-    const { vpc, db, sotrageBucket, imageTag, presignedUrl, databaseUrl } =
-      props;
-
-    const repository = new ecr.Repository(this, "StorageRepository", {
-      repositoryName: "storage-app",
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-      emptyOnDelete: true,
-    });
+    const {
+      vpc,
+      db,
+      sotrageBucket,
+      imageTag,
+      presignedUrl,
+      databaseUrl,
+      repository,
+    } = props;
 
     const cluster = new ecs.Cluster(this, "StorageCluster", { vpc });
 
@@ -79,9 +81,11 @@ export class AppStack extends cdk.Stack {
       port: 3000,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [appService.service],
-      healthCheck: { path: "/health", healthyHttpCodes: "200",
+      healthCheck: {
+        path: "/health",
+        healthyHttpCodes: "200",
         interval: cdk.Duration.seconds(60),
-       },
+      },
     });
 
     new cdk.CfnOutput(this, "AppUrl", {
