@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM --platform=linux/amd64 node:20-alpine AS builder
 WORKDIR /app
 RUN npm install -g pnpm
 
@@ -21,7 +21,8 @@ ENV DB_HOST=localhost DB_PORT=5432 DB_PASSWORD=password DB_USER=user DB_NAME=db 
 
 RUN pnpm build
 
-FROM node:20-alpine AS runner
+FROM --platform=linux/amd64 node:20-alpine AS runner
+
 WORKDIR /app
 ENV NODE_ENV=production
 
