@@ -39,7 +39,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
-  secret: globalEnv.AUTH_SECRET,
+  secret: globalEnv!.AUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
