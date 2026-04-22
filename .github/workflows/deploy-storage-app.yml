@@ -49,7 +49,6 @@ jobs:
 
       - name: Build and push image to ECR
         id: build-image
-        working-directory: apps/web
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
