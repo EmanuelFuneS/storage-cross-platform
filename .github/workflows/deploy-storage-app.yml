@@ -47,7 +47,6 @@ jobs:
       - name: Build and push Docker Image
         uses: docker/build-push-action@v6
         with:
-          # Al estar en el root, el contexto y el file son locales al inicio
           context: . 
           file: ./Dockerfile 
           push: true
@@ -56,7 +55,7 @@ jobs:
             ${{ steps.ecr-login.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
 
-      - name: CDK Diff
+      - name: CDK Diff 
         working-directory: apps/cdk-app
         run: pnpm cdk diff --all
         env:

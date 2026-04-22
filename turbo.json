@@ -9,7 +9,6 @@
     "DB_PASSWORD",
     "DB_NAME",
     "DATABASE_URL",
-    "NEXT_PUBLIC_API_URL",
     "AUTH_SECRET"
   ],
   "tasks": {
@@ -34,7 +33,6 @@
         "DB_PASSWORD",
         "DB_NAME",
         "DATABASE_URL",
-        "NEXT_PUBLIC_API_URL",
         "AUTH_SECRET"
       ],
       "cache": false,
