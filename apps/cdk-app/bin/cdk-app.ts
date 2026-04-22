@@ -9,6 +9,7 @@ import { AppStack } from "../lib/stacks/app-stack";
 import { StorageStack } from "../lib/stacks/storage-stack";
 
 const app = new cdk.App();
+const imageTag = process.env.IMAGE_TAG || "latest";
 
 const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
@@ -35,6 +36,9 @@ new AppStack(app, "storage-app-stack", {
   env,
   vpc: networkStack.vpc,
   sotrageBucket: storageStack.storageBucket,
+  imageTag: imageTag,
+  presignedUrl: storageStack.presignedUrl,
   db: dbStack.db,
   dbSecurityGroup: dbStack.dbSecurityGroup,
+  databaseUrl: dbStack.databaseUrlSecret,
 });
