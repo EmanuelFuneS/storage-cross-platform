@@ -1,3 +1,10 @@
-//generate url signed for upload
+export async function POST(req: Request) {
+  const body = await req.json();
 
-//generate url signed for download
+  const res = await fetch(process.env.PRESIGNED_LAMBDA_URL!, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+
+  return Response.json(await res.json());
+}

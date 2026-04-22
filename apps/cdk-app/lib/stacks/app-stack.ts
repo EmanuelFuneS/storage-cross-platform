@@ -33,7 +33,7 @@ export class AppStack extends cdk.Stack {
       vpc,
       cluster,
       repository,
-      containerPort: 3000,
+      containerPort: 80,
       environment: {
         NODE_ENV: "production",
         BUCKET_NAME: sotrageBucket.bucket.bucketName,
@@ -58,13 +58,15 @@ export class AppStack extends cdk.Stack {
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
     });
 
+    appService.connections.allowFrom(alb, ec2.Port.tcp(80));
+
     const listener = alb.addListener("HttpListener", { port: 80 });
 
     listener.addTargets("StorageTarget", {
-      port: 3000,
+      port: 80,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [appService.service],
-      healthCheck: { path: "/api/health" },
+      healthCheck: { path: "/", healthyHttpCodes: "200" },
     });
 
     new cdk.CfnOutput(this, "AppUrl", {

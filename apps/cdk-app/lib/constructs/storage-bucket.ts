@@ -13,7 +13,7 @@ export class StorageBucket extends Construct {
   constructor(scope: Construct, id: string, props: StorageBucketProps = {}) {
     super(scope, id);
 
-    const { removalPolicy = cdk.RemovalPolicy.RETAIN, versioned = false } =
+    const { removalPolicy = cdk.RemovalPolicy.DESTROY, versioned = false } =
       props;
 
     this.bucket = new s3.Bucket(this, "Bucket", {

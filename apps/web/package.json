@@ -22,6 +22,7 @@
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.96.1",
     "bcryptjs": "^3.0.3",
+    "drag-drop^4": "link:@uppy/drag-drop^4",
     "drizzle-orm": "^0.45.1",
     "jsonwebtoken": "^9.0.3",
     "next": "16.1.5",
@@ -30,6 +31,7 @@
     "pg": "^8.20.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-dropzone": "^15.0.0",
     "react-hook-form": "^7.72.0",
     "reflect-metadata": "^0.2.2",
     "zod": "^3.24.2"

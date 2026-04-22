@@ -4,10 +4,10 @@ import { signIn, signOut } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ILoginForm, loginFormSchema } from "@/lib/schema/user.schema";
-import { Card } from "@workspace/ui/components/card";
+import Card from "@workspace/ui/components/card";
 import Typography from "@workspace/ui/components/typography";
 import Link from "next/link";
-import { Button } from "@workspace/ui/components/button";
+import Button from "@workspace/ui/components/button";
 import { useRouter } from "next/navigation";
 import Logout from "@/components/profile/logout";
 
@@ -41,9 +41,9 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="lg:w-1/3 h-3/4 p-6">
+    <Card scale={false} className="w-full h-full p-6">
       <Typography as="h1" type="headline">
-        Welcome 
+        Welcome
       </Typography>
       <Typography as="p" type="body">
         Please complete form for Login

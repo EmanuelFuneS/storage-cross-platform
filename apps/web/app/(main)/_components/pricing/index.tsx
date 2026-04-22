@@ -6,7 +6,7 @@ const Pricing = () => {
   return (
     <section
       id="pricing"
-      className="flex-1 flex flex-col items-center justify-center min-h-screen m-10 lg:m-5 py-15"
+      className="max-h-100 flex flex-col items-center justify-center min-h-screen m-10 lg:m-5 py-15"
     >
       <Typography as="h3" type="headline">
         Simple, transparent pricing

@@ -28,7 +28,7 @@ export class AppService extends Construct {
       imageTag,
       cpu = 512,
       memory = 1024,
-      containerPort = 3000,
+      containerPort = 80,
       environment = {},
       secrets = {},
     } = props;
@@ -44,7 +44,7 @@ export class AppService extends Construct {
 
     taskDefinition.addContainer("StorageContainer", {
       //image: ecs.ContainerImage.fromEcrRepository(repository, imageTag),
-      image: ecs.ContainerImage.fromRegistry("public.ecr.aws/amazonlinux/amazonlinux:latest"),
+      image: ecs.ContainerImage.fromRegistry("nginx:latest"),
       portMappings: [{ containerPort }],
       environment,
       secrets,

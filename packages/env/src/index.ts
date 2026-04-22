@@ -1,24 +1,24 @@
-import {z} from "zod";
-import * as dotenv from "dotenv"
+import { z } from "zod";
+import * as dotenv from "dotenv";
 
-dotenv.config({path: "../../.env"});
+dotenv.config({ path: "../../.env" });
 
 const schemaEnv = z.object({
-    //environment
-    NODE_ENV: z.string().default("development"),
-    //db credentials
-    DB_HOST: z.string(),
-    DB_PORT: z.string(),
-    DB_PASSWORD: z.string(),
-    DB_USER: z.string(),
-    DB_NAME: z.string(),
-    //web
-    NEXT_PUBLIC_API_URL: z.string(),
-    AUTH_SECRET: z.string(),
-    
-    DATABASE_URL: z.string(),
-})
+  //environment
+  NODE_ENV: z.string().default("development"),
+  //db credentials
+  DB_HOST: z.string(),
+  DB_PORT: z.string(),
+  DB_PASSWORD: z.string(),
+  DB_USER: z.string(),
+  DB_NAME: z.string(),
+  //web
+  NEXT_PUBLIC_API_URL: z.string(),
+  NEXT_PUBLIC_PRESIGNED_URL: z.string(),
+  AUTH_SECRET: z.string(),
 
+  DATABASE_URL: z.string(),
+});
 
-const globalEnv = schemaEnv.parse(process.env) 
+const globalEnv = schemaEnv.parse(process.env);
 export default globalEnv;

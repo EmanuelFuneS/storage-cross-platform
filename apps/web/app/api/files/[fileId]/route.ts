@@ -34,6 +34,7 @@ export async function PUT(
 ) {
   const { fileId } = await params;
   const session = await getServerSession(authOptions);
+
   if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -43,4 +44,21 @@ export async function PUT(
     .where(eq(filesTable.id, fileId));
 
   return NextResponse.json({ ok: true });
+}
+
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ fileId: string }> },
+) {
+  const { fileId } = await params;
+  const session = await getServerSession();
+
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const file = await db.query.filesTable.findFirst({
+    where: eq(filesTable.id, fileId),
+  });
+
+  return NextResponse.json({ ok: true, data: file });
 }
