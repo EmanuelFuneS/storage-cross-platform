@@ -1,10 +1,8 @@
-import { Button } from "@workspace/ui/components";
+import { Button, Typography } from "@workspace/ui/components";
 import { signOut } from "next-auth/react";
 import React from "react";
 
-type Props = {};
-
-const Logout = (props: Props) => {
+const Logout = () => {
   return (
     <Button
       onClick={() =>
@@ -13,7 +11,9 @@ const Logout = (props: Props) => {
         })
       }
     >
-      Logout
+      <Typography as="p" type="body">
+        Logout
+      </Typography>
     </Button>
   );
 };
