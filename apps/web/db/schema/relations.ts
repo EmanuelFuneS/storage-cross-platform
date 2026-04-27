@@ -4,6 +4,7 @@ import { relations } from "drizzle-orm";
 import { usersStorageTable } from "./userStorage";
 import { foldersTable } from "./folder";
 import { filesTable } from "./file";
+import { typesTable } from "./type";
 //plan -> users
 
 export const plansRelations = relations(plansTable, ({ many }) => ({
@@ -64,5 +65,9 @@ export const filesRelations = relations(filesTable, ({ one }) => ({
   folder: one(foldersTable, {
     fields: [filesTable.folderId],
     references: [foldersTable.id],
+  }),
+  type: one(typesTable, {
+    fields: [filesTable.typeId],
+    references: [typesTable.id],
   }),
 }));
