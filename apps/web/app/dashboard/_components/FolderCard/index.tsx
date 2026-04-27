@@ -15,7 +15,7 @@ const FolderCard = ({ folder, setDepth }: FolderCardProps) => {
       href={`/dashboard?parent=${folder.id}`}
       onClick={() => folder && setDepth()}
     >
-      <div className="bg-card-nested flex flex-col items-start h-30 w-30 p-4 text-white rounded-2xl">
+      <div className="bg-card-nested flex flex-col items-start h-30 w-30 p-4 text-foreground rounded-2xl">
         <FolderIcon size={70} />
         <Typography as="p" type="body">
           {folder.name}
