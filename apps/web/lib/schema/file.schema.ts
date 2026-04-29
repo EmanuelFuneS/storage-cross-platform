@@ -2,8 +2,8 @@ import * as z from "zod";
 
 export const fileSchema = z.object({
   folderId: z.string(),
+  typeId: z.string(),
   name: z.string(),
-  type: z.string(),
   size: z.number(),
   s3_key: z.string(),
 });
