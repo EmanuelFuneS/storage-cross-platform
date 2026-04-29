@@ -22,6 +22,7 @@
     --color-muted: #f8fafc;         /* para textos/fondos secundarios */
     --color-accent: #2463eb1a;      /* primary con opacidad */
     --color-popover: #ffffff;       /* blanco puro para popovers */
+    --color-danger: #d16900;
 }
 
 .dark {
@@ -37,6 +38,7 @@
     --color-muted: #334155;         /* entre background y secondary */
     --color-accent: #2463eb33;      /* primary con opacidad */
     --color-popover: #1e293b;       /* mismo que card */
+    --color-danger: #d16900;
 }
 
 @layer base {

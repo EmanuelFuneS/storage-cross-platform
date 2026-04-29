@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "./button";
 import Card from "./card";
+import { X } from "../lib";
 
 interface ModalProps {
   isOpen: boolean;
@@ -17,8 +18,12 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
       //onClick={onClose}
     >
       <Card scale={false} className="relative p-10">
-        <Button className="absolute top-2.5 right-2.5" onClick={onClose}>
-          X
+        <Button
+          scale={true}
+          className="absolute top-2.5 right-2.5"
+          onClick={onClose}
+        >
+          <X size={20}/>
         </Button>
         {children}
       </Card>
