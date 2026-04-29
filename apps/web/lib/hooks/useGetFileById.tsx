@@ -1,7 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
-import React from "react";
-
+import { File } from "../types/schema.db";
 interface UseGetFileByIdProps {
   id: string;
 }
@@ -9,7 +7,7 @@ interface UseGetFileByIdProps {
 const useGetFileById = ({ id }: UseGetFileByIdProps) => {
   return useQuery({
     queryKey: ["file", id],
-    queryFn: async () => {
+    queryFn: async (): Promise<File> => {
       const res = await fetch(`/api/files/${encodeURIComponent(id)}`, {
         method: "GET",
         headers: {
@@ -17,7 +15,7 @@ const useGetFileById = ({ id }: UseGetFileByIdProps) => {
         },
       }).then((r) => r.json());
 
-      return res;
+      return res.data;
     },
   });
 };

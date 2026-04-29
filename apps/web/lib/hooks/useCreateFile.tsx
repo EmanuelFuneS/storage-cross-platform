@@ -18,7 +18,7 @@ const useCreateFile = () => {
       return res;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["files"] });
+      queryClient.invalidateQueries({ queryKey: ["files", "userStorage"] });
     },
   });
 };
