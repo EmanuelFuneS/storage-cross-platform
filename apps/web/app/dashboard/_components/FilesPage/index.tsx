@@ -1,7 +1,13 @@
 "use client";
 import useGetFolders from "@/lib/hooks/useGetFolders";
-import { File, Folder } from "@/lib/types/schema.db";
-import { Typography, Button, Modal, Card } from "@workspace/ui/components";
+import { File, Folder, Type } from "@/lib/types/schema.db";
+import {
+  Typography,
+  Button,
+  Modal,
+  Card,
+  Input,
+} from "@workspace/ui/components";
 import { FolderIcon } from "@workspace/ui/lib";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -10,6 +16,9 @@ import FolderForm from "../FolderForm";
 import useGetFilesByFolder from "@/lib/hooks/useGetFilesByFolder";
 import FileCard from "../FileCard";
 import FolderCard from "../FolderCard";
+import useGetTypes from "@/lib/hooks/useGetTypes";
+import { useTypeStore } from "@/lib/stores";
+import FileDetail from "../FileDetails";
 
 const typeFiles = ["All Files", "Images", "Documents", "Videos", "Audio"];
 
@@ -29,12 +38,27 @@ const FilesPage = () => {
     },
   ]);
 
+  const [filer, setFilter] = useState<{
+    maxSize: number;
+    minSize: number;
+    type: string;
+
+    //subtype: string
+  }>({
+    maxSize: 0,
+    minSize: 0,
+    type: "",
+    //subtype: "",
+  });
+
   const [isModalFolderOpen, setIsModalFolderOpen] = useState(false);
   const [isModalFileOpen, setIsModalFileOpen] = useState(false);
   const [isModalFileOptionsOpen, setIsModalFileOptionsOpen] = useState(false);
+  const [fileDetail, setFileDetail] = useState<string | undefined>("");
 
   const { data } = useGetFolders();
   const { data: files } = useGetFilesByFolder();
+  const { types } = useTypeStore();
 
   const removeNavigation = (link: { name: string; id: string | undefined }) => {
     setDepthNavigation((prev) => {
@@ -88,23 +112,41 @@ const FilesPage = () => {
           </Modal>
         </div>
       </div>
-      <div className="w-full lg:w-2/3 my-5 flex items-center justify-between">
-        {typeFiles.map((type, idx: number) => (
-          <Card key={idx} scale={false} className="p-2">
-            {type}
-          </Card>
-        ))}
+      <div className="flex flex-col">
+        {/* Filter section */}
+        {/* Search section */}
+        <div className="flex space-x-4">
+          <Typography as="p" type="body">
+            Min Size
+          </Typography>
+          <Typography as="p" type="body">
+            Max Size
+          </Typography>
+        </div>
+        <div className="w-full my-5 flex flex-wrap gap-2">
+          {types &&
+            types.map((type: Type, idx: number) => (
+              <Card key={idx} scale={true} className="p-2 cursor-pointer">
+                <Typography as="p" type="body" className="capitalize">
+                  {type.name}
+                </Typography>
+              </Card>
+            ))}
+        </div>
       </div>
-      <div className="my-5 w-full h-170">
+      <div className="my-5 w-full h-155">
         <Card
           scale={false}
           className="flex flex-col justify-start w-full h-full"
         >
           <Modal
             isOpen={isModalFileOptionsOpen}
-            onClose={() => setIsModalFileOptionsOpen(false)}
+            onClose={() => {
+              setFileDetail(undefined);
+              setIsModalFileOptionsOpen(false);
+            }}
           >
-            <h1>file options</h1>
+            {fileDetail && <FileDetail id={fileDetail!} />}
           </Modal>
           <div className="flex m-4">
             {depthNavigation &&
@@ -144,13 +186,16 @@ const FilesPage = () => {
             ))}
 
             {files ? (
-              files?.data.map((file: File, idx: number) => (
-                <FileCard
-                  key={idx}
-                  data={file}
-                  modal={() => setIsModalFileOptionsOpen(true)}
-                />
-              ))
+              files.data.map((file: File, idx: number) => {
+                return (
+                  <FileCard
+                    key={idx}
+                    data={file}
+                    modal={() => setIsModalFileOptionsOpen(true)}
+                    setId={() => file.id && setFileDetail(file.id)}
+                  />
+                );
+              })
             ) : (
               <p>Load files</p>
             )}

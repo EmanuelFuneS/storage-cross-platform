@@ -17,6 +17,8 @@ import { Button, Separator, Typography } from "@workspace/ui/components";
 import Image from "next/image";
 import AppIcon from "@/public/box.png";
 import { usePathname } from "next/navigation";
+import useStorageStatus from "@/lib/hooks/useStorageStatus";
+import FileHelper from "@/lib/utils/FileHelper";
 
 interface LayoutDashboardProps {
   children: React.ReactNode;
@@ -63,6 +65,10 @@ const asideRoutes: Route[] = [
 
 const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const pathname = usePathname();
+
+  const { data } = useStorageStatus();
+
+  console.log(data);
 
   /* const segments = pathname?.split("/").filter(Boolean) || [];
   const [basePath, ...slug] = segments; */
@@ -124,8 +130,14 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
             border={true}
             className="bg-card-nested dark:bg-card-nested my-auto p-5"
           >
-            storage bar porcentage storage space
-            <Button className="w-full my-5">
+            <Typography as="p" type="body">
+              Capacity: {FileHelper.formatSize(data?.capacity!, "MB")}
+            </Typography>
+            <Typography as="p" type="body">
+              Used: {FileHelper.formatSize(data?.used!, "MB")}
+            </Typography>
+
+            <Button scale={true} className="w-full my-5">
               Upgrade Plan
             </Button>
           </Card>

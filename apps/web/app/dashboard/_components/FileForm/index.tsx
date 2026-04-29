@@ -3,11 +3,12 @@ import { fileSchema, ICreateFileForm } from "@/lib/schema/file.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input, Button } from "@workspace/ui/components";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FileMinus, FileType } from "@workspace/ui/lib";
 import useCreateFile from "@/lib/hooks/useCreateFile";
 import { IResponseApi } from "@/lib/types/common";
+import { useTypeStore } from "@/lib/stores";
 
 interface FileFormProps {
   parentId: string;
@@ -26,6 +27,15 @@ console.log("URL", process.env.NEXT_PUBLIC_PRESIGNED_URL);
 
 const FileForm = ({ parentId, onClose }: FileFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [typeName, setTypeName] = useState<string | null>(null);
+
+  const { isInitialized, types } = useTypeStore();
+
+  const typeId = useMemo(() => {
+    const found = types.find((type) => type.name === typeName);
+    return found?.id ?? null;
+  }, [typeName, types]);
+
   const {
     register,
     handleSubmit,
@@ -36,8 +46,8 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
     resolver: zodResolver(fileSchema),
     defaultValues: {
       folderId: parentId,
+      typeId: "",
       name: "",
-      type: "",
       size: 0,
       s3_key: "",
     },
@@ -52,14 +62,19 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
       onDrop: async (files: File[]) => {
         const file = files[0];
         if (file) {
-          const { name, type, size } = file;
+          const { name, type: fileType, size } = file;
+          const [type, subType] = fileType.split("/");
+          console.log(type);
+
+          if (type) setTypeName(type);
+
           setSelectedFile(file);
           setValue("name", name);
-          setValue("type", type);
           setValue("size", size);
         }
       },
     });
+  console.log(typeId);
 
   const onSubmit: SubmitHandler<ICreateFileForm> = async (data) => {
     console.log("Form Data:", data);
@@ -85,6 +100,7 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
       console.log("presignedUrl", presignedUrl);
       const result: IResponseApi = await mutateAsync({
         ...data,
+        typeId: typeId!,
         s3_key: s3_Key,
       });
       if (presignedUrl && result.ok) {

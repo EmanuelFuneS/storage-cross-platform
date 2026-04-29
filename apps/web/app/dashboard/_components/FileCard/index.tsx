@@ -8,15 +8,22 @@ import {
 } from "@workspace/ui/lib";
 import { Typography } from "@workspace/ui/components";
 import { File } from "@/lib/types/schema.db";
+import { useTypeStore } from "@/lib/stores";
 
 interface FileCardProps {
   data: File;
   modal: () => void;
+  setId: () => void;
 }
 
-const FileCard = ({ data, modal }: FileCardProps) => {
-  const [firstType, especificType] = data.type.split("/");
-  const Icon = FileTypeRender(firstType || "");
+const FileCard = ({ data, modal, setId }: FileCardProps) => {
+  const { types } = useTypeStore();
+
+  const typeName = types.find((type) => type.id === data.typeId)?.name;
+
+  const Icon = FileTypeRender(typeName || "");
+
+  setId();
   return (
     <div
       className="flex flex-col items-center justify-center w-30 h-30 rounded-2xl p-4 hover:scale-105  transform transition-transform duration-300 cursor-pointer"
@@ -24,7 +31,7 @@ const FileCard = ({ data, modal }: FileCardProps) => {
     >
       {Icon}
       <Typography as="p" type="body">
-        {data.name.substring(0, 7)}-{especificType}
+        {data.name.substring(0, 9)}
       </Typography>
     </div>
   );
