@@ -45,8 +45,8 @@ export interface File {
   id?: string;
   userStorageId: string;
   folderId: string;
+  typeId: string;
   name: string;
-  type: string;
   size: string;
   s3_key: string;
   is_deleted: boolean;
@@ -55,4 +55,12 @@ export interface File {
   deleted_at: DateTime;
   created_at: DateTime;
   update_at: DateTime;
+
+  type: Type;
+}
+
+export interface Type {
+  id?: string;
+  name: string;
+  subTypes?: string[];
 }
