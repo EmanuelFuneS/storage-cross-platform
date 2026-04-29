@@ -7,7 +7,7 @@ import { filesTable, usersStorageTable } from "@/db/schema";
 
 //create file db
 export async function POST(req: Request) {
-  const { folderId, name, type, size, s3_key } = await req.json();
+  const { folderId, name, typeId, size, s3_key } = await req.json();
   const session = await getServerSession(authOptions);
 
   if (!session)
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       await tx.insert(filesTable).values({
         folderId: folderId || null,
         name: name,
-        type: type,
+        typeId: typeId,
         size: size,
         s3_key: s3_key,
         userStorageId: userStorage.id,

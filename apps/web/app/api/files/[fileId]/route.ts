@@ -46,6 +46,7 @@ export async function PUT(
   return NextResponse.json({ ok: true });
 }
 
+//get by id
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ fileId: string }> },
@@ -58,6 +59,13 @@ export async function GET(
 
   const file = await db.query.filesTable.findFirst({
     where: eq(filesTable.id, fileId),
+    with: {
+      type: {
+        columns: {
+          name: true,
+        },
+      },
+    },
   });
 
   return NextResponse.json({ ok: true, data: file });

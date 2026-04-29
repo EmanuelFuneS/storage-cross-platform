@@ -19,13 +19,13 @@ const Pricing = () => {
         <PricingCard
           plan="Free"
           price={0}
-          features={["5GB Secure Storage", "Basic Sharing", "Mobile Access"]}
+          features={["500MB Secure Storage", "Basic Sharing", "Mobile Access"]}
         />
         <PricingCard
           plan="Pro"
           price={12}
           features={[
-            "10GB Cloud Storage",
+            "2GB Cloud Storage",
             "Advance Security",
             "Offline File Access",
             "Priority Support",

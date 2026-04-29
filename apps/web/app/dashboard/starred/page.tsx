@@ -2,16 +2,18 @@ import { Typography } from "@workspace/ui/components";
 import React from "react";
 
 const Page = () => {
-  return <div>
-    <div className="my-10">
-      <Typography as="h1" type="headline">
-        Starred
-      </Typography>
-      <Typography as="p" type="body">
-        Pick up exactly where you left
-      </Typography>
+  return (
+    <div>
+      <section className="my-10">
+        <Typography as="h1" type="headline">
+          Starred
+        </Typography>
+        <Typography as="p" type="body">
+          Files you've marked as favorites
+        </Typography>
+      </section>
     </div>
-  </div>;
+  );
 };
 
 export default Page;
