@@ -6,7 +6,7 @@ on:
       - development
     paths:
       - ".github/workflows/**"
-      - "apps/cdk-app/"
+      - "apps/cdk-app/**"
 
 jobs:
   release:
