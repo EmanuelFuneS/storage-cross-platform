@@ -37,6 +37,7 @@ export async function GET(
         ? isNull(filesTable.folderId)
         : eq(filesTable.folderId, parentFolderId),
       eq(filesTable.userStorageId, userStorage.id),
+      eq(filesTable.is_deleted, false),
     ),
   });
 

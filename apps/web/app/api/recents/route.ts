@@ -4,6 +4,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import { db } from "@/db";
 import { recentsFileTable, usersStorageTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { ok } from "assert";
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -32,6 +33,8 @@ export async function GET(req: Request) {
     }
     return NextResponse.json({ ok: true, data: recentsFiles.slice(0, 6) });
   }
+
+  return NextResponse.json({ ok: true, data: recentsFiles });
 }
 
 export async function POST(req: Request) {

@@ -12,17 +12,22 @@ export async function DELETE(
 ) {
   const { fileId } = await params;
   const session = await getServerSession(authOptions);
-  if (session)
+  
+  if (!session)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const file = await db.query.filesTable.findFirst({
     where: eq(filesTable.id, fileId),
   });
-  if (!file) return NextResponse.json({ error: "Not Found" }, { status: 400 });
+
+  if (!file) return NextResponse.json({ error: "Not Found" }, { status: 404 });
 
   await db
     .update(filesTable)
     .set({ is_deleted: true })
     .where(eq(filesTable.id, file.id));
+
+  console.log("deleted File", fileId);
 
   return NextResponse.json({ ok: true });
 }
