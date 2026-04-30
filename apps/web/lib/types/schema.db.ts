@@ -64,3 +64,11 @@ export interface Type {
   name: string;
   subTypes?: string[];
 }
+
+export interface RecentFile {
+  id?: string;
+  storageId: string;
+  fileId: string;
+  opened_at: Date;
+  File: File;
+}
