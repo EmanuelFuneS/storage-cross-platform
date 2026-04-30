@@ -5,7 +5,7 @@ const useAddRecentFile = () => {
   return useMutation({
     mutationKey: ["recentFile"],
     mutationFn: async (data: { fileId: string }) => {
-      const res = await fetch("/api/files", {
+      const res = await fetch("/api/recents", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
