@@ -39,4 +39,20 @@ export class StorageBucket extends Construct {
   grantReadWrite(grantes: iam.IGrantable): iam.Grant {
     return this.bucket.grantReadWrite(grantes);
   }
+
+  addCloudFrontAccess(cloudFrontOacId: string) {
+    this.bucket.addToResourcePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.ServicePrincipal("cloudfront.amazonaws.com")],
+        actions: ["s3:GetObject"],
+        resources: [this.bucket.arnForObjects("*")],
+        conditions: {
+          StringEquals: {
+            "AWS:SourceArn": `arn:aws:cloudfront::${cdk.Stack.of(this).account}:distribution/${cloudFrontOacId}`,
+          },
+        },
+      }),
+    );
+  }
 }
