@@ -146,7 +146,12 @@ const FilesPage = () => {
               setIsModalFileOptionsOpen(false);
             }}
           >
-            {fileDetail && <FileDetail id={fileDetail!} />}
+            {fileDetail && (
+              <FileDetail
+                id={fileDetail!}
+                onClose={() => setIsModalFileOptionsOpen(true)}
+              />
+            )}
           </Modal>
           <div className="flex m-4">
             {depthNavigation &&

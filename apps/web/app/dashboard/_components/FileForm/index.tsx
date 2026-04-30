@@ -23,8 +23,6 @@ interface Response {
   deleted?: boolean;
 }
 
-console.log("URL", process.env.NEXT_PUBLIC_PRESIGNED_URL);
-
 const FileForm = ({ parentId, onClose }: FileFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [typeName, setTypeName] = useState<string | null>(null);
@@ -64,7 +62,6 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
         if (file) {
           const { name, type: fileType, size } = file;
           const [type, subType] = fileType.split("/");
-          console.log(type);
 
           if (type) setTypeName(type);
 
@@ -74,10 +71,8 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
         }
       },
     });
-  console.log(typeId);
 
   const onSubmit: SubmitHandler<ICreateFileForm> = async (data) => {
-    console.log("Form Data:", data);
     try {
       let presignedUrl;
       let s3_Key;
@@ -92,12 +87,11 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
         }).then((r) => r.json());
 
         const { url, s3Key: key } = await response;
-        console.log(url, key);
 
         presignedUrl = url;
         s3_Key = key;
       }
-      console.log("presignedUrl", presignedUrl);
+
       const result: IResponseApi = await mutateAsync({
         ...data,
         typeId: typeId!,
@@ -111,7 +105,7 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
             "Content-Type": selectedFile!.type,
           },
         });
-        console.log(uploadFile);
+
         if (uploadFile.ok) {
           onClose();
         }
@@ -120,8 +114,6 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
       console.error("File Creation Failed", error);
     }
   };
-
-  console.log(getValues());
 
   return (
     <form
