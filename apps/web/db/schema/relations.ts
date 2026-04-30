@@ -5,6 +5,7 @@ import { usersStorageTable } from "./userStorage";
 import { foldersTable } from "./folder";
 import { filesTable } from "./file";
 import { typesTable } from "./type";
+import { recentsFileTable } from "./recentFile";
 //plan -> users
 
 export const plansRelations = relations(plansTable, ({ many }) => ({
@@ -69,5 +70,18 @@ export const filesRelations = relations(filesTable, ({ one }) => ({
   type: one(typesTable, {
     fields: [filesTable.typeId],
     references: [typesTable.id],
+  }),
+}));
+
+//recent files -> storage, file
+
+export const recentsFileRelations = relations(recentsFileTable, ({ one }) => ({
+  Storage: one(usersStorageTable, {
+    fields: [recentsFileTable.storageId],
+    references: [usersStorageTable.id],
+  }),
+  File: one(filesTable, {
+    fields: [recentsFileTable.fileId],
+    references: [filesTable.id],
   }),
 }));
