@@ -43,6 +43,13 @@
       "when": 1777568965234,
       "tag": "0005_recent_file_table_and_relations",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1777685070383,
+      "tag": "0006_add_is_starred_to_file",
+      "breakpoints": true
     }
   ]
 }

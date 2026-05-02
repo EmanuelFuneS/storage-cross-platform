@@ -24,6 +24,7 @@ export const filesTable = pgTable(
     size: bigint({ mode: "number" }).notNull(),
     s3_key: varchar().notNull(),
     is_deleted: boolean().default(false),
+    is_starred: boolean().default(false),
 
     uploaded_at: timestamp(),
     ...timestamps,
