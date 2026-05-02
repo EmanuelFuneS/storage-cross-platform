@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
-const useGetDeletedFiles = () => {
+const useGetStarredFiles = () => {
   return useQuery({
-    queryKey: ["deleted", "files"],
+    queryKey: ["starred", "files"],
     queryFn: async () => {
-      const res = await fetch(`/api/files`, {
+      const res = await fetch(`/api/files/starred`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -16,4 +16,4 @@ const useGetDeletedFiles = () => {
   });
 };
 
-export default useGetDeletedFiles;
+export default useGetStarredFiles;

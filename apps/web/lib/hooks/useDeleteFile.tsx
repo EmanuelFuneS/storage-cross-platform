@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 const useDeleteFile = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["deleteFile"],
+    mutationKey: ["delete", "file"],
     mutationFn: async (fileId: string) => {
       const res = await fetch(`/api/files/${encodeURIComponent(fileId)}`, {
         method: "DELETE",

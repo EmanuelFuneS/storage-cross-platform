@@ -3,7 +3,7 @@ import { UserStorage } from "../types/schema.db";
 
 const useStorageStatus = () => {
   return useQuery({
-    queryKey: ["userStorage"],
+    queryKey: ["user", "storage"],
     queryFn: async (): Promise<UserStorage> => {
       const res = await fetch("/api/storage", {
         method: "GET",

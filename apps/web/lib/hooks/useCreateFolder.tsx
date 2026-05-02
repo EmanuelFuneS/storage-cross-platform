@@ -4,7 +4,7 @@ import { ICreateFolderForm } from "../schema/folder.schema";
 const useCreateFolder = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["createFolder"],
+    mutationKey: ["create", "folder"],
     mutationFn: async (data: ICreateFolderForm) => {
       const res = await fetch("/api/folders", {
         method: "POST",

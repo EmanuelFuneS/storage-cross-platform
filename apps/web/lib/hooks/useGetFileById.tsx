@@ -6,7 +6,7 @@ interface UseGetFileByIdProps {
 
 const useGetFileById = ({ id }: UseGetFileByIdProps) => {
   return useQuery({
-    queryKey: ["file", id],
+    queryKey: ["files", "detail", id],
     queryFn: async (): Promise<File> => {
       const res = await fetch(`/api/files/${encodeURIComponent(id)}`, {
         method: "GET",

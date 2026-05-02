@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 const useAddRecentFile = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["recentFile"],
+    mutationKey: ["recent", "file"],
     mutationFn: async (data: { fileId: string }) => {
       const res = await fetch("/api/recents", {
         method: "POST",
