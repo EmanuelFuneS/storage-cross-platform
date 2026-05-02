@@ -3,17 +3,14 @@ import React from "react";
 import { Button, Card, Typography } from "@workspace/ui/components";
 import { Trash } from "@workspace/ui/lib";
 import { File } from "@/lib/types/schema.db";
-import Image from "next/image";
 import useGetDeletedFiles from "@/lib/hooks/useGetDeletedFiles";
-
-const distUrl = `https://${process.env.NEXT_PUBLIC_CLOUDFRONT_DOMAIN}/`;
+import FilesCard from "@/components/card-items/fileCard";
 
 //here delete file in s3
 
 //here handle restore file
 
 const Page = () => {
-
   const { data } = useGetDeletedFiles();
 
   if (!data) return <>...loding</>;
@@ -40,25 +37,7 @@ const Page = () => {
       </section>
       <section className="w-full h-190 flex flex-wrap overflow-y-scroll gap-4 py-5 px-2">
         {data.map((el: File, idx: number) => (
-          <Card
-            key={idx}
-            className="w-70 h-70 flex flex-col items-center justify-start space-y-4"
-          >
-            <div className="m-2">
-              <Typography as="p" type="body">
-                {el.name}
-              </Typography>
-            </div>
-            <div className="max-h-60 w-full">
-               <Image
-                src={distUrl + el.s3_key}
-                alt=""
-                width={100}
-                height={100}
-                className="object-center w-full h-full rounded-b-xl"
-              />
-            </div>
-          </Card>
+          <FilesCard key={idx} data={el} />
         ))}
       </section>
     </div>

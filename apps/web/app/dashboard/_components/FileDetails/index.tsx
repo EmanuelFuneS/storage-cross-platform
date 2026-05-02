@@ -8,6 +8,8 @@ import Image from "next/image";
 import globalEnv from "@repo/env";
 import useDeleteFile from "@/lib/hooks/useDeleteFile";
 import useAddRecentFile from "@/lib/hooks/useAddRecentFile";
+import { Star } from "@workspace/ui/lib";
+import useStarFile from "@/lib/hooks/useStarFile";
 
 interface FileDetailProps {
   id: string;
@@ -21,6 +23,20 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
   const { mutateAsync } = useDeleteFile();
 
   const { mutateAsync: addHistory } = useAddRecentFile();
+  const { mutateAsync: starFile } = useStarFile();
+
+  const handleStarred = async () => {
+    try {
+      if (data && data.id) {
+        await starFile({
+          fileId: data.id,
+          value: data.is_starred ? false : true,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const history = async () => {
@@ -55,11 +71,21 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
 
   return (
     <div className="w-auto my-5 space-y-4 capitalize">
-      <div className="">
-        <Button scale={true} variant="danger" onClick={handleDelete}>
+      <div className="w-full  flex items-center justify-between">
+        <Button
+          scale={true}
+          variant="danger"
+          onClick={handleDelete}
+          className="m-0"
+        >
           Delete
         </Button>
-        {/* Soft Delete */}
+
+        <Star
+          onClick={handleStarred}
+          size={35}
+          className={`${data.is_starred ? "text-yellow-300 hover:text-foreground" : " hover:text-yellow-300"} cursor-pointer`}
+        />
       </div>
       <Typography as="h1" type="title">
         {data.name}
