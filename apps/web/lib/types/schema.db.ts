@@ -50,6 +50,7 @@ export interface File {
   size: string;
   s3_key: string;
   is_deleted: boolean;
+  is_starred: boolean;
 
   uploaded_at: DateTime;
   deleted_at: DateTime;
