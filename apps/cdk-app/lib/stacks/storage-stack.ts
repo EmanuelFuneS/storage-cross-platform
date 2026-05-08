@@ -29,6 +29,19 @@ export class StorageStack extends cdk.Stack {
       },
     });
 
+    const corsCachePolicy = new cloudfront.CachePolicy(
+      this,
+      "CorsCachePolicy",
+      {
+        cachePolicyName: "CORS-S3-Origin",
+        comment: "Include Origin header for cors",
+        defaultTtl: cdk.Duration.days(1),
+        maxTtl: cdk.Duration.days(365),
+        minTtl: cdk.Duration.seconds(1),
+        headerBehavior: cloudfront.CacheHeaderBehavior.allowList("Origin"),
+      },
+    );
+
     const dist = new cloudfront.Distribution(this, "Distribution", {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(
@@ -38,6 +51,7 @@ export class StorageStack extends cdk.Stack {
           },
         ),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        cachePolicy: corsCachePolicy,
       },
       defaultRootObject: "",
     });
