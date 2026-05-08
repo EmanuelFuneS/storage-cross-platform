@@ -21,6 +21,7 @@ export const filesTable = pgTable(
     typeId: uuid().references(() => typesTable.id),
     name: varchar().notNull(),
     //type: varchar().notNull(),
+    extension: varchar(),
     size: bigint({ mode: "number" }).notNull(),
     s3_key: varchar().notNull(),
     is_deleted: boolean().default(false),

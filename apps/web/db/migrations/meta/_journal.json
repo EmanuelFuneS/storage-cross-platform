@@ -50,6 +50,13 @@
       "when": 1777685070383,
       "tag": "0006_add_is_starred_to_file",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1778215559771,
+      "tag": "0007_add_extension_field_file_schema",
+      "breakpoints": true
     }
   ]
 }
