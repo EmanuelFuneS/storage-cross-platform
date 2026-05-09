@@ -17,6 +17,7 @@ interface AppStackProps extends cdk.StackProps {
   sotrageBucket: StorageBucket;
   imageTag: string;
   presignedUrl: string;
+  authSecret: string;
   repository: ecr.IRepository;
 }
 
@@ -32,6 +33,7 @@ export class AppStack extends cdk.Stack {
       presignedUrl,
       dbSecret,
       repository,
+      authSecret,
     } = props;
 
     const cluster = new ecs.Cluster(this, "StorageCluster", { vpc });
@@ -46,11 +48,11 @@ export class AppStack extends cdk.Stack {
         NODE_ENV: "production",
         BUCKET_NAME: sotrageBucket.bucket.bucketName,
         PRESIGNED_LAMBDA_URL: presignedUrl,
-        AUTH_SECRET: process.env.AUTH_SECRET || "default-dev-token",
+        AUTH_SECRET: authSecret,
       },
       secrets: {
         DB_USER: ecs.Secret.fromSecretsManager(dbSecret, "username"),
-        DB_PASS: ecs.Secret.fromSecretsManager(dbSecret, "password"),
+        DB_PASSWORD: ecs.Secret.fromSecretsManager(dbSecret, "password"),
         DB_HOST: ecs.Secret.fromSecretsManager(dbSecret, "host"),
         DB_PORT: ecs.Secret.fromSecretsManager(dbSecret, "port"),
         DB_NAME: ecs.Secret.fromSecretsManager(dbSecret, "dbname"),

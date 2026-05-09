@@ -38,5 +38,6 @@ new AppStack(app, "storage-app-stack", {
   imageTag: imageTag,
   sotrageBucket: storageStack.storageBucket,
   presignedUrl: storageStack.presignedUrl,
+  authSecret: process.env.AUTH_SECRET!,
   repository: storageStack.repository,
 });
