@@ -6,12 +6,12 @@ import { AppStack } from "../lib/stacks/app-stack";
 import { StorageStack } from "../lib/stacks/storage-stack";
 
 const app = new cdk.App();
-const environmet = process.env.ENVIRONMENT || "dev";
+const environment = app.node.tryGetContext("environment") || process.env.ENVIRONMENT || "dev";
 const imageTag = process.env.IMAGE_TAG || "latest";
 
-if (!["dev", "staging", "prod"].includes(environmet)) {
+if (!["dev", "staging", "prod"].includes(environment)) {
   throw new Error(
-    `Invalid environment: ${environmet}. Must be dev, staging, or prod.`,
+    `Invalid environment: ${environment}. Must be dev, staging, or prod.`,
   );
 }
 
@@ -20,7 +20,7 @@ const env = {
   region: process.env.CDK_DEFAULT_REGION,
 };
 
-const prefix = `storage-${environmet}`;
+const prefix = `storage-${environment}`;
 const stackName = (name: string) => `${prefix}${name}`;
 
 const networkStack = new NetworkStack(app, stackName("network"), {
@@ -52,5 +52,5 @@ new AppStack(app, stackName("app"), {
   repository: storageStack.repository,
 });
 
-cdk.Tags.of(app).add("Environment", environmet);
+cdk.Tags.of(app).add("Environment", environment);
 cdk.Tags.of(app).add("Project", "storage");
