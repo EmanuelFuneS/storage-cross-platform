@@ -6,6 +6,7 @@ export const fileSchema = z.object({
   name: z.string(),
   size: z.number(),
   s3_key: z.string(),
+  extension: z.string(),
 });
 
 export type ICreateFileForm = z.infer<typeof fileSchema>;

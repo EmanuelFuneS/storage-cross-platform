@@ -20,6 +20,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@hookform/resolvers": "^5.2.2",
+    "@monaco-editor/react": "^4.7.0",
     "@repo/env": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.96.1",
@@ -35,6 +36,7 @@
     "react-dom": "^19.2.0",
     "react-dropzone": "^15.0.0",
     "react-hook-form": "^7.72.0",
+    "react-pdf": "^10.4.1",
     "reflect-metadata": "^0.2.2",
     "zod": "^3.24.2",
     "zustand": "^5.0.12"

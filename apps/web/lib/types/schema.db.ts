@@ -48,6 +48,7 @@ export interface File {
   typeId: string;
   name: string;
   size: string;
+  extension: string;
   s3_key: string;
   is_deleted: boolean;
   is_starred: boolean;
