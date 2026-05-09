@@ -1,8 +1,21 @@
-import { Button, Typography } from "@workspace/ui/components";
-import { Trash } from "@workspace/ui/lib";
+"use client";
 import React from "react";
+import { Button, Card, Typography } from "@workspace/ui/components";
+import { Trash } from "@workspace/ui/lib";
+import { File } from "@/lib/types/schema.db";
+import useGetDeletedFiles from "@/lib/hooks/useGetDeletedFiles";
+import FilesCard from "@/components/card-items/fileCard";
+
+//here delete file in s3
+
+//here handle restore file
+//here handle all delete files
 
 const Page = () => {
+  const { data } = useGetDeletedFiles();
+
+  if (!data) return <>...loding</>;
+
   return (
     <div className="w-full h-full">
       <section className="my-10 flex justify-between">
@@ -23,8 +36,10 @@ const Page = () => {
           </Button>
         </div>
       </section>
-      <section className="bg-orange-500 w-full h-4/5">
-        items
+      <section className="w-full h-190 flex flex-wrap overflow-y-scroll gap-4 py-5 px-2">
+        {data.map((el: File, idx: number) => (
+          <FilesCard key={idx} data={el} option={true} />
+        ))}
       </section>
     </div>
   );

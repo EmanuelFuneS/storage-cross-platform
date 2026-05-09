@@ -5,7 +5,7 @@ const useGetFilesByFolder = () => {
   const searchParams = useSearchParams();
   const parentId = searchParams.get("parent") as string;
   return useQuery({
-    queryKey: ["files", parentId],
+    queryKey: ["files", "folder", parentId],
     queryFn: async () => {
       let param;
       if (parentId !== null) {

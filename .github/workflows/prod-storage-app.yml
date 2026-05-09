@@ -1,4 +1,4 @@
-name: Deploy Storage App
+name: Prod Deploy Storage App
 
 on:
   push:
@@ -8,11 +8,22 @@ on:
       - ".github/workflows/**"
       - "apps/cdk-app/**"
       - "apps/cdk/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - staging
+          - prod
 
 jobs:
   release:
     name: Build & Deploy Storage APP
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'prod' }}
     permissions:
       id-token: write
       contents: read
@@ -32,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      #AWS
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -42,16 +53,19 @@ jobs:
 
       - name: CDK Diff
         working-directory: apps/cdk-app
-        run: pnpm cdk diff --all
         env:
+          ENVIRONMENT: ${{ github.event.inputs.environment || 'prod' }}
           IMAGE_TAG: ${{ github.sha }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+        run: pnpm cdk diff --all --context environment=$ENVIRONMENT
 
-      - name: CDK Deploy Base (Network & Storage)Stacks
+      - name: CDK Deploy Base (Network & Storage & DB)
         working-directory: apps/cdk-app
-        run: pnpm cdk deploy network-stack storage-stack db-stack --require-approval never
+        env:
+          ENVIRONMENT: ${{ github.event.inputs.environment || 'prod' }}
+        run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-prod-network storage-prod-storage storage-prod-db --require-approval never
 
-      - name: Login to amazon ECR
+      - name: Login to Amazon ECR
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
@@ -66,9 +80,10 @@ jobs:
             ${{ steps.ecr-login.outputs.registry }}/storage-app:${{ github.sha }}
             ${{ steps.ecr-login.outputs.registry }}/storage-app:latest
 
-      - name: CDK DEPLOY
+      - name: CDK Deploy App
         working-directory: apps/cdk-app
         env:
+          ENVIRONMENT: ${{ github.event.inputs.environment || 'prod' }}
           IMAGE_TAG: ${{ github.sha }}
-          AUTH_SECRET: ${{ secrets.AUTH_SECRET}}
-        run: pnpm cdk deploy storage-app-stack --require-approval never
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+        run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-prod-app --require-approval never

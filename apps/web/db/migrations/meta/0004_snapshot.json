@@ -1,6 +1,6 @@
 {
-  "id": "400667e5-6fb1-4041-9134-66cc9c1f6beb",
-  "prevId": "05d0a5e0-3876-4003-844c-5ed5f926b6b6",
+  "id": "e58a4536-32ed-4650-bbec-5203c77bd22b",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -27,14 +27,14 @@
           "primaryKey": false,
           "notNull": false
         },
+        "typeId": {
+          "name": "typeId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -105,6 +105,19 @@
           "tableTo": "folders",
           "columnsFrom": [
             "folderId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "files_typeId_types_id_fk": {
+          "name": "files_typeId_types_id_fk",
+          "tableFrom": "files",
+          "tableTo": "types",
+          "columnsFrom": [
+            "typeId"
           ],
           "columnsTo": [
             "id"
@@ -216,6 +229,57 @@
         "capacity": {
           "name": "capacity",
           "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.types": {
+      "name": "types",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subType": {
+          "name": "subType",
+          "type": "varchar[]",
           "primaryKey": false,
           "notNull": true
         },

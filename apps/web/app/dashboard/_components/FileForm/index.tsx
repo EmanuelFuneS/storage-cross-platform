@@ -3,11 +3,13 @@ import { fileSchema, ICreateFileForm } from "@/lib/schema/file.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input, Button } from "@workspace/ui/components";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FileMinus, FileType } from "@workspace/ui/lib";
 import useCreateFile from "@/lib/hooks/useCreateFile";
 import { IResponseApi } from "@/lib/types/common";
+import { useTypeStore } from "@/lib/stores";
+import { MIME_TO_CATEGORY } from "@/lib/types/map";
 
 interface FileFormProps {
   parentId: string;
@@ -22,10 +24,20 @@ interface Response {
   deleted?: boolean;
 }
 
-console.log("URL", process.env.NEXT_PUBLIC_PRESIGNED_URL);
-
 const FileForm = ({ parentId, onClose }: FileFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { types } = useTypeStore();
+  const [typeName, setTypeName] = useState<string | null>(null);
+
+  const typeId = useMemo(() => {
+    let mimeCat: string;
+    if (typeName) {
+      mimeCat = MIME_TO_CATEGORY[typeName] as string;
+    }
+    const found = types.find((type) => type.name === mimeCat);
+    return found?.id ?? null;
+  }, [typeName, types]);
+
   const {
     register,
     handleSubmit,
@@ -36,10 +48,11 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
     resolver: zodResolver(fileSchema),
     defaultValues: {
       folderId: parentId,
+      typeId: "",
       name: "",
-      type: "",
       size: 0,
       s3_key: "",
+      extension: "",
     },
   });
 
@@ -52,17 +65,20 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
       onDrop: async (files: File[]) => {
         const file = files[0];
         if (file) {
-          const { name, type, size } = file;
+          const { name, type: fileType, size } = file;
+          const [type, subType] = fileType.split("/");
+
+          if (type) setTypeName(fileType);
+
+          setValue("extension", subType!);
           setSelectedFile(file);
           setValue("name", name);
-          setValue("type", type);
           setValue("size", size);
         }
       },
     });
 
   const onSubmit: SubmitHandler<ICreateFileForm> = async (data) => {
-    console.log("Form Data:", data);
     try {
       let presignedUrl;
       let s3_Key;
@@ -77,14 +93,14 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
         }).then((r) => r.json());
 
         const { url, s3Key: key } = await response;
-        console.log(url, key);
 
         presignedUrl = url;
         s3_Key = key;
       }
-      console.log("presignedUrl", presignedUrl);
+
       const result: IResponseApi = await mutateAsync({
         ...data,
+        typeId: typeId!,
         s3_key: s3_Key,
       });
       if (presignedUrl && result.ok) {
@@ -95,7 +111,7 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
             "Content-Type": selectedFile!.type,
           },
         });
-        console.log(uploadFile);
+
         if (uploadFile.ok) {
           onClose();
         }
@@ -104,8 +120,6 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
       console.error("File Creation Failed", error);
     }
   };
-
-  console.log(getValues());
 
   return (
     <form
@@ -135,7 +149,7 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
 
       <p>{parentId}</p>
       <Button type="submit" className="w-full">
-        Create
+        Add File
       </Button>
     </form>
   );

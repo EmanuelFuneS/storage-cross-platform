@@ -20,9 +20,9 @@ cdk.out
 .aws
 
 # Archivos de entorno y secretos (VITAL)
-.env
-.env.*
-!.env.example
+#.env
+#.env.*
+#!.env.example
 secrets.json
 *.pem
 

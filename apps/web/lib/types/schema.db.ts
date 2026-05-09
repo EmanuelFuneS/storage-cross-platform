@@ -45,14 +45,32 @@ export interface File {
   id?: string;
   userStorageId: string;
   folderId: string;
+  typeId: string;
   name: string;
-  type: string;
   size: string;
+  extension: string;
   s3_key: string;
   is_deleted: boolean;
+  is_starred: boolean;
 
   uploaded_at: DateTime;
   deleted_at: DateTime;
   created_at: DateTime;
   update_at: DateTime;
+
+  type: Type;
+}
+
+export interface Type {
+  id?: string;
+  name: string;
+  subTypes?: string[];
+}
+
+export interface RecentFile {
+  id?: string;
+  storageId: string;
+  fileId: string;
+  opened_at: Date;
+  File: File;
 }

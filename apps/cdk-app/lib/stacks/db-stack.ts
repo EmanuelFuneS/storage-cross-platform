@@ -7,6 +7,7 @@ import { PostgresDatabase } from "../constructs/postgres-db";
 
 interface DBStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
+  environment: string;
 }
 
 export class DBStack extends cdk.Stack {
@@ -17,11 +18,11 @@ export class DBStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: DBStackProps) {
     super(scope, id, props);
 
-    const { vpc } = props;
+    const { vpc, environment } = props;
 
-    this.db = new PostgresDatabase(this, "postgresDatabase", {
+    this.db = new PostgresDatabase(this, `postgresDatabase-${environment}`, {
       vpc: vpc,
-      databaseName: "storage_db",
+      databaseName: `storage_db-${environment}`,
     });
 
     this.dbSecurityGroup = this.db.connections.securityGroups[0];

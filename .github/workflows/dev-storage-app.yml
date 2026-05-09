@@ -1,0 +1,53 @@
+name: Dev Deploy Storage App
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - ".github/workflows/**"
+      - "apps/cdk-app/**"
+
+jobs:
+  release:
+    name: Development Storage App Deploy
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: CDK Diff
+        working-directory: apps/cdk-app
+        env:
+          ENVIRONMENT: dev
+        run: pnpm cdk diff --context environment=$ENVIRONMENT storage-dev-network storage-dev-storage
+
+      - name: CDK Deploy Base (Network & Storage)
+        working-directory: apps/cdk-app
+        env:
+          ENVIRONMENT: dev
+        run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-dev-network storage-dev-storage --require-approval never

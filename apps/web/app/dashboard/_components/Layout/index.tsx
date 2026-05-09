@@ -14,9 +14,9 @@ import {
 import ThemeToggle from "@/components/theme-toggle";
 import Card from "@workspace/ui/components/card";
 import { Button, Separator, Typography } from "@workspace/ui/components";
-import Image from "next/image";
-import AppIcon from "@/public/box.png";
 import { usePathname } from "next/navigation";
+import useStorageStatus from "@/lib/hooks/useStorageStatus";
+import FileHelper from "@/lib/utils/FileHelper";
 
 interface LayoutDashboardProps {
   children: React.ReactNode;
@@ -39,11 +39,11 @@ const asideRoutes: Route[] = [
     name: "Recent",
     icon: ClockFading,
   },
-  {
+/*   {
     path: "/dashboard/shared",
     name: "Shared",
     icon: UsersRound,
-  },
+  }, */
   {
     path: "/dashboard/starred",
     name: "Starred",
@@ -63,6 +63,8 @@ const asideRoutes: Route[] = [
 
 const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const pathname = usePathname();
+
+  const { data } = useStorageStatus();
 
   /* const segments = pathname?.split("/").filter(Boolean) || [];
   const [basePath, ...slug] = segments; */
@@ -124,8 +126,14 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
             border={true}
             className="bg-card-nested dark:bg-card-nested my-auto p-5"
           >
-            storage bar porcentage storage space
-            <Button className="w-full my-5">
+            <Typography as="p" type="body">
+              Capacity: {FileHelper.formatSize(data?.capacity!, "GB")}
+            </Typography>
+            <Typography as="p" type="body">
+              Used: {FileHelper.formatSize(data?.used!, "MB")}
+            </Typography>
+
+            <Button scale={true} className="w-full my-5">
               Upgrade Plan
             </Button>
           </Card>

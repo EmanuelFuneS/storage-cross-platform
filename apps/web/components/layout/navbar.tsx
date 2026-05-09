@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import ThemeToggle from "../theme-toggle";
+import Logout from "../profile/logout";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -31,13 +32,17 @@ const Navbar = () => {
         </div>
         <div className="flex space-x-5">
           <div>
-            <Link href={"#pricing"}>
-              <Button>
-                <Typography as="p" type="body">
-                  Get Started
-                </Typography>
-              </Button>
-            </Link>
+            {status === "authenticated" ? (
+              <Logout />
+            ) : (
+              <Link href={"#pricing"}>
+                <Button>
+                  <Typography as="p" type="body">
+                    Get Started
+                  </Typography>
+                </Button>
+              </Link>
+            )}
           </div>
           <div>
             {status === "authenticated" ? (

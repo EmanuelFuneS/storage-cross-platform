@@ -4,7 +4,7 @@ import { IRegisterForm } from "../schema/user.schema";
 
 const useRegisterUser = () => {
   return useMutation({
-    mutationKey: ["registerUser"],
+    mutationKey: ["register", "user"],
     mutationFn: async (data: IRegisterForm) => {
       const res = await fetch("/api/auth/sign-up", {
         method: "POST",

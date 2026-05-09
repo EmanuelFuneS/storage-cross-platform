@@ -1,6 +1,6 @@
 {
-  "id": "e1274044-a57f-4ffa-a944-5f85610ce476",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "3e9b4eba-6201-42f5-95d4-aefd06c8ac42",
+  "prevId": "e78c5301-ebc3-4895-b8ce-736c56286090",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -27,21 +27,27 @@
           "primaryKey": false,
           "notNull": false
         },
+        "typeId": {
+          "name": "typeId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
         "name": {
           "name": "name",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
-        "type": {
-          "name": "type",
+        "extension": {
+          "name": "extension",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "size": {
           "name": "size",
-          "type": "integer",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
@@ -53,6 +59,13 @@
         },
         "is_deleted": {
           "name": "is_deleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "is_starred": {
+          "name": "is_starred",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
@@ -105,6 +118,19 @@
           "tableTo": "folders",
           "columnsFrom": [
             "folderId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "files_typeId_types_id_fk": {
+          "name": "files_typeId_types_id_fk",
+          "tableFrom": "files",
+          "tableTo": "types",
+          "columnsFrom": [
+            "typeId"
           ],
           "columnsTo": [
             "id"
@@ -215,7 +241,133 @@
         },
         "capacity": {
           "name": "capacity",
-          "type": "integer",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.recentsFile": {
+      "name": "recentsFile",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "storageId": {
+          "name": "storageId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fileId": {
+          "name": "fileId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "opened_at": {
+          "name": "opened_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "recentsFile_storageId_usersStorage_id_fk": {
+          "name": "recentsFile_storageId_usersStorage_id_fk",
+          "tableFrom": "recentsFile",
+          "tableTo": "usersStorage",
+          "columnsFrom": [
+            "storageId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "recentsFile_fileId_files_id_fk": {
+          "name": "recentsFile_fileId_files_id_fk",
+          "tableFrom": "recentsFile",
+          "tableTo": "files",
+          "columnsFrom": [
+            "fileId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "recentsFile_storageId_fileId_unique": {
+          "name": "recentsFile_storageId_fileId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "storageId",
+            "fileId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.types": {
+      "name": "types",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subType": {
+          "name": "subType",
+          "type": "varchar[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -270,11 +422,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "planId": {
-          "name": "planId",
-          "type": "uuid",
+        "password": {
+          "name": "password",
+          "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "role": {
           "name": "role",
@@ -282,6 +434,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'client'"
+        },
+        "planId": {
+          "name": "planId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
@@ -352,13 +510,13 @@
         },
         "capacity": {
           "name": "capacity",
-          "type": "integer",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
         "used": {
           "name": "used",
-          "type": "integer",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
@@ -394,7 +552,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },

@@ -13,7 +13,7 @@ const schemaEnv = z.object({
   DB_USER: z.string(),
   DB_NAME: z.string(),
   //web
-
+  NEXT_PUBLIC_CLOUDFRONT_DOMAIN: z.string(),
   PRESIGNED_LAMBDA_URL: z.string(),
   AUTH_SECRET: z.string(),
 

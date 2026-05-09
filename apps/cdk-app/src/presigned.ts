@@ -31,11 +31,15 @@ export const handler = async (event: any) => {
       return response(200, { url, s3Key: key, success: true });
 
     case "download":
+      const finalFileName = fileName || s3Key.split("/").pop() || "download";
+
       const downloadUrl = await getSignedUrl(
         s3,
         new GetObjectCommand({
           Bucket: process.env.BUCKET_NAME,
           Key: s3Key,
+          ResponseContentDisposition: `attachment; filename="${encodeURIComponent(finalFileName)}"`,
+          ResponseContentType: "application/octet-stream",
         }),
         { expiresIn: 60 },
       );

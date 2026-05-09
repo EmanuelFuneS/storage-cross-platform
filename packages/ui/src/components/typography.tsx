@@ -4,7 +4,7 @@ const typeText: Record<string, string> = {
   display: "text-6xl font-black",
   headline: "text-3xl font-bold",
   title: "text-xl font-semibold ",
-  body: "text-sm font-normal",
+  body: "text-sm",
 };
 
 type TypeText = "display" | "headline" | "title" | "body";

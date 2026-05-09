@@ -6,7 +6,7 @@ import { IResponseApi } from "../types/common";
 const useCreateFile = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["createFile"],
+    mutationKey: ["create", "file"],
     mutationFn: async (data: ICreateFileForm): Promise<IResponseApi> => {
       const res = await fetch("/api/files", {
         method: "POST",
