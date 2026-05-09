@@ -6,34 +6,44 @@ import { Construct } from "constructs";
 import { StorageBucket } from "../constructs/storage-bucket";
 import { Presigned } from "../constructs/presigned";
 
+interface StorageStackPorps extends cdk.StackProps {
+  environment: string;
+}
+
 export class StorageStack extends cdk.Stack {
   public readonly storageBucket: StorageBucket;
   public readonly distribution: string;
   public readonly presignedUrl: string;
   public readonly repository: ecr.IRepository;
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: StorageStackPorps) {
     super(scope, id, props);
 
-    this.storageBucket = new StorageBucket(this, "StorageBucket", {
+    const { environment } = props;
+
+    this.storageBucket = new StorageBucket(this, `StorageBucket-${environment}`, {
       removalPolicy: cdk.RemovalPolicy.RETAIN,
       versioned: true,
     });
 
-    const oac = new cloudfront.CfnOriginAccessControl(this, "OAC", {
-      originAccessControlConfig: {
-        name: `${this.storageBucket.bucket.bucketName}-oac`,
-        originAccessControlOriginType: "s3",
-        signingBehavior: "always",
-        signingProtocol: "sigv4",
+    const oac = new cloudfront.CfnOriginAccessControl(
+      this,
+      `OAC-${environment}`,
+      {
+        originAccessControlConfig: {
+          name: `storage-oac-${environment}`,
+          originAccessControlOriginType: "s3",
+          signingBehavior: "always",
+          signingProtocol: "sigv4",
+        },
       },
-    });
+    );
 
     const corsCachePolicy = new cloudfront.CachePolicy(
       this,
-      "CorsCachePolicy",
+      `CorsCachePolicy-${environment}`,
       {
-        cachePolicyName: "CORS-S3-Origin",
+        cachePolicyName: `CORS-S3-Origin-${environment}`,
         comment: "Include Origin header for cors",
         defaultTtl: cdk.Duration.days(1),
         maxTtl: cdk.Duration.days(365),
@@ -42,7 +52,7 @@ export class StorageStack extends cdk.Stack {
       },
     );
 
-    const dist = new cloudfront.Distribution(this, "Distribution", {
+    const dist = new cloudfront.Distribution(this, `Distribution-${environment}`, {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(
           this.storageBucket.bucket,
@@ -58,25 +68,25 @@ export class StorageStack extends cdk.Stack {
     const distributionId = dist.distributionId;
     this.storageBucket.addCloudFrontAccess(distributionId);
 
-    const repository = new ecr.Repository(this, "StorageRepository", {
-      repositoryName: "storage-app",
+    const repository = new ecr.Repository(this, `StorageRepository-${environment}`, {
+      repositoryName: `storage-app-${environment}`,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       emptyOnDelete: true,
     });
 
     this.repository = repository;
 
-    const presigned = new Presigned(this, "PresignedUrl", {
+    const presigned = new Presigned(this, `PresignedUrl-${environment}`, {
       bucket: this.storageBucket.bucket,
     });
 
     this.presignedUrl = presigned.functionUrl.url;
 
-    new cdk.CfnOutput(this, "PresignedFunctionUrl", {
+    new cdk.CfnOutput(this, `PresignedFunctionUrl-${environment}`, {
       value: presigned.functionUrl.url,
     });
 
-    new cdk.CfnOutput(this, "DistributionURL", {
+    new cdk.CfnOutput(this, `DistributionURL-${environment}`, {
       value: `https://${dist.domainName}`,
     });
   }

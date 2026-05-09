@@ -14,11 +14,12 @@ interface AppStackProps extends cdk.StackProps {
   db: PostgresDatabase;
   dbSecurityGroup: ec2.ISecurityGroup;
   dbSecret: secretmanager.ISecret;
-  sotrageBucket: StorageBucket;
+  storageBucket: StorageBucket;
   imageTag: string;
   presignedUrl: string;
   authSecret: string;
   repository: ecr.IRepository;
+  environment: string;
 }
 
 export class AppStack extends cdk.Stack {
@@ -28,17 +29,18 @@ export class AppStack extends cdk.Stack {
     const {
       vpc,
       db,
-      sotrageBucket,
+      storageBucket,
       imageTag,
       presignedUrl,
       dbSecret,
       repository,
       authSecret,
+      environment
     } = props;
 
-    const cluster = new ecs.Cluster(this, "StorageCluster", { vpc });
+    const cluster = new ecs.Cluster(this, `StorageCluster-${environment}`, { vpc });
 
-    const appService = new AppService(this, "StorageService", {
+    const appService = new AppService(this, `StorageService-${environment}`, {
       vpc,
       cluster,
       repository,
@@ -46,7 +48,7 @@ export class AppStack extends cdk.Stack {
       imageTag,
       environment: {
         NODE_ENV: "production",
-        BUCKET_NAME: sotrageBucket.bucket.bucketName,
+        BUCKET_NAME: storageBucket.bucket.bucketName,
         PRESIGNED_LAMBDA_URL: presignedUrl,
         AUTH_SECRET: authSecret,
       },
@@ -66,9 +68,9 @@ export class AppStack extends cdk.Stack {
       ec2.Port.tcp(5432),
     );
 
-    sotrageBucket.grantReadWrite(appService.service.taskDefinition.taskRole);
+    storageBucket.grantReadWrite(appService.service.taskDefinition.taskRole);
 
-    const alb = new elbv2.ApplicationLoadBalancer(this, "alb", {
+    const alb = new elbv2.ApplicationLoadBalancer(this, `alb-${environment}`, {
       vpc,
       internetFacing: true,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
@@ -76,9 +78,9 @@ export class AppStack extends cdk.Stack {
 
     appService.connections.allowFrom(alb, ec2.Port.tcp(80));
 
-    const listener = alb.addListener("HttpListener", { port: 80 });
+    const listener = alb.addListener(`HttpListener-${environment}`, { port: 80 });
 
-    listener.addTargets("StorageTarget", {
+    listener.addTargets(`StorageTarget-${environment}`, {
       port: 3000,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [appService.service],
@@ -89,7 +91,7 @@ export class AppStack extends cdk.Stack {
       },
     });
 
-    new cdk.CfnOutput(this, "AppUrl", {
+    new cdk.CfnOutput(this, `AppUrl-${environment}`, {
       value: `http://${alb.loadBalancerDnsName}`,
       description: "App Url",
     });
