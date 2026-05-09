@@ -26,6 +26,8 @@ FROM --platform=linux/amd64 node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
+RUN npm install -g drizzle-kit drizzle-orm pg
+
 COPY apps/web/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
@@ -37,7 +39,6 @@ COPY --from=builder /app/apps/web/public ./apps/web/public
 COPY --from=builder /app/apps/web/db ./db
 COPY --from=builder /app/apps/web/drizzle.config.ts ./
 
-RUN npm install -g drizzle-kit pg
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 EXPOSE 3000

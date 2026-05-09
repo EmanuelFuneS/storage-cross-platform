@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      # Variables que ahora pide tu entrypoint.sh
+      DB_USER: admin
+      DB_PASSWORD: admin
+      DB_HOST: host.containers.internal
+      DB_PORT: 5432
+      DB_NAME: driveapp
+      # Mantén esta si tu app o Zod la siguen usando directamente
+      DATABASE_URL: postgresql://postgres:password@host.containers.internal:5432/driveapp
+      AUTH_SECRET: ${AUTH_SECRET}
+      PRESIGNED_LAMBDA_URL: ${PRESIGNED_LAMBDA_URL}
+    extra_hosts:
+      - "host.containers.internal:host-gateway"
+    restart: unless-stopped
