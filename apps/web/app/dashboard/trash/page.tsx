@@ -9,6 +9,7 @@ import FilesCard from "@/components/card-items/fileCard";
 //here delete file in s3
 
 //here handle restore file
+//here handle all delete files
 
 const Page = () => {
   const { data } = useGetDeletedFiles();
@@ -37,7 +38,7 @@ const Page = () => {
       </section>
       <section className="w-full h-190 flex flex-wrap overflow-y-scroll gap-4 py-5 px-2">
         {data.map((el: File, idx: number) => (
-          <FilesCard key={idx} data={el} />
+          <FilesCard key={idx} data={el} option={true} />
         ))}
       </section>
     </div>

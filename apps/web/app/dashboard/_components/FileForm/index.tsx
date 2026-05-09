@@ -9,6 +9,7 @@ import { FileMinus, FileType } from "@workspace/ui/lib";
 import useCreateFile from "@/lib/hooks/useCreateFile";
 import { IResponseApi } from "@/lib/types/common";
 import { useTypeStore } from "@/lib/stores";
+import { MIME_TO_CATEGORY } from "@/lib/types/map";
 
 interface FileFormProps {
   parentId: string;
@@ -25,12 +26,15 @@ interface Response {
 
 const FileForm = ({ parentId, onClose }: FileFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { types } = useTypeStore();
   const [typeName, setTypeName] = useState<string | null>(null);
 
-  const { isInitialized, types } = useTypeStore();
-
   const typeId = useMemo(() => {
-    const found = types.find((type) => type.name === typeName);
+    let mimeCat: string;
+    if (typeName) {
+      mimeCat = MIME_TO_CATEGORY[typeName] as string;
+    }
+    const found = types.find((type) => type.name === mimeCat);
     return found?.id ?? null;
   }, [typeName, types]);
 
@@ -48,6 +52,7 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
       name: "",
       size: 0,
       s3_key: "",
+      extension: "",
     },
   });
 
@@ -63,8 +68,9 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
           const { name, type: fileType, size } = file;
           const [type, subType] = fileType.split("/");
 
-          if (type) setTypeName(type);
+          if (type) setTypeName(fileType);
 
+          setValue("extension", subType!);
           setSelectedFile(file);
           setValue("name", name);
           setValue("size", size);
@@ -143,7 +149,7 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
 
       <p>{parentId}</p>
       <Button type="submit" className="w-full">
-        Create
+        Add File
       </Button>
     </form>
   );

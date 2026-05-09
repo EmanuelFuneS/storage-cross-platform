@@ -1,26 +1,16 @@
 "use client";
 import useGetFolders from "@/lib/hooks/useGetFolders";
 import { File, Folder, Type } from "@/lib/types/schema.db";
-import {
-  Typography,
-  Button,
-  Modal,
-  Card,
-  Input,
-} from "@workspace/ui/components";
-import { FolderIcon } from "@workspace/ui/lib";
+import { Typography, Button, Modal, Card } from "@workspace/ui/components";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FileForm from "../FileForm";
 import FolderForm from "../FolderForm";
 import useGetFilesByFolder from "@/lib/hooks/useGetFilesByFolder";
 import FileCard from "../FileCard";
 import FolderCard from "../FolderCard";
-import useGetTypes from "@/lib/hooks/useGetTypes";
 import { useTypeStore } from "@/lib/stores";
 import FileDetail from "../FileDetails";
-
-const typeFiles = ["All Files", "Images", "Documents", "Videos", "Audio"];
 
 const FilesPage = () => {
   const searchParams = new URLSearchParams();
@@ -37,7 +27,7 @@ const FilesPage = () => {
       id: undefined,
     },
   ]);
-
+  //Filters
   const [filer, setFilter] = useState<{
     maxSize: number;
     minSize: number;
@@ -53,8 +43,8 @@ const FilesPage = () => {
 
   const [isModalFolderOpen, setIsModalFolderOpen] = useState(false);
   const [isModalFileOpen, setIsModalFileOpen] = useState(false);
-  const [isModalFileOptionsOpen, setIsModalFileOptionsOpen] = useState(false);
-  const [fileDetail, setFileDetail] = useState<string | undefined>("");
+  const [isModalFileDetailOpen, setIsModalFileDetailOpen] = useState(false);
+  const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
 
   const { data } = useGetFolders();
   const { data: files } = useGetFilesByFolder();
@@ -66,6 +56,21 @@ const FilesPage = () => {
       return prev.slice(0, index + 1);
     });
   };
+
+  // Abrir modal con un archivo específico
+  const openDetails = (fileId: string) => {
+    setSelectedFileId(fileId);
+    setIsModalFileDetailOpen(true);
+  };
+
+  // Cerrar modal y limpiar selección
+  const closeDetails = useCallback(() => {
+    setIsModalFileDetailOpen(false);
+    // Limpiar después de que la animación de cierre termine (opcional)
+    setTimeout(() => setSelectedFileId(null), 300);
+  }, []);
+
+  console.log(selectedFileId);
 
   return (
     <div>
@@ -89,7 +94,7 @@ const FilesPage = () => {
             className="w-full lg:h-10"
             onClick={() => setIsModalFileOpen(true)}
           >
-            New File
+            Add File
           </Button>
           <Modal
             isOpen={isModalFileOpen}
@@ -139,18 +144,9 @@ const FilesPage = () => {
           scale={false}
           className="flex flex-col justify-start w-full h-full"
         >
-          <Modal
-            isOpen={isModalFileOptionsOpen}
-            onClose={() => {
-              setFileDetail(undefined);
-              setIsModalFileOptionsOpen(false);
-            }}
-          >
-            {fileDetail && (
-              <FileDetail
-                id={fileDetail!}
-                onClose={() => setIsModalFileOptionsOpen(true)}
-              />
+          <Modal isOpen={isModalFileDetailOpen} onClose={closeDetails}>
+            {selectedFileId && (
+              <FileDetail id={selectedFileId} onClose={closeDetails} />
             )}
           </Modal>
           <div className="flex m-4">
@@ -192,17 +188,10 @@ const FilesPage = () => {
 
             {files ? (
               files.data.map((file: File, idx: number) => {
-                return (
-                  <FileCard
-                    key={idx}
-                    data={file}
-                    modal={() => setIsModalFileOptionsOpen(true)}
-                    setId={() => file.id && setFileDetail(file.id)}
-                  />
-                );
+                return <FileCard key={idx} data={file} modal={openDetails} />;
               })
             ) : (
-              <p>Load files</p>
+              <p>...Loading Files</p>
             )}
           </div>
         </Card>

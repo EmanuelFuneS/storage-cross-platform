@@ -1,20 +1,25 @@
 "use client";
 import useGetFileById from "@/lib/hooks/useGetFileById";
 import { Button, Typography } from "@workspace/ui/components";
-import React, { useEffect } from "react";
-import { deleteFile, downloadFile } from "@/lib/utils/FileUtils";
+import React, { useEffect, useState } from "react";
+import { downloadFile } from "@/lib/utils/FileUtils";
 import FileHelper from "@/lib/utils/FileHelper";
 import Image from "next/image";
-import globalEnv from "@repo/env";
 import useDeleteFile from "@/lib/hooks/useDeleteFile";
 import useAddRecentFile from "@/lib/hooks/useAddRecentFile";
 import { Star } from "@workspace/ui/lib";
 import useStarFile from "@/lib/hooks/useStarFile";
 
+import { Document, Page, pdfjs } from "react-pdf";
+import Editor from "@monaco-editor/react";
+import { File } from "@/lib/types/schema.db";
+
 interface FileDetailProps {
   id: string;
   onClose: () => void;
 }
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const distUrl = `https://${process.env.NEXT_PUBLIC_CLOUDFRONT_DOMAIN}/`;
 
@@ -24,7 +29,7 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
 
   const { mutateAsync: addHistory } = useAddRecentFile();
   const { mutateAsync: starFile } = useStarFile();
-
+  console.log(data);
   const handleStarred = async () => {
     try {
       if (data && data.id) {
@@ -90,20 +95,16 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
       <Typography as="h1" type="title">
         {data.name}
       </Typography>
-      <div className="w-full min-h-55 bg-orange-50">
-        {distUrl && (
-          <Image
-            src={distUrl + data.s3_key}
-            alt={`${data.name} Image`}
-            width={100}
-            height={100}
-            className="object-contain w-full h-full"
-          />
-        )}
+      <div className="w-full min-h-55 max-h-125 bg-orange-50">
+        {
+          //add types relation with name type
+          //extend schema with extension field. save subType of file
+          distUrl && <FilePreview type={data?.type?.name} file={data} />
+        }
       </div>
       <div className="py-4 space-y-4">
         <Typography as="p" type="body">
-          Type: {data.type.name}
+          Type: {data.type?.name}
         </Typography>
         <Typography as="p" type="body">
           Size: {FileHelper.formatSize(Number(data.size), "KB")}
@@ -123,6 +124,131 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
         >
           Download
         </Button>
+      </div>
+    </div>
+  );
+};
+
+const FilePreview = ({ type, file }: { type: string; file: File }) => {
+  console.log("type", type);
+  switch (type) {
+    case "audio":
+      const urlAudio = `${distUrl}${file.s3_key}`;
+      return (
+        <audio controls style={{ width: "100%" }}>
+          <source
+            src={distUrl + urlAudio}
+            type={file.extension || "audio/mpe"}
+          />
+        </audio>
+      );
+
+    case "video":
+      const urlVideo = `${distUrl}${file.s3_key}`;
+      return (
+        <video controls width={"100%"} style={{ maxHeight: "100px" }}>
+          <source
+            src={distUrl + urlVideo}
+            type={file.extension || "video/mp4"}
+          />
+        </video>
+      );
+
+    case "document":
+      return <DocumentFile subType={file.extension} file={file} />;
+
+    default:
+      return (
+        distUrl && (
+          <Image
+            src={distUrl + file.s3_key}
+            alt={`${file.name} Image`}
+            width={100}
+            height={100}
+            className="object-contain w-full h-full"
+          />
+        )
+      );
+  }
+};
+
+export const DocumentFile = ({
+  subType,
+  file,
+}: {
+  subType: string;
+  file: File;
+}) => {
+  const [content, setContent] = useState<{ type: string; data: File } | null>(
+    null,
+  );
+
+  useEffect(() => {
+    handleFileType(subType, file);
+  }, []);
+
+  const handleFileType = async (subType: string, file: any) => {
+    switch (subType) {
+      case "pdf":
+        setContent({ type: "pdf", data: file });
+        break;
+
+      default:
+        const text = await file.text();
+        setContent({ type: "text", data: text });
+    }
+  };
+
+  const renderContent = () => {
+    if (!content) return <>...Loading</>;
+    switch (content.type) {
+      case "pdf":
+        const pdfUrl = `${distUrl}${content.data.s3_key}`;
+        return <PdfPreview url={pdfUrl} />;
+      default:
+        const txtUrl = `${distUrl}${content.data.s3_key}`;
+        return (
+          <Editor
+            height={"600px"}
+            defaultLanguage="plaintext"
+            value={txtUrl}
+            options={{ readOnly: true }}
+          />
+        );
+    }
+  };
+
+  return <div className="file-preview-container">{renderContent()}</div>;
+};
+
+const PdfPreview = ({ url }: { url: string }) => {
+  const [pageWidth, setPageWidth] = useState(200);
+
+  // Responsive: ajustar al ancho del contenedor
+  useEffect(() => {
+    const updateWidth = () => {
+      const container = document.getElementById("pdf-container");
+      if (container) {
+        setPageWidth(Math.min(container.clientWidth - 32, 800));
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  return (
+    <div id="pdf-container" className="w-full flex justify-center">
+      <div className="w-full flex items-center max-h-125 shadow-lg rounded-lg overflow-auto">
+        <Document file={url}>
+          <Page
+            pageNumber={1}
+            width={pageWidth}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
+        </Document>
       </div>
     </div>
   );

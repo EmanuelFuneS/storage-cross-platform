@@ -2,14 +2,28 @@
 import useStorageStatus from "@/lib/hooks/useStorageStatus";
 import FileHelper from "@/lib/utils/FileHelper";
 import { Button, Card, Typography } from "@workspace/ui/components";
-import React from "react";
+import React, { useMemo } from "react";
 import StorageStatBar from "./_components/StorageStatBar";
 import FileTypeStat from "./_components/FileTypeStat";
+import useStorageStats from "@/lib/hooks/useStorageStats";
+import { StorageBar } from "@/lib/types/common";
 
 const Page = () => {
-  const { data } = useStorageStatus();
+  const { data: storage } = useStorageStatus();
 
-  if (!data) return <>...Loading</>;
+  const { data } = useStorageStats();
+
+  const statBar: StorageBar = useMemo(() => {
+    return {
+      capacity: storage?.capacity ?? 0,
+      usedPerTypes: (data?.fileStats ?? []).map((el) => ({
+        type: el.typeName,
+        size: el.totalSize,
+      })),
+    };
+  }, [storage, data]);
+
+  if (!storage) return <>...Loading</>;
   return (
     <div className="w-full h-full">
       <div className="my-10">
@@ -17,7 +31,7 @@ const Page = () => {
           Storage Usage
         </Typography>
         <Typography as="p" type="body">
-          You've used {FileHelper.formatSize(data.used, "MB")} of your total
+          You've used {FileHelper.formatSize(storage.used, "MB")} of your total
           capacity. Consider refining your collection or upgrade your plan.
         </Typography>
       </div>
@@ -29,15 +43,15 @@ const Page = () => {
             </Typography>
 
             <Typography as="p" type="headline">
-              {FileHelper.formatSize(data.used, "MB")}/
-              {FileHelper.formatSize(data.capacity, "GB")}
+              {FileHelper.formatSize(storage.used, "MB")}/
+              {FileHelper.formatSize(storage.capacity, "GB")}
             </Typography>
           </div>
           <div className="h-[30%] px-4">
-            <StorageStatBar />
+            <StorageStatBar data={statBar!} />
           </div>
           <div className="h-[60%] p-4">
-            <FileTypeStat />
+            <FileTypeStat data={data?.fileStats} />
           </div>
         </Card>
         <Card
@@ -55,11 +69,11 @@ const Page = () => {
           <Button className="w-full">Upgrade Plan</Button>
         </Card>
       </div>
-      <div className="my-10">
+      {/* <div className="my-10">
         <Card scale={false} className="w-full h-80">
           table
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 };

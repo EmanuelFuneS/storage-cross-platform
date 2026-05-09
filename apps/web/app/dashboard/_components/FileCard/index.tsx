@@ -14,23 +14,23 @@ import useStarFile from "@/lib/hooks/useStarFile";
 
 interface FileCardProps {
   data: File;
-  modal: () => void;
-  setId: () => void;
+  modal: (fileId: string) => void;
+  setId?: () => void;
 }
 
 const FileCard = ({ data, modal, setId }: FileCardProps) => {
   const { types } = useTypeStore();
-  
 
   const typeName = types.find((type) => type.id === data.typeId)?.name;
 
   const Icon = FileTypeRender(typeName || "");
 
-  setId();
+  if (!data) return <>...Loading</>;
+
   return (
     <div
       className="flex flex-col items-center justify-center w-30 h-30 rounded-2xl p-4 hover:scale-105  transform transition-transform duration-300 cursor-pointer"
-      onClick={modal}
+      onClick={() => modal(data.id!)}
     >
       <div className="w-full flex justify-end">
         <Star

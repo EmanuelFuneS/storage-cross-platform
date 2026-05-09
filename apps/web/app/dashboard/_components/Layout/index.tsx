@@ -14,8 +14,6 @@ import {
 import ThemeToggle from "@/components/theme-toggle";
 import Card from "@workspace/ui/components/card";
 import { Button, Separator, Typography } from "@workspace/ui/components";
-import Image from "next/image";
-import AppIcon from "@/public/box.png";
 import { usePathname } from "next/navigation";
 import useStorageStatus from "@/lib/hooks/useStorageStatus";
 import FileHelper from "@/lib/utils/FileHelper";
@@ -41,11 +39,11 @@ const asideRoutes: Route[] = [
     name: "Recent",
     icon: ClockFading,
   },
-  {
+/*   {
     path: "/dashboard/shared",
     name: "Shared",
     icon: UsersRound,
-  },
+  }, */
   {
     path: "/dashboard/starred",
     name: "Starred",
@@ -67,8 +65,6 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const pathname = usePathname();
 
   const { data } = useStorageStatus();
-
-  console.log(data);
 
   /* const segments = pathname?.split("/").filter(Boolean) || [];
   const [basePath, ...slug] = segments; */
@@ -131,7 +127,7 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
             className="bg-card-nested dark:bg-card-nested my-auto p-5"
           >
             <Typography as="p" type="body">
-              Capacity: {FileHelper.formatSize(data?.capacity!, "MB")}
+              Capacity: {FileHelper.formatSize(data?.capacity!, "GB")}
             </Typography>
             <Typography as="p" type="body">
               Used: {FileHelper.formatSize(data?.used!, "MB")}
