@@ -1,10 +1,13 @@
 import { Suspense } from "react";
 import FilesPage from "./_components/FilesPage";
+import ClientWrapper from "@/components/clientWrapper";
 
 const Page = () => {
   return (
     <Suspense fallback={<div>Loading</div>}>
-      <FilesPage />
+      <ClientWrapper>
+        <FilesPage />
+      </ClientWrapper>
     </Suspense>
   );
 };
