@@ -6,30 +6,40 @@ import { AppStack } from "../lib/stacks/app-stack";
 import { StorageStack } from "../lib/stacks/storage-stack";
 
 const app = new cdk.App();
+const environmet = process.env.ENVIRONMENT || "dev";
 const imageTag = process.env.IMAGE_TAG || "latest";
+
+if (!["dev", "staging", "prod"].includes(environmet)) {
+  throw new Error(
+    `Invalid environment: ${environmet}. Must be dev, staging, or prod.`,
+  );
+}
 
 const env = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
   region: process.env.CDK_DEFAULT_REGION,
 };
 
-const networkStack = new NetworkStack(app, "network-stack", {
-  stackName: "network-stack",
+const prefix = `storage-${environmet}`;
+const stackName = (name: string) => `${prefix}${name}`;
+
+const networkStack = new NetworkStack(app, stackName("network"), {
+  stackName: stackName("network"),
   env,
 });
 
-const storageStack = new StorageStack(app, "storage-stack", {
-  stackName: "storage-stack",
+const storageStack = new StorageStack(app, stackName("storage"), {
+  stackName: stackName("storage"),
   env,
 });
 
-const dbStack = new DBStack(app, "db-stack", {
-  stackName: "db-stack",
+const dbStack = new DBStack(app, stackName("db"), {
+  stackName: stackName("db"),
   vpc: networkStack.vpc,
   env,
 });
 
-new AppStack(app, "storage-app-stack", {
+new AppStack(app, stackName("app"), {
   env,
   vpc: networkStack.vpc,
   db: dbStack.db,
@@ -41,3 +51,6 @@ new AppStack(app, "storage-app-stack", {
   authSecret: process.env.AUTH_SECRET!,
   repository: storageStack.repository,
 });
+
+cdk.Tags.of(app).add("Environment", environmet);
+cdk.Tags.of(app).add("Project", "storage");

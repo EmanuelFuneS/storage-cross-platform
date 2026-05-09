@@ -12,6 +12,7 @@ jobs:
   release:
     name: Development Storage App Deploy
     runs-on: ubuntu-latest
+    environment: dev
     permissions:
       id-token: write
       contents: read
@@ -41,8 +42,12 @@ jobs:
 
       - name: CDK Diff
         working-directory: apps/cdk-app
-        run: pnpm cdk diff network-stack storage-stack
+        env:
+          ENVIRONMENT: dev
+        run: pnpm cdk diff --context environment=$ENVIRONMENT network-stack storage-stack
 
-      - name: CDK Deploy Base S3
+      - name: CDK Deploy Base (Network & Storage)
         working-directory: apps/cdk-app
-        run: pnpm cdk deploy network-stack storage-stack --require-approval never
+        env:
+          ENVIRONMENT: dev
+        run: pnpm cdk deploy --context environment=$ENVIRONMENT network-stack storage-stack --require-approval never
