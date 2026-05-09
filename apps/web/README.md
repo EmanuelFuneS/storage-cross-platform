@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Web — Storage Application (`web`)
+
+Full-stack cloud storage web application (Google Drive–like) built with Next.js 16 (App Router).
+
+## Tech Stack
+
+- **Next.js 16.1** (standalone output, App Router)
+- **React 19.2** + TypeScript
+- **NextAuth.js v4** (Credentials provider, JWT sessions)
+- **Drizzle ORM** + **node-postgres** (PostgreSQL)
+- **@tanstack/react-query** (server state)
+- **Zustand** (client state)
+- **Tailwind CSS v4** (design system from `@repo/ui`)
+- **react-hook-form** + **Zod** (form validation)
+- **react-dropzone** (file upload)
+- **lucide-react** (icons)
+- **next-themes** (dark mode)
+- **react-pdf** + **@monaco-editor/react** (file previews)
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Marketing landing (Hero, Features, Pricing) |
+| `/auth/sign-in` | Login (NextAuth credentials) |
+| `/auth/sign-up?plan=X` | Registration |
+| `/dashboard` | File browser (folders, files, breadcrumbs) |
+| `/dashboard/recent` | Recently accessed files |
+| `/dashboard/starred` | Starred/favorited files |
+| `/dashboard/shared` | Shared files (placeholder) |
+| `/dashboard/storage` | Storage usage by file type |
+
+## API Endpoints
+
+16 endpoints under `/api/` covering auth, files, folders, storage, S3 presigned proxy, and health checks. See `app/api/` for the full list.
+
+## Database
+
+PostgreSQL with 8 tables: `users`, `plans`, `usersStorage`, `folders`, `files`, `types`, `recentsFile`. Managed via Drizzle ORM with migrations in `db/migrations/`.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies (from monorepo root)
+pnpm install
+
+# Start dev server
+pnpm --filter web dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Requires all variables defined in `@repo/env` (see `packages/env/`). Create a `.env` at the monorepo root.
