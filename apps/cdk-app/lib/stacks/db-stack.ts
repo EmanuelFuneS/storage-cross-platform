@@ -22,7 +22,7 @@ export class DBStack extends cdk.Stack {
 
     this.db = new PostgresDatabase(this, `postgresDatabase-${environment}`, {
       vpc: vpc,
-      databaseName: `storage_db-${environment}`,
+      databaseName: `storage_db_${environment}`,
     });
 
     this.dbSecurityGroup = this.db.connections.securityGroups[0];
