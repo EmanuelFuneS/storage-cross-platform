@@ -7,7 +7,7 @@ import globalEnv from "@repo/env";
 const connectionString = `postgresql://${globalEnv.DB_USER}:${globalEnv.DB_PASSWORD}@${globalEnv.DB_HOST}:${globalEnv.DB_PORT}/${globalEnv.DB_NAME}`;
 
 const pool = new Pool({
-  connectionString: connectionString,
+  connectionString: `${connectionString}?sslmode=require`,
 });
 
 export const db = drizzle(pool, { schema });

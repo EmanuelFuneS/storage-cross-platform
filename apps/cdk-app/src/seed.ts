@@ -14,18 +14,21 @@ export async function handler(event: Event) {
 
   let commands: { name: string; cmd: string[] }[];
 
+  const dbUrl = "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?sslmode=require";
+  const exportUrl = `export DATABASE_URL="${dbUrl}"`;
+
   if (type === "migrate") {
     commands = [
       {
         name: "migrate",
-        cmd: ["drizzle-kit", "migrate", "--config=./apps/web/drizzle.config.ts"],
+        cmd: ["/bin/sh", "-c", `${exportUrl} && drizzle-kit migrate --config=./apps/web/drizzle.config.ts`],
       },
     ];
   } else {
     const seeds = event.seed ? [event.seed] : SEEDS;
     commands = seeds.map((seed) => ({
       name: seed,
-      cmd: ["npx", "tsx", `apps/web/db/seeds/${seed}.ts`],
+      cmd: ["/bin/sh", "-c", `${exportUrl} && npx tsx apps/web/db/seeds/${seed}.ts`],
     }));
   }
 
