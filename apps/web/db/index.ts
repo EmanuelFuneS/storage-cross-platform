@@ -8,6 +8,7 @@ const connectionString = `postgresql://${globalEnv.DB_USER}:${globalEnv.DB_PASSW
 
 const pool = new Pool({
   connectionString: `${connectionString}?sslmode=require`,
+  ssl: { rejectUnauthorized: false },
 });
 
 export const db = drizzle(pool, { schema });

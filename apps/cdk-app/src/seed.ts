@@ -15,20 +15,20 @@ export async function handler(event: Event) {
   let commands: { name: string; cmd: string[] }[];
 
   const dbUrl = "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?sslmode=require";
-  const exportUrl = `export DATABASE_URL="${dbUrl}"`;
+  const setup = "export NODE_TLS_REJECT_UNAUTHORIZED=0 && export DATABASE_URL=\"" + dbUrl + "\"";
 
   if (type === "migrate") {
     commands = [
       {
         name: "migrate",
-        cmd: ["/bin/sh", "-c", `${exportUrl} && drizzle-kit migrate --config=./apps/web/drizzle.config.ts`],
+        cmd: ["/bin/sh", "-c", `${setup} && drizzle-kit migrate --config=./apps/web/drizzle.config.ts`],
       },
     ];
   } else {
     const seeds = event.seed ? [event.seed] : SEEDS;
     commands = seeds.map((seed) => ({
       name: seed,
-      cmd: ["/bin/sh", "-c", `${exportUrl} && npx tsx apps/web/db/seeds/${seed}.ts`],
+      cmd: ["/bin/sh", "-c", `${setup} && npx tsx apps/web/db/seeds/${seed}.ts`],
     }));
   }
 
