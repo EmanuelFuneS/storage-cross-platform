@@ -76,7 +76,7 @@ export class AppStack extends cdk.Stack {
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
     });
 
-    appService.connections.allowFrom(alb, ec2.Port.tcp(80));
+    appService.connections.allowFrom(alb, ec2.Port.tcp(3000));
 
     const listener = alb.addListener(`HttpListener-${environment}`, { port: 80 });
 
