@@ -1,13 +1,6 @@
 name: Prod Deploy Storage App
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/**"
-      - "apps/cdk-app/**"
-      - "apps/cdk/**"
   workflow_dispatch:
     inputs:
       environment:
