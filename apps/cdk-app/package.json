@@ -8,7 +8,10 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "deploy:dev": "cdk deploy storage-dev-network storage-dev-bucket --context environment=dev --require-approval never",
+    "destroy:dev": "cdk destroy --all --context environment=dev",
+    "destroy:prod": "cdk destroy --all --context environment=prod"
   },
   "devDependencies": {
     "@types/jest": "^30",

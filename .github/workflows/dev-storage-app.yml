@@ -44,10 +44,10 @@ jobs:
         working-directory: apps/cdk-app
         env:
           ENVIRONMENT: dev
-        run: pnpm cdk diff --context environment=$ENVIRONMENT storage-dev-network storage-dev-storage
+        run: pnpm cdk diff --context environment=$ENVIRONMENT storage-dev-network storage-dev-bucket
 
       - name: CDK Deploy Base (Network & Storage)
         working-directory: apps/cdk-app
         env:
           ENVIRONMENT: dev
-        run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-dev-network storage-dev-storage --require-approval never
+        run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-dev-network storage-dev-bucket --require-approval never

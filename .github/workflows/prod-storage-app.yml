@@ -63,7 +63,7 @@ jobs:
         working-directory: apps/cdk-app
         env:
           ENVIRONMENT: ${{ github.event.inputs.environment || 'prod' }}
-        run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-prod-network storage-prod-storage storage-prod-db --require-approval never
+        run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-prod-network storage-prod-bucket storage-prod-db --require-approval never
 
       - name: Login to Amazon ECR
         id: ecr-login
@@ -77,8 +77,8 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            ${{ steps.ecr-login.outputs.registry }}/storage-app:${{ github.sha }}
-            ${{ steps.ecr-login.outputs.registry }}/storage-app:latest
+            ${{ steps.ecr-login.outputs.registry }}/storage-app-${{ github.event.inputs.environment || 'prod' }}:${{ github.sha }}
+            ${{ steps.ecr-login.outputs.registry }}/storage-app-${{ github.event.inputs.environment || 'prod' }}:latest
 
       - name: CDK Deploy App
         working-directory: apps/cdk-app
