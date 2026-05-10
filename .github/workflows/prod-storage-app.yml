@@ -93,10 +93,18 @@ jobs:
             --output text)
           echo "function-name=$FUNCTION_NAME" >> "$GITHUB_OUTPUT"
 
+      - name: Run DB Migrations
+        run: |
+          aws lambda invoke \
+            --function-name ${{ steps.get-lambda.outputs.function-name }} \
+            --payload '{"type":"migrate"}' \
+            /tmp/migrate-response.json
+          cat /tmp/migrate-response.json
+
       - name: Run DB Seeds
         run: |
           aws lambda invoke \
             --function-name ${{ steps.get-lambda.outputs.function-name }} \
-            --payload '{}' \
+            --payload '{"type":"seed"}' \
             /tmp/seed-response.json
           cat /tmp/seed-response.json
