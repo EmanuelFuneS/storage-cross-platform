@@ -5,12 +5,16 @@ const nextConfig = {
   output: "standalone",
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: process.env.NEXT_PUBLIC_CLOUDFRONT_DOMAIN,
-        port: "",
-        pathname: "/**",
-      },
+      ...(process.env.NEXT_PUBLIC_CLOUDFRONT_DOMAIN
+        ? [
+            {
+              protocol: "https",
+              hostname: process.env.NEXT_PUBLIC_CLOUDFRONT_DOMAIN,
+              port: "",
+              pathname: "/**",
+            },
+          ]
+        : []),
     ],
   },
 };

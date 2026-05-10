@@ -17,7 +17,8 @@ WORKDIR /app/apps/web
 # Placeholders para el build
 ENV DB_HOST=localhost DB_PORT=5432 DB_PASSWORD=password DB_USER=user DB_NAME=db \
     PRESIGNED_LAMBDA_URL=http://placeholder AUTH_SECRET=placeholder_secret_123 \
-    DATABASE_URL=postgresql://user:pass@localhost:5432/db
+    DATABASE_URL=postgresql://user:pass@localhost:5432/db \
+    NEXT_PUBLIC_CLOUDFRONT_DOMAIN=placeholder.example.com
 
 RUN pnpm build
 
