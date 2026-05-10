@@ -85,7 +85,7 @@ export class AppStack extends cdk.Stack {
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [appService.service],
       healthCheck: {
-        path: "/health",
+        path: "/api/health",
         healthyHttpCodes: "200",
         interval: cdk.Duration.seconds(60),
       },
