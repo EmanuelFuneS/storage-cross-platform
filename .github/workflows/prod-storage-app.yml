@@ -96,6 +96,7 @@ jobs:
       - name: Run DB Migrations
         run: |
           aws lambda invoke \
+            --cli-binary-format raw-in-base64-out \
             --function-name ${{ steps.get-lambda.outputs.function-name }} \
             --payload '{"type":"migrate"}' \
             /tmp/migrate-response.json
@@ -104,6 +105,7 @@ jobs:
       - name: Run DB Seeds
         run: |
           aws lambda invoke \
+            --cli-binary-format raw-in-base64-out \
             --function-name ${{ steps.get-lambda.outputs.function-name }} \
             --payload '{"type":"seed"}' \
             /tmp/seed-response.json
