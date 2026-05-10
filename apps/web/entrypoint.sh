@@ -5,9 +5,8 @@ export DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT
 
 echo "DATABASE_URL: postgresql://${DB_USER}:****@${DB_HOST}:${DB_PORT}/${DB_NAME}"
 
-#echo "Run Drizzle Migrations"
-#cd /app
-#drizzle-kit migrate --config=./drizzle.config.ts
+echo "Run Drizzle Migrations"
+npx drizzle-kit migrate --config=./drizzle.config.ts
 
 echo "Run APP"
 exec "$@"
