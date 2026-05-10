@@ -37,8 +37,8 @@ COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder /app/apps/web/public ./apps/web/public
 
 # 2. Ajuste de rutas para Drizzle (usando tu carpeta 'db')
-COPY --from=builder /app/apps/web/db ./db
-COPY --from=builder /app/apps/web/drizzle.config.ts ./
+COPY --from=builder /app/apps/web/db ./apps/web/db
+COPY --from=builder /app/apps/web/drizzle.config.ts ./apps/web/
 
 
 ENTRYPOINT [ "/entrypoint.sh" ]

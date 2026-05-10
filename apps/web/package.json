@@ -15,7 +15,8 @@
     "db:studio": "npx drizzle-kit studio",
     "seed:plans": "node --env-file=.env --import tsx/esm db/seeds/plans.ts",
     "seed:types": "node --env-file=.env --import tsx/esm db/seeds/types.ts",
-    "seed:users": "node --env-file=.env --import tsx/esm db/seeds/users.ts"
+    "seed:users": "node --env-file=.env --import tsx/esm db/seeds/users.ts",
+    "seed:all": "npm run seed:plans && npm run seed:types && npm run seed:users"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",

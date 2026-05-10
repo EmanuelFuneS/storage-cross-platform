@@ -65,7 +65,6 @@ export class AppService extends Construct {
       securityGroups: [securityGroup],
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       desiredCount: 1,
-      enableExecuteCommand: true,
     });
 
     this.connections = this.service.connections;

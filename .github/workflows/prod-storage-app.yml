@@ -74,9 +74,29 @@ jobs:
             ${{ steps.ecr-login.outputs.registry }}/storage-app-${{ github.event.inputs.environment || 'prod' }}:latest
 
       - name: CDK Deploy App
+        id: cdk-deploy
         working-directory: apps/cdk-app
         env:
           ENVIRONMENT: ${{ github.event.inputs.environment || 'prod' }}
           IMAGE_TAG: ${{ github.sha }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
         run: pnpm cdk deploy --context environment=$ENVIRONMENT storage-prod-app --require-approval never
+
+      - name: Get Seed Lambda name
+        id: get-lambda
+        env:
+          ENVIRONMENT: ${{ github.event.inputs.environment || 'prod' }}
+        run: |
+          FUNCTION_NAME=$(aws cloudformation describe-stacks \
+            --stack-name "storage-$ENVIRONMENT-app" \
+            --query "Stacks[0].Outputs[?contains(OutputKey,'SeedLambdaName')].OutputValue" \
+            --output text)
+          echo "function-name=$FUNCTION_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Run DB Seeds
+        run: |
+          aws lambda invoke \
+            --function-name ${{ steps.get-lambda.outputs.function-name }} \
+            --payload '{}' \
+            /tmp/seed-response.json
+          cat /tmp/seed-response.json
