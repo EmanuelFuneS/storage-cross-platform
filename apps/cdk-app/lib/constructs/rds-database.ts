@@ -46,11 +46,11 @@ export abstract class RdsDatabase extends Construct {
       allowAllIpv6Outbound: false,
     });
 
-    securityGroup.addIngressRule(
+    /* securityGroup.addIngressRule(
       ec2.Peer.ipv4(vpc.vpcCidrBlock),
       ec2.Port.tcp(5432),
       `Allow ${engine.engineType} from within the vpc`,
-    );
+    ); */
 
     const instance = new rds.DatabaseInstance(this, "Instance", {
       engine,
