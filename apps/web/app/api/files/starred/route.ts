@@ -14,6 +14,13 @@ export async function GET(req: Request) {
 
   const starredFiles = await db.query.filesTable.findMany({
     where: eq(filesTable.is_starred, true),
+    with: {
+      type: {
+        columns: {
+          name: true,
+        },
+      },
+    },
   });
 
   return NextResponse.json({ ok: true, data: starredFiles });
