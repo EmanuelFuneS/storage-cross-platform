@@ -7,7 +7,7 @@ const Features = () => {
   return (
     <section
       id="features"
-      className="max-h-100 flex flex-col items-center lg:items-start justify-center space-y-8 m-10 lg:m-2 py-15"
+      className="h-auto flex flex-col items-center lg:items-start justify-center space-y-8 mx-4 lg:m-2 py-15 my-10"
     >
       <div className="space-y-4 text-center lg:text-start lg:w-2/4">
         <Typography as="h2" type="headline">

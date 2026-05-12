@@ -3,8 +3,8 @@ import React, { type JSX } from "react";
 const typeText: Record<string, string> = {
   display: "text-6xl font-black",
   headline: "text-3xl font-bold",
-  title: "text-xl font-semibold ",
-  body: "text-sm",
+  title: "text-sm lg:text-xl font-semibold ",
+  body: "text-xs lg:text-sm",
 };
 
 type TypeText = "display" | "headline" | "title" | "body";
