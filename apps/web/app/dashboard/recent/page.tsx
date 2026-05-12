@@ -8,8 +8,6 @@ import React from "react";
 const Page = () => {
   const { data } = useGetRecentsFiles();
 
-  console.log(data);
-
   if (!data) return <>...Loading</>;
 
   return (

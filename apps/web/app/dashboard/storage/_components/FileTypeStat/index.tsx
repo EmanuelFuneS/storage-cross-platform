@@ -34,7 +34,7 @@ const FileTypeStat = ({ data }: FileTypeStatProps) => {
               </Typography>
             </div>
             <Typography as="p" type="body" className="font-bold">
-              {FileHelper.formatSize(stat.totalSize, "KB")}
+              {FileHelper.formatSize(stat.totalSize)}
             </Typography>
             <Typography as="p" type="body">
               {stat.count} files

@@ -127,10 +127,10 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
             className="bg-card-nested dark:bg-card-nested my-auto p-5"
           >
             <Typography as="p" type="body">
-              Capacity: {FileHelper.formatSize(data?.capacity!, "GB")}
+              Capacity: {FileHelper.formatSize(data?.capacity!)}
             </Typography>
             <Typography as="p" type="body">
-              Used: {FileHelper.formatSize(data?.used!, "MB")}
+              Used: {FileHelper.formatSize(data?.used!)}
             </Typography>
 
             <Button scale={true} className="w-full my-5">
