@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { JSX } from "react";
+import React, { JSX, useState } from "react";
 import {
   CloudDownloadIcon,
   Trash,
@@ -9,6 +9,8 @@ import {
   Folder,
   HardDrive,
   UsersRound,
+  Menu,
+  X,
   cn,
 } from "@workspace/ui/lib";
 import ThemeToggle from "@/components/theme-toggle";
@@ -17,6 +19,7 @@ import { Button, Separator, Typography } from "@workspace/ui/components";
 import { usePathname } from "next/navigation";
 import useStorageStatus from "@/lib/hooks/useStorageStatus";
 import FileHelper from "@/lib/utils/FileHelper";
+import Logout from "@/components/profile/logout";
 
 interface LayoutDashboardProps {
   children: React.ReactNode;
@@ -39,7 +42,7 @@ const asideRoutes: Route[] = [
     name: "Recent",
     icon: ClockFading,
   },
-/*   {
+  /*   {
     path: "/dashboard/shared",
     name: "Shared",
     icon: UsersRound,
@@ -61,85 +64,123 @@ const asideRoutes: Route[] = [
   },
 ];
 
+const sidebarContent = (
+  pathname: string | null,
+  data: any,
+  setMobileOpen: any,
+) => (
+  <Card
+    border={false}
+    scale={false}
+    className="flex flex-col p-10 w-100 h-full"
+  >
+    <div className="w-full flex items-center justify-between lg:hidden">
+      <Logout className="m-0" />
+      <Button onClick={() => setMobileOpen(false)} className="m-0">
+        <X size={20} />
+      </Button>
+    </div>
+    <div className="h-30 flex items-center justify-between">
+      <div className="flex items-center space-x-2">
+        <div className="bg-primary dark:bg-primary text-white py-4 px-3 rounded-2xl">
+          <CloudDownloadIcon size={40} className="text-elevated" />
+        </div>
+        <div>
+          <Typography as="h1" type="title">
+            Storage Dashboard
+          </Typography>
+          <Typography as="p" type="body">
+            Plan Selected
+          </Typography>
+        </div>
+      </div>
+      <ThemeToggle />
+    </div>
+
+    <div className="flex flex-col space-y-10">
+      {asideRoutes.map((el: Route, idx: number) => {
+        const isSelected = pathname === asideRoutes[idx]?.path!;
+
+        return (
+          <Link
+            key={idx}
+            href={`${el.path}`}
+            className={cn(
+              "rounded-xl hover:text-white hover:bg-primary hover:dark:bg-primary",
+              isSelected
+                ? "bg-primary dark:bg-primary text-white"
+                : "hover:bg-primary",
+            )}
+            //onClick={setMobileOpen(false)}
+          >
+            <div className="flex items-center space-x-2 h-12 p-6 ">
+              <el.icon />
+              <Typography as="p" type="body">
+                {el.name}
+              </Typography>
+            </div>
+          </Link>
+        );
+      })}
+    </div>
+
+    <Card
+      scale={false}
+      border={true}
+      className="bg-card-nested dark:bg-card-nested my-auto p-5"
+    >
+      <Typography as="p" type="body">
+        Capacity: {FileHelper.formatSize(data?.capacity!)}
+      </Typography>
+      <Typography as="p" type="body">
+        Used: {FileHelper.formatSize(data?.used!)}
+      </Typography>
+
+      <Button scale={true} className="w-full my-5">
+        Upgrade Plan
+      </Button>
+    </Card>
+  </Card>
+);
+
 const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const { data } = useStorageStatus();
 
-  /* const segments = pathname?.split("/").filter(Boolean) || [];
-  const [basePath, ...slug] = segments; */
-
   return (
-    <div className="w-full h-screen flex">
-      <aside className="hidden lg:block">
-        <Card
-          border={false}
-          scale={false}
-          className="flex flex-col p-10 w-100 h-full"
-        >
-          <div className="h-30 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              {/* <Image src={AppIcon} alt="Logo app" className="w-15 h-15" /> */}
-              <div className="bg-primary dark:bg-primary text-white py-4 px-3 rounded-2xl">
-                <CloudDownloadIcon size={40} className="text-elevated" />
-              </div>
-              <div>
-                <Typography as="h1" type="title">
-                  Storage Dashboard
-                </Typography>
-                <Typography as="p" type="body">
-                  Plan Selected
-                </Typography>
-              </div>
-            </div>
-            <ThemeToggle />
-          </div>
+    <div className="w-full h-screen flex relative">
+      <Button
+        onClick={() => setMobileOpen(true)}
+        className="fixed top-4 left-4 z-50 lg:hidden bg-primary text-white p-2 rounded-lg"
+      >
+        <Menu size={20} />
+      </Button>
 
-          <div className="flex flex-col space-y-10">
-            {asideRoutes.map((el: Route, idx: number) => {
-              const isSelected = pathname === asideRoutes[idx]?.path!;
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
 
-              return (
-                <Link
-                  key={idx}
-                  href={`${el.path}`}
-                  className={cn(
-                    "rounded-xl hover:text-white hover:bg-primary hover:dark:bg-primary",
-                    isSelected
-                      ? "bg-primary dark:bg-primary text-white"
-                      : "hover:bg-primary",
-                  )}
-                >
-                  <div className="flex items-center space-x-2 h-12 p-6 ">
-                    <el.icon />
-                    <Typography as="p" type="body">
-                      {el.name}
-                    </Typography>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          <Card
-            scale={false}
-            border={true}
-            className="bg-card-nested dark:bg-card-nested my-auto p-5"
-          >
-            <Typography as="p" type="body">
-              Capacity: {FileHelper.formatSize(data?.capacity!)}
-            </Typography>
-            <Typography as="p" type="body">
-              Used: {FileHelper.formatSize(data?.used!)}
-            </Typography>
-
-            <Button scale={true} className="w-full my-5">
-              Upgrade Plan
-            </Button>
-          </Card>
-        </Card>
+      <aside
+        className={cn(
+          "fixed top-0 left-0 z-50 h-full transition-transform duration-300 ease-in-out lg:hidden",
+          mobileOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
+        <div className="relative h-full">
+          {sidebarContent(pathname, data, setMobileOpen)}
+        </div>
       </aside>
-      <main className="p-2 lg:p-10 w-full ">{children}</main>
+
+      <aside className="hidden lg:block">
+        {sidebarContent(pathname, data, setMobileOpen)}
+      </aside>
+
+      <main className="p-2 pt-5 lg:p-10 w-full">{children}</main>
     </div>
   );
 };

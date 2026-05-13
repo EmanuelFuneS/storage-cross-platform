@@ -172,8 +172,8 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
 
     default:
       return (
-        <div className="w-full h-full flex justify-center items-center">
-          <FileIcon size={200} />
+        <div className="w-full h-full flex justify-center items-end">
+          <FileIcon size={180} />
         </div>
       );
   }
