@@ -3,13 +3,30 @@
   "ui": "tui",
   "globalEnv": [
     "NODE_ENV",
+
     "DB_HOST",
     "DB_PORT",
     "DB_USER",
     "DB_PASSWORD",
     "DB_NAME",
+
     "DATABASE_URL",
-    "AUTH_SECRET"
+    "DIRECT_URL",
+
+    "NEON_DATABASE_URL",
+
+    "PGHOST",
+    "PGDATABASE",
+    "PGUSER",
+    "PGPASSWORD",
+    "PGSSLMODE",
+    "PGCHANNELBINDING",
+
+    "NEXT_PUBLIC_APP",
+    "AUTH_SECRET",
+
+    "NEXT_PUBLIC_CLOUDFRONT_DOMAIN",
+    "PRESIGNED_LAMBDA_URL"
   ],
   "tasks": {
     "build": {
@@ -27,13 +44,30 @@
     "dev": {
       "env": [
         "NODE_ENV",
+
         "DB_HOST",
         "DB_PORT",
         "DB_USER",
         "DB_PASSWORD",
         "DB_NAME",
+
         "DATABASE_URL",
-        "AUTH_SECRET"
+        "DIRECT_URL",
+
+        "NEON_DATABASE_URL",
+
+        "PGHOST",
+        "PGDATABASE",
+        "PGUSER",
+        "PGPASSWORD",
+        "PGSSLMODE",
+        "PGCHANNELBINDING",
+
+        "NEXT_PUBLIC_APP",
+        "AUTH_SECRET",
+
+        "NEXT_PUBLIC_CLOUDFRONT_DOMAIN",
+        "PRESIGNED_LAMBDA_URL"
       ],
       "cache": false,
       "persistent": true
