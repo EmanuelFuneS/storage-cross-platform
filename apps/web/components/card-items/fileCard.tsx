@@ -1,4 +1,5 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import { Card, Typography } from "@workspace/ui/components";
 import {
   ArchiveRestore,
@@ -10,7 +11,14 @@ import { File } from "@/lib/types/schema.db";
 import Image from "next/image";
 import useRestoreFile from "@/lib/hooks/useRestoreFile";
 import useHardDeleteFile from "@/lib/hooks/useHardDeleteFile";
-import { FilePreview } from "@/app/dashboard/_components/FileDetails";
+
+const FilePreview = dynamic(
+  () =>
+    import("@/app/dashboard/_components/FileDetails").then(
+      (mod) => mod.FilePreview,
+    ),
+  { ssr: false },
+);
 
 export interface FileCardProps {
   data: File;
