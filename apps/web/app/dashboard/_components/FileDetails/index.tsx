@@ -7,7 +7,7 @@ import FileHelper from "@/lib/utils/FileHelper";
 import Image from "next/image";
 import useDeleteFile from "@/lib/hooks/useDeleteFile";
 import useAddRecentFile from "@/lib/hooks/useAddRecentFile";
-import { Star, File as FileIcon } from "@workspace/ui/lib";
+import { Star, File as FileIcon, Divide } from "@workspace/ui/lib";
 import useStarFile from "@/lib/hooks/useStarFile";
 
 import { Document, Page, pdfjs } from "react-pdf";
@@ -97,7 +97,7 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
       <Typography as="h1" type="title">
         {data.name}
       </Typography>
-      <div className="min-h-55 max-h-125">
+      <div className=" max-h-125">
         {distUrl && <FilePreview type={data?.type?.name} file={data} />}
       </div>
       <div className="py-4 space-y-4">
@@ -134,23 +134,24 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
     case "audio":
       const urlAudio = `${distUrl}${file.s3_key}`;
       return (
-        <audio controls style={{ width: "100%" }}>
-          <source
-            src={distUrl + urlAudio}
-            type={file.extension || "audio/mpe"}
-          />
-        </audio>
+        <div className="">
+          <audio controls style={{ width: "100%" }}>
+            <source src={urlAudio} type={`audio/${file.extension}`} />
+          </audio>
+        </div>
       );
 
     case "video":
       const urlVideo = `${distUrl}${file.s3_key}`;
       return (
-        <video controls width={"100%"} style={{ maxHeight: "100px" }}>
-          <source
-            src={distUrl + urlVideo}
-            type={file.extension || "video/mp4"}
-          />
-        </video>
+        <div className="w-full h-full flex justify-center items-center lg:max-w-125">
+          <video
+            controls
+            style={{ width: "100%", maxHeight: "100%", height: "auto" }}
+          >
+            <source src={urlVideo} type={`video/${file.extension}`} />
+          </video>
+        </div>
       );
 
     case "document":
