@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import useGetFolders from "@/lib/hooks/useGetFolders";
 import { File, Folder, Type } from "@/lib/types/schema.db";
 import { Typography, Button, Modal, Card } from "@workspace/ui/components";
@@ -10,7 +11,8 @@ import useGetFilesByFolder from "@/lib/hooks/useGetFilesByFolder";
 import FileCard from "../FileCard";
 import FolderCard from "../FolderCard";
 import { useTypeStore } from "@/lib/stores";
-import FileDetail from "../FileDetails";
+
+const FileDetail = dynamic(() => import("../FileDetails"), { ssr: false });
 
 const FilesPage = () => {
   const searchParams = new URLSearchParams();
