@@ -7,7 +7,7 @@ import FileHelper from "@/lib/utils/FileHelper";
 import Image from "next/image";
 import useDeleteFile from "@/lib/hooks/useDeleteFile";
 import useAddRecentFile from "@/lib/hooks/useAddRecentFile";
-import { Star } from "@workspace/ui/lib";
+import { Star, File as FileIcon, Divide } from "@workspace/ui/lib";
 import useStarFile from "@/lib/hooks/useStarFile";
 
 import { Document, Page, pdfjs } from "react-pdf";
@@ -29,7 +29,7 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
 
   const { mutateAsync: addHistory } = useAddRecentFile();
   const { mutateAsync: starFile } = useStarFile();
-  console.log(data);
+
   const handleStarred = async () => {
     try {
       if (data && data.id) {
@@ -75,7 +75,7 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
     );
 
   return (
-    <div className="w-auto my-5 space-y-4 capitalize">
+    <div className="min-w-60 my-5 space-y-4 capitalize">
       <div className="w-full  flex items-center justify-between">
         <Button
           scale={true}
@@ -83,7 +83,9 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
           onClick={handleDelete}
           className="m-0"
         >
-          Delete
+          <Typography as="p" type="body">
+            Delete
+          </Typography>
         </Button>
 
         <Star
@@ -95,19 +97,15 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
       <Typography as="h1" type="title">
         {data.name}
       </Typography>
-      <div className="w-full min-h-55 max-h-125 bg-orange-50">
-        {
-          //add types relation with name type
-          //extend schema with extension field. save subType of file
-          distUrl && <FilePreview type={data?.type?.name} file={data} />
-        }
+      <div className=" max-h-125">
+        {distUrl && <FilePreview type={data?.type?.name} file={data} />}
       </div>
       <div className="py-4 space-y-4">
         <Typography as="p" type="body">
           Type: {data.type?.name}
         </Typography>
         <Typography as="p" type="body">
-          Size: {FileHelper.formatSize(Number(data.size), "KB")}
+          Size: {FileHelper.formatSize(Number(data.size))}
         </Typography>
       </div>
       <div className="flex justify-between ">
@@ -122,42 +120,44 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
             onClose();
           }}
         >
-          Download
+          <Typography as="p" type="body">
+            Download
+          </Typography>
         </Button>
       </div>
     </div>
   );
 };
 
-const FilePreview = ({ type, file }: { type: string; file: File }) => {
-  console.log("type", type);
+export const FilePreview = ({ type, file }: { type: string; file: File }) => {
   switch (type) {
     case "audio":
       const urlAudio = `${distUrl}${file.s3_key}`;
       return (
-        <audio controls style={{ width: "100%" }}>
-          <source
-            src={distUrl + urlAudio}
-            type={file.extension || "audio/mpe"}
-          />
-        </audio>
+        <div className="">
+          <audio controls style={{ width: "100%" }}>
+            <source src={urlAudio} type={`audio/${file.extension}`} />
+          </audio>
+        </div>
       );
 
     case "video":
       const urlVideo = `${distUrl}${file.s3_key}`;
       return (
-        <video controls width={"100%"} style={{ maxHeight: "100px" }}>
-          <source
-            src={distUrl + urlVideo}
-            type={file.extension || "video/mp4"}
-          />
-        </video>
+        <div className="w-full h-full flex justify-center items-center lg:max-w-125">
+          <video
+            controls
+            style={{ width: "100%", maxHeight: "100%", height: "auto" }}
+          >
+            <source src={urlVideo} type={`video/${file.extension}`} />
+          </video>
+        </div>
       );
 
     case "document":
       return <DocumentFile subType={file.extension} file={file} />;
 
-    default:
+    case "image":
       return (
         distUrl && (
           <Image
@@ -168,6 +168,13 @@ const FilePreview = ({ type, file }: { type: string; file: File }) => {
             className="object-contain w-full h-full"
           />
         )
+      );
+
+    default:
+      return (
+        <div className="w-full h-full flex justify-center items-end">
+          <FileIcon size={180} />
+        </div>
       );
   }
 };
@@ -224,7 +231,6 @@ export const DocumentFile = ({
 const PdfPreview = ({ url }: { url: string }) => {
   const [pageWidth, setPageWidth] = useState(200);
 
-  // Responsive: ajustar al ancho del contenedor
   useEffect(() => {
     const updateWidth = () => {
       const container = document.getElementById("pdf-container");
@@ -240,7 +246,7 @@ const PdfPreview = ({ url }: { url: string }) => {
 
   return (
     <div id="pdf-container" className="w-full flex justify-center">
-      <div className="w-full flex items-center max-h-125 shadow-lg rounded-lg overflow-auto">
+      <div className="w-full flex items-center max-h-65 md:max-h-125 shadow-lg rounded-md overflow-auto">
         <Document file={url}>
           <Page
             pageNumber={1}

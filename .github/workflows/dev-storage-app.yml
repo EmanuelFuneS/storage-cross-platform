@@ -1,12 +1,22 @@
 name: Dev Deploy Storage App
 
 on:
-  push:
-    branches:
-      - development
-    paths:
-      - ".github/workflows/**"
-      - "apps/cdk-app/**"
+  #push:
+  #  branches:
+  #    - development
+  #  paths:
+  #    - ".github/workflows/**"
+  #    - "apps/cdk-app/**"
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        describe: "Environment to deploy"
+        required: true
+        default: "prod"
+        type: choice
+        options:
+          - dev
 
 jobs:
   release:

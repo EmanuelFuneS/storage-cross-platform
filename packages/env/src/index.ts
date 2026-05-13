@@ -6,18 +6,27 @@ dotenv.config({ path: "../../.env" });
 const schemaEnv = z.object({
   //environment
   NODE_ENV: z.string().default("development"),
-  //db credentials
+  //db local credentials
   DB_HOST: z.string(),
   DB_PORT: z.string(),
   DB_PASSWORD: z.string(),
   DB_USER: z.string(),
   DB_NAME: z.string(),
-  //web
-  NEXT_PUBLIC_CLOUDFRONT_DOMAIN: z.string(),
-  PRESIGNED_LAMBDA_URL: z.string(),
-  AUTH_SECRET: z.string(),
 
   DATABASE_URL: z.string(),
+  //DB NEON
+  PGUSER: z.string(),
+  PGPASSWORD: z.string(),
+  PGHOST: z.string(),
+  PGDATABASE: z.string(),
+  PGSSLMODE: z.string(),
+
+  NEON_DATABASE_URL: z.string(),
+  //web
+  AUTH_SECRET: z.string(),
+  //AWS
+  NEXT_PUBLIC_CLOUDFRONT_DOMAIN: z.string(),
+  PRESIGNED_LAMBDA_URL: z.string(),
 });
 
 const result = schemaEnv.safeParse(process.env);

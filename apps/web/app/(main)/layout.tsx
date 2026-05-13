@@ -9,7 +9,7 @@ export default function MainLayout({
   return (
     <body>
       <Navbar />
-      <main className="w-full max-w-6xl mx-auto grow flex-1 flex flex-col min-h-0">{children}</main>
+      <main className="w-full max-w-6xl mx-auto flex flex-col">{children}</main>
       <Footer />
     </body>
   );

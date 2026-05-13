@@ -12,31 +12,27 @@ interface FileTypeStatProps {
 const FileTypeStat = ({ data }: FileTypeStatProps) => {
   if (!data) return <>...Loading</>;
   return (
-    <div className="h-full flex  space-x-5">
+    <div className="h-full flex flex-row-reverse justify-end">
       {data.length &&
         data.map((stat, idx: number) => (
           <Card
             scale={false}
-            className="max-w-26 p-3 flex justify-center items-center"
+            className="max-w-26 px-5 py-4 flex justify-center items-center mx-3 relative"
           >
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center text-start space-x-1 w-full relative">
               <div
-                className={`${barColorsTail[idx]} w-2.5 h-2.5 rounded-full`}
+                className={`${barColorsTail[idx]} w-2.5 h-2.5 absolute left-[-12] rounded-full`}
               ></div>
-              <Typography
-                as="p"
-                type="body"
-                className="flex items-center justify-start  capitalize"
-              >
+              <Typography as="p" type="body" className="capitalize">
                 {stat.typeName.endsWith("s")
                   ? stat.typeName
                   : stat.typeName + "s"}
               </Typography>
             </div>
-            <Typography as="p" type="body" className="font-bold">
-              {FileHelper.formatSize(stat.totalSize, "KB")}
+            <Typography as="p" type="body" className="font-bold w-full">
+              {FileHelper.formatSize(stat.totalSize)}
             </Typography>
-            <Typography as="p" type="body">
+            <Typography as="p" type="body" className="w-full ">
               {stat.count} files
             </Typography>
           </Card>

@@ -31,7 +31,7 @@ const Page = () => {
           Storage Usage
         </Typography>
         <Typography as="p" type="body">
-          You've used {FileHelper.formatSize(storage.used, "MB")} of your total
+          You've used {FileHelper.formatSize(storage.used)} of your total
           capacity. Consider refining your collection or upgrade your plan.
         </Typography>
       </div>
@@ -43,8 +43,8 @@ const Page = () => {
             </Typography>
 
             <Typography as="p" type="headline">
-              {FileHelper.formatSize(storage.used, "MB")}/
-              {FileHelper.formatSize(storage.capacity, "GB")}
+              {FileHelper.formatSize(storage.used)}/
+              {FileHelper.formatSize(storage.capacity)}
             </Typography>
           </div>
           <div className="h-[30%] px-4">

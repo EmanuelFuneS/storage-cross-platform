@@ -1,16 +1,16 @@
 import type { Config } from "drizzle-kit";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not defined in env vars");
+if (!process.env.NEON_DATABASE_URL) {
+  throw new Error("NEON_DATABASE_URL is not defined in env vars");
 }
 
-console.log("DB_URL: ", process.env.DATABASE_URL)
+console.log("DB_URL: ", process.env.NEON_DATABASE_URL);
 
 export default {
   dialect: "postgresql",
   schema: "./db/schema/index.ts",
   out: "./db/migrations",
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url: process.env.NEON_DATABASE_URL,
   },
 } satisfies Config;

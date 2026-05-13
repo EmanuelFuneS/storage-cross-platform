@@ -1,8 +1,13 @@
 import { Button, Typography } from "@workspace/ui/components";
+import { cn } from "@workspace/ui/lib";
 import { signOut } from "next-auth/react";
 import React from "react";
 
-const Logout = () => {
+export interface LogoutProps {
+  className?: string;
+}
+
+const Logout = ({ className }: LogoutProps) => {
   return (
     <Button
       onClick={() =>
@@ -10,6 +15,7 @@ const Logout = () => {
           callbackUrl: "/",
         })
       }
+      className={cn(className)}
     >
       <Typography as="p" type="body">
         Logout

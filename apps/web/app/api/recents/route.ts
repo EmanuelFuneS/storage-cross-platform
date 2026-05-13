@@ -4,8 +4,9 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import { db } from "@/db";
 import { recentsFileTable, usersStorageTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { ok } from "assert";
 
+
+//get all recents files
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
 
@@ -22,7 +23,15 @@ export async function GET(req: Request) {
     where: eq(recentsFileTable.storageId, userStorage?.id),
     orderBy: (fields, { desc }) => [desc(fields.opened_at)],
     with: {
-      File: true,
+      File: {
+        with: {
+          type: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -36,7 +45,7 @@ export async function GET(req: Request) {
 
   return NextResponse.json({ ok: true, data: recentsFiles });
 }
-
+//add recent file
 export async function POST(req: Request) {
   const { fileId } = await req.json();
   const session = await getServerSession(authOptions);
