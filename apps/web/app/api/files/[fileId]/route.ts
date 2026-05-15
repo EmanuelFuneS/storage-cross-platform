@@ -27,8 +27,6 @@ export async function DELETE(
     .set({ is_deleted: true })
     .where(eq(filesTable.id, file.id));
 
-  console.log("deleted File", fileId);
-
   return NextResponse.json({ ok: true });
 }
 

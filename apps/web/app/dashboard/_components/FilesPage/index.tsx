@@ -72,8 +72,6 @@ const FilesPage = () => {
     setTimeout(() => setSelectedFileId(null), 300);
   }, []);
 
-  console.log(selectedFileId);
-
   return (
     <div>
       <div className="my-10 flex justify-between">

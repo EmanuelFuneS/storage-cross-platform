@@ -38,8 +38,6 @@ const FilesCard = ({ data, option }: FileCardProps) => {
     }
   };
 
-  console.log(data.type);
-
   const handleDelete = async () => {
     try {
       if (!data) throw new Error("Data is undefined");
