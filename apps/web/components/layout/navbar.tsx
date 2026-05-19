@@ -1,5 +1,6 @@
 "use client";
 import { Button, Card, Typography } from "@workspace/ui/components";
+import { CloudDownloadIcon } from "@workspace/ui/lib";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -21,11 +22,14 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-around h-20 bg-elevated dark:bg-secondary">
       <div className="w-full flex items-center justify-between max-w-7xl">
-        <div>
+        <Link href={"/"} className="flex items-center space-x-2">
+          <div className="bg-primary dark:bg-primary text-white p-2 rounded-2xl">
+            <CloudDownloadIcon size={24} className="text-elevated" />
+          </div>
           <Typography as="p" type="title">
-            logo
+            Storage
           </Typography>
-        </div>
+        </Link>
         <div className="flex items-center justify-between w-xs">
           <Typography as="p" type="body">
             <Link href={"#home"}>Home</Link>
