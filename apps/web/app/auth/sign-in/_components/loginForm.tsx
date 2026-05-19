@@ -15,7 +15,7 @@ import { useState } from "react";
 
 const LoginForm = () => {
   const router = useRouter();
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
   const {
     register,
     handleSubmit,
