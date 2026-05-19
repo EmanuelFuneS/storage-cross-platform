@@ -135,10 +135,10 @@ const FilesPage = () => {
         }}
         types={types || []}
       />
-      <div className="my-5 w-full h-155">
+      <div className="my-5 w-full h-145">
         <Card
           scale={false}
-          className="flex flex-col justify-start w-full h-auto  md:h-full"
+          className="flex flex-col justify-start w-full h-auto md:h-full"
         >
           <Modal isOpen={isModalFileDetailOpen} onClose={closeDetails}>
             {selectedFileId && (

@@ -74,9 +74,9 @@ const sidebarContent = (
     scale={false}
     className="flex flex-col p-10 w-100 h-full"
   >
-    <div className="w-full flex items-center justify-between lg:hidden">
+    <div className="w-full flex items-center justify-between">
       <Logout className="m-0" />
-      <Button onClick={() => setMobileOpen(false)} className="m-0">
+      <Button onClick={() => setMobileOpen(false)} className="m-0 lg:hidden">
         <X size={20} />
       </Button>
     </div>
