@@ -1,5 +1,5 @@
 "use client";
-import { Button, Typography } from "@workspace/ui/components";
+import { Button, Card, Typography } from "@workspace/ui/components";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -7,11 +7,15 @@ import ThemeToggle from "../theme-toggle";
 import Logout from "../profile/logout";
 
 const Navbar = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [mounted, setMounted] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    if (process.env.NODE_ENV === "development") {
+      setShowTooltip(true);
+    }
   }, []);
 
   return (
@@ -49,7 +53,7 @@ const Navbar = () => {
                 </Link>
               )}
             </div>
-            <div>
+            <div className="relative">
               {status === "authenticated" ? (
                 <Link href={"/dashboard"}>
                   <Button>
@@ -66,6 +70,19 @@ const Navbar = () => {
                     </Typography>
                   </Button>
                 </Link>
+              )}
+              {showTooltip && status !== "authenticated" && (
+                <div className="absolute top-full right-0 z-50 p-4">
+                  <Card className="bg-popover text-foreground text-xs rounded-lg border border-slate-300 dark:border-muted shadow-lg p-4 whitespace-nowrap relative">
+                    You can login with test user
+                    <button
+                      onClick={() => setShowTooltip(false)}
+                      className="absolute top-0.5 right-0.5 rounded-full bg-primary text-white w-4 h-4 flex items-center justify-center text-[10px] leading-none"
+                    >
+                      x
+                    </button>
+                  </Card>
+                </div>
               )}
             </div>
           </div>

@@ -1,21 +1,22 @@
 "use client";
 import React from "react";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ILoginForm, loginFormSchema } from "@/lib/schema/user.schema";
+import Button from "@workspace/ui/components/button";
 import Card from "@workspace/ui/components/card";
+import Input from "@workspace/ui/components/input";
 import Typography from "@workspace/ui/components/typography";
 import Link from "next/link";
-import Button from "@workspace/ui/components/button";
 import { useRouter } from "next/navigation";
-import Logout from "@/components/profile/logout";
 
 const LoginForm = () => {
   const router = useRouter();
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<ILoginForm>({
     resolver: zodResolver(loginFormSchema),
@@ -24,6 +25,11 @@ const LoginForm = () => {
       password: "",
     },
   });
+
+  const fillTestUser = () => {
+    setValue("email", "admin@gmial.com");
+    setValue("password", "admin");
+  };
 
   const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
     const result = await signIn("credentials", {
@@ -42,51 +48,42 @@ const LoginForm = () => {
 
   return (
     <Card scale={false} className="w-full h-full p-6">
-      <Typography as="h1" type="headline">
-        Welcome
-      </Typography>
-      <Typography as="p" type="body">
-        Please complete form for Login
-      </Typography>
+      <div className="flex items-start justify-between">
+        <div>
+          <Typography as="h1" type="headline">
+            Welcome
+          </Typography>
+          <Typography as="p" type="body">
+            Please complete form for Login
+          </Typography>
+        </div>
+        {process.env.NODE_ENV === "development" && (
+          <button
+            type="button"
+            onClick={fillTestUser}
+            className="cursor-pointer shrink-0 rounded-full bg-accent px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
+          >
+            Auto-Login
+          </button>
+        )}
+      </div>
       <form
         action=""
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col space-y-10 gap-4 my-5 py-5"
       >
-        <div className="flex flex-col h-15 space-y-2">
-          <Typography as="span" type="body">
-            Email
-          </Typography>
-          <input
-            className="p-2.5 rounded-xl bg-slate-500"
-            type="text"
-            {...register("email", {
-              required: true,
-            })}
-          />
-          {errors.email && (
-            <Typography as="span" type="body" className="text-error">
-              {errors.email.message}
-            </Typography>
-          )}
-        </div>
-        <div className="flex flex-col h-15 space-y-2">
-          <Typography as="span" type="body">
-            Password
-          </Typography>
-          <input
-            className="p-2.5 rounded-xl bg-slate-500"
-            type="text"
-            {...register("password", {
-              required: true,
-            })}
-          />
-          {errors.password && (
-            <Typography as="span" type="body" className="text-error">
-              {errors.password?.message}
-            </Typography>
-          )}
-        </div>
+        <Input<ILoginForm>
+          register={register}
+          errors={errors}
+          name="email"
+          label="email"
+        />
+        <Input<ILoginForm>
+          register={register}
+          errors={errors}
+          name="password"
+          label="password"
+        />
         <div className="flex flex-col space-y-2">
           <Link href={""}>
             <Typography as="p" type="body">
@@ -107,7 +104,6 @@ const LoginForm = () => {
         <Button>Gmail</Button>
         <Button>Github</Button>
       </div>
-      <Logout />
     </Card>
   );
 };
