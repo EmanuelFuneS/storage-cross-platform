@@ -14,7 +14,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setMounted(true);
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NEXT_PUBLIC_ENV === "development") {
       setShowTooltip(true);
     }
   }, []);
