@@ -1,12 +1,13 @@
 "use client";
 import dynamic from "next/dynamic";
 import useGetFolders from "@/lib/hooks/useGetFolders";
-import { File, Folder, Type } from "@/lib/types/schema.db";
+import { File, Folder } from "@/lib/types/schema.db";
 import { Typography, Button, Modal, Card } from "@workspace/ui/components";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import FileForm from "../FileForm";
 import FolderForm from "../FolderForm";
+import FilterFiles from "../FilterFiles";
 import useGetFilesByFolder from "@/lib/hooks/useGetFilesByFolder";
 import FileCard from "../FileCard";
 import FolderCard from "../FolderCard";
@@ -29,19 +30,10 @@ const FilesPage = () => {
       id: undefined,
     },
   ]);
-  //Filters
-  const [filer, setFilter] = useState<{
-    maxSize: number;
-    minSize: number;
-    type: string;
+  const defaultFilter = { maxSize: 0, minSize: 0, type: "" };
 
-    //subtype: string
-  }>({
-    maxSize: 0,
-    minSize: 0,
-    type: "",
-    //subtype: "",
-  });
+  const [filter, setFilter] = useState(defaultFilter);
+  const [appliedFilter, setAppliedFilter] = useState(defaultFilter);
 
   const [isModalFolderOpen, setIsModalFolderOpen] = useState(false);
   const [isModalFileOpen, setIsModalFileOpen] = useState(false);
@@ -51,6 +43,22 @@ const FilesPage = () => {
   const { data } = useGetFolders();
   const { data: files } = useGetFilesByFolder();
   const { types } = useTypeStore();
+
+  const filteredFiles = React.useMemo(() => {
+    if (!files?.data) return [];
+    return files.data.filter((file: File) => {
+      if (appliedFilter.type) {
+        const typeName = types.find((t) => t.id === file.typeId)?.name;
+        if (typeName !== appliedFilter.type) return false;
+      }
+      const fileSize = Number(file.size);
+      if (appliedFilter.minSize > 0 && fileSize < appliedFilter.minSize * 1024)
+        return false;
+      if (appliedFilter.maxSize > 0 && fileSize > appliedFilter.maxSize * 1024)
+        return false;
+      return true;
+    });
+  }, [files, appliedFilter, types]);
 
   const removeNavigation = (link: { name: string; id: string | undefined }) => {
     setDepthNavigation((prev) => {
@@ -117,28 +125,16 @@ const FilesPage = () => {
           </Modal>
         </div>
       </div>
-      <div className="flex flex-col">
-        {/* Filter section */}
-        {/* Search section */}
-        <div className="flex space-x-4">
-          <Typography as="p" type="body">
-            Min Size
-          </Typography>
-          <Typography as="p" type="body">
-            Max Size
-          </Typography>
-        </div>
-        <div className="w-full my-5 flex flex-wrap gap-2">
-          {types &&
-            types.map((type: Type, idx: number) => (
-              <Card key={idx} scale={true} className="p-2 cursor-pointer">
-                <Typography as="p" type="body" className="capitalize">
-                  {type.name}
-                </Typography>
-              </Card>
-            ))}
-        </div>
-      </div>
+      <FilterFiles
+        filter={filter}
+        onFilterChange={(f) => setFilter(f)}
+        onApply={() => setAppliedFilter({ ...filter })}
+        onClear={() => {
+          setFilter(defaultFilter);
+          setAppliedFilter(defaultFilter);
+        }}
+        types={types || []}
+      />
       <div className="my-5 w-full h-155">
         <Card
           scale={false}
@@ -187,9 +183,15 @@ const FilesPage = () => {
             ))}
 
             {files ? (
-              files.data.map((file: File, idx: number) => {
-                return <FileCard key={idx} data={file} modal={openDetails} />;
-              })
+              filteredFiles.length > 0 ? (
+                filteredFiles.map((file: File, idx: number) => (
+                  <FileCard key={idx} data={file} modal={openDetails} />
+                ))
+              ) : (
+                <p className="text-secondary text-sm col-span-full text-center py-10">
+                  No files match the current filters.
+                </p>
+              )
             ) : (
               <p>...Loading Files</p>
             )}
