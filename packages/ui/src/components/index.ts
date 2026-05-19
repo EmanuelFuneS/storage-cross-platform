@@ -6,5 +6,6 @@ import Separator from "./separator";
 import Typography from "./typography";
 import Modal from "./modal";
 import ToastContainer, { useToast } from "./toast";
+import Tooltip from "./tooltip";
 
-export { Button, Card, Code, Input, Separator, Typography, Modal, ToastContainer, useToast };
+export { Button, Card, Code, Input, Separator, Typography, Modal, ToastContainer, useToast, Tooltip };

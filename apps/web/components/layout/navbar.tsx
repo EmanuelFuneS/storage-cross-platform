@@ -1,5 +1,5 @@
 "use client";
-import { Button, Card, Typography } from "@workspace/ui/components";
+import { Button, Card, Typography, Tooltip } from "@workspace/ui/components";
 import { CloudDownloadIcon } from "@workspace/ui/lib";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -75,19 +75,12 @@ const Navbar = () => {
                   </Button>
                 </Link>
               )}
-              {showTooltip && status !== "authenticated" && (
-                <div className="absolute top-full right-0 z-50 p-4">
-                  <Card className="bg-popover text-foreground text-xs rounded-lg border border-slate-300 dark:border-muted shadow-lg p-4 whitespace-nowrap relative">
-                    You can login with test user
-                    <button
-                      onClick={() => setShowTooltip(false)}
-                      className="absolute top-0.5 right-0.5 rounded-full bg-primary text-white w-4 h-4 flex items-center justify-center text-[10px] leading-none"
-                    >
-                      x
-                    </button>
-                  </Card>
-                </div>
-              )}
+              <Tooltip
+                show={showTooltip && status !== "authenticated"}
+                onClose={() => setShowTooltip(false)}
+              >
+                You can login with test user
+              </Tooltip>
             </div>
           </div>
         )}

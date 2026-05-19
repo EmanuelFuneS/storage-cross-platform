@@ -76,9 +76,8 @@ const sidebarContent = (
     scale={false}
     className="flex flex-col p-10 w-100 h-full"
   >
-    <div className="w-full flex items-center justify-between">
-      <Logout className="m-0" />
-      <Button onClick={() => setMobileOpen(false)} className="m-0 lg:hidden">
+    <div className="w-full flex items-center justify-end lg:hidden">
+      <Button onClick={() => setMobileOpen(false)} className="m-0">
         <X size={20} />
       </Button>
     </div>
@@ -96,7 +95,10 @@ const sidebarContent = (
           </Typography>
         </div>
       </div>
-      <ThemeToggle />
+      <div className="flex items-center gap-2">
+        <Logout iconOnly />
+        <ThemeToggle />
+      </div>
     </div>
 
     <div className="flex flex-col space-y-10">

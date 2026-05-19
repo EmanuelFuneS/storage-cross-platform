@@ -7,12 +7,15 @@ import { ILoginForm, loginFormSchema } from "@/lib/schema/user.schema";
 import Button from "@workspace/ui/components/button";
 import Card from "@workspace/ui/components/card";
 import Input from "@workspace/ui/components/input";
+import Tooltip from "@workspace/ui/components/tooltip";
 import Typography from "@workspace/ui/components/typography";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const LoginForm = () => {
   const router = useRouter();
+  const [showTooltip, setShowTooltip] = useState(true);
   const {
     register,
     handleSubmit,
@@ -58,13 +61,24 @@ const LoginForm = () => {
           </Typography>
         </div>
         {process.env.NODE_ENV === "development" && (
-          <button
-            type="button"
-            onClick={fillTestUser}
-            className="cursor-pointer shrink-0 rounded-full bg-accent px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
-          >
-            Auto-Login
-          </button>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                fillTestUser();
+                setShowTooltip(false);
+              }}
+              className="cursor-pointer shrink-0 rounded-full bg-accent px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20 transition-colors"
+            >
+              Auto-Login
+            </button>
+            <Tooltip
+              show={showTooltip}
+              onClose={() => setShowTooltip(false)}
+            >
+              Click for auto complete fields
+            </Tooltip>
+          </div>
         )}
       </div>
       <form
