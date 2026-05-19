@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,7 @@ import { useState } from "react";
 
 const LoginForm = () => {
   const router = useRouter();
-  const [showTooltip, setShowTooltip] = useState(true);
+  const [showTooltip, setShowTooltip] = useState(false);
   const {
     register,
     handleSubmit,
@@ -60,7 +60,7 @@ const LoginForm = () => {
             Please complete form for Login
           </Typography>
         </div>
-        {process.env.NODE_ENV === "development" && (
+        {process.env.NEXT_PUBLIC_ENV === "development" && (
           <div className="relative">
             <button
               type="button"
@@ -72,10 +72,7 @@ const LoginForm = () => {
             >
               Auto-Login
             </button>
-            <Tooltip
-              show={showTooltip}
-              onClose={() => setShowTooltip(false)}
-            >
+            <Tooltip show={showTooltip} onClose={() => setShowTooltip(false)}>
               Click for auto complete fields
             </Tooltip>
           </div>
