@@ -32,11 +32,14 @@ const Tooltip = ({ children, show, onClose, className }: TooltipProps) => {
         className,
       )}
     >
-      <Card scale={false} className="bg-popover text-foreground text-xs rounded-lg border border-slate-300 dark:border-muted shadow-lg p-3 whitespace-nowrap relative">
+      <Card
+        scale={false}
+        className="bg-popover text-foreground text-xs rounded-lg border border-slate-300 dark:border-muted shadow-lg p-4 whitespace-nowrap relative"
+      >
         {children}
         <button
           onClick={onClose}
-          className="absolute -top-1.5 -right-1.5 rounded-full bg-primary text-white w-4 h-4 flex items-center justify-center text-[10px] leading-none hover:opacity-90 transition-opacity"
+          className="cursor-pointer absolute top-0.5 right-0.5 rounded-full bg-primary text-white w-4 h-4 flex items-center justify-center text-[10px] leading-none hover:opacity-90 transition-opacity"
         >
           x
         </button>
