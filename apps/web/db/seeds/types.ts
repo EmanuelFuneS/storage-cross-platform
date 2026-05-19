@@ -80,11 +80,7 @@ const types = [
 ];
 
 async function seed() {
-  console.log("sedding types...");
-
   await db.insert(typesTable).values(types).onConflictDoNothing();
-
-  console.log("Types seeded successfully");
   process.exit(0);
 }
 

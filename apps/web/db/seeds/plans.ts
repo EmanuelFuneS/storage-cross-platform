@@ -20,10 +20,7 @@ const plans = [
 ];
 
 async function seed() {
-  console.log("Sedding plans...");
   await db.insert(plansTable).values(plans).onConflictDoNothing();
-
-  console.log("Plans seeded successfully");
   process.exit(0);
 }
 

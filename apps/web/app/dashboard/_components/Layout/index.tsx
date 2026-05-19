@@ -17,6 +17,7 @@ import ThemeToggle from "@/components/theme-toggle";
 import Card from "@workspace/ui/components/card";
 import { Button, Separator, Typography } from "@workspace/ui/components";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import useStorageStatus from "@/lib/hooks/useStorageStatus";
 import FileHelper from "@/lib/utils/FileHelper";
 import Logout from "@/components/profile/logout";
@@ -68,14 +69,14 @@ const sidebarContent = (
   pathname: string | null,
   data: any,
   setMobileOpen: any,
+  planName?: string,
 ) => (
   <Card
     border={false}
     scale={false}
     className="flex flex-col p-10 w-100 h-full"
   >
-    <div className="w-full flex items-center justify-between lg:hidden">
-      <Logout className="m-0" />
+    <div className="w-full flex items-center justify-end lg:hidden">
       <Button onClick={() => setMobileOpen(false)} className="m-0">
         <X size={20} />
       </Button>
@@ -89,12 +90,15 @@ const sidebarContent = (
           <Typography as="h1" type="title">
             Storage Dashboard
           </Typography>
-          <Typography as="p" type="body">
-            Plan Selected
+          <Typography as="p" type="body" className="capitalize">
+            Plan {planName || "Plan Selected"} selected
           </Typography>
         </div>
       </div>
-      <ThemeToggle />
+      <div className="flex items-center gap-2">
+        <Logout iconOnly />
+        <ThemeToggle />
+      </div>
     </div>
 
     <div className="flex flex-col space-y-10">
@@ -146,6 +150,7 @@ const sidebarContent = (
 const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: session } = useSession();
 
   const { data } = useStorageStatus();
 
@@ -172,12 +177,12 @@ const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
         )}
       >
         <div className="relative h-full">
-          {sidebarContent(pathname, data, setMobileOpen)}
+          {sidebarContent(pathname, data, setMobileOpen, session?.user?.planName)}
         </div>
       </aside>
 
       <aside className="hidden lg:block">
-        {sidebarContent(pathname, data, setMobileOpen)}
+        {sidebarContent(pathname, data, setMobileOpen, session?.user?.planName)}
       </aside>
 
       <main className="p-2 pt-5 lg:p-10 w-full">{children}</main>

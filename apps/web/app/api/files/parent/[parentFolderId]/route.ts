@@ -41,7 +41,5 @@ export async function GET(
     ),
   });
 
-  console.log("API RESPONSE", files);
-
   return NextResponse.json({ ok: true, data: files });
 }

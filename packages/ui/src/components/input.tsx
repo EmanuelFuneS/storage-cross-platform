@@ -31,7 +31,7 @@ export default function Input<T extends FieldValues>({
         {label}
       </Typography>
       <input
-        className="p-2.5 rounded-xl bg-slate-500"
+        className="p-2.5 rounded-xl bg-elevated dark:bg-card-nested"
         type="text"
         {...register(name, {
           required: true,

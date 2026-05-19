@@ -14,8 +14,6 @@ const Page = () => {
 
   const { data } = useGetPlanIdByName({ name: planName });
 
-  console.log(data, planName);
-
   return (
     <div className="h-screen flex justify-center items-center space-x-5">
       <Card

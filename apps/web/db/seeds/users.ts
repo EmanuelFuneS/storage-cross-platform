@@ -4,8 +4,6 @@ import { plansTable, usersStorageTable, usersTable } from "../schema";
 import bcrypt from "bcryptjs";
 
 async function seed() {
-  console.log("Sedding admin user...");
-
   const plan = await db.query.plansTable.findFirst({
     where: eq(plansTable.name, "Company"),
   });
@@ -32,7 +30,6 @@ async function seed() {
     });
   });
 
-  console.log("User admin with userStorage seeded successfully");
   process.exit(0);
 }
 
