@@ -1,6 +1,6 @@
 "use client";
 import useGetFileById from "@/lib/hooks/useGetFileById";
-import { Button, Typography } from "@workspace/ui/components";
+import { Button, Card, Typography } from "@workspace/ui/components";
 import React, { useEffect, useState } from "react";
 import { downloadFile } from "@/lib/utils/FileUtils";
 import FileHelper from "@/lib/utils/FileHelper";
@@ -75,8 +75,11 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
     );
 
   return (
-    <div className="min-w-60 my-5 space-y-4 capitalize">
-      <div className="w-full  flex items-center justify-between">
+    <div className="min-w-100 my-5 space-y-4 capitalize">
+      <Card
+        scale
+        className="w-full p-3 flex flex-row items-center justify-between"
+      >
         <Button
           scale={true}
           variant="danger"
@@ -87,31 +90,16 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
             Delete
           </Typography>
         </Button>
-
-        <Star
-          onClick={handleStarred}
-          size={35}
-          className={`${data.is_starred ? "text-yellow-300 hover:text-foreground" : " hover:text-yellow-300"} cursor-pointer`}
-        />
-      </div>
-      <Typography as="h1" type="title">
-        {data.name}
-      </Typography>
-      <div className=" max-h-125">
-        {distUrl && <FilePreview type={data?.type?.name} file={data} />}
-      </div>
-      <div className="py-4 space-y-4">
-        <Typography as="p" type="body">
-          Type: {data.type?.name}
-        </Typography>
-        <Typography as="p" type="body">
-          Size: {FileHelper.formatSize(Number(data.size))}
-        </Typography>
-      </div>
-      <div className="flex justify-between ">
+        <div className="mx-auto">
+          <Star
+            onClick={handleStarred}
+            size={35}
+            className={`${data.is_starred ? "text-yellow-300 hover:text-foreground" : " hover:text-yellow-300"} cursor-pointer`}
+          />
+        </div>
         <Button
           scale={true}
-          className="w-full"
+          className="m-0"
           onClick={async () => {
             const response = await downloadFile(data.s3_key);
             if (typeof response === "string" && response) {
@@ -124,6 +112,10 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
             Download
           </Typography>
         </Button>
+      </Card>
+
+      <div className=" max-h-125">
+        {distUrl && <FilePreview type={data?.type?.name} file={data} />}
       </div>
     </div>
   );
@@ -134,8 +126,8 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
     case "audio":
       const urlAudio = `${distUrl}${file.s3_key}`;
       return (
-        <div className="">
-          <audio controls style={{ width: "100%" }}>
+        <div className="min-w-60 bg-black/60 rounded-xl py-10 px-2">
+          <audio controlsList="nodownload" controls style={{ width: "100%" }}>
             <source src={urlAudio} type={`audio/${file.extension}`} />
           </audio>
         </div>
@@ -144,13 +136,17 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
     case "video":
       const urlVideo = `${distUrl}${file.s3_key}`;
       return (
-        <div className="w-full h-full flex justify-center items-center lg:max-w-125">
+        <div className="w-full h-full bg-black/60 rounded-xl py-10 flex justify-center items-center lg:max-w-125 relative">
           <video
+            controlsList="nodownload"
             controls
             style={{ width: "100%", maxHeight: "100%", height: "auto" }}
           >
             <source src={urlVideo} type={`video/${file.extension}`} />
           </video>
+          <div className="absolute top-10 left-10 z-50 pointer-events-none  text-elevated text-2xl lg:text-xl">
+            {file.name} . . . {FileHelper.formatSize(Number(file.size))}
+          </div>
         </div>
       );
 
@@ -160,19 +156,24 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
     case "image":
       return (
         distUrl && (
-          <Image
-            src={distUrl + file.s3_key}
-            alt={`${file.name} Image`}
-            width={100}
-            height={100}
-            className="object-contain w-full h-full"
-          />
+          <div className="relative bg-black/60 rounded-xl py-10 px-3">
+            <Image
+              src={distUrl + file.s3_key}
+              alt={`${file.name} Image`}
+              width={100}
+              height={100}
+              className="object-fill w-full h-full rounded-xl"
+            />
+            <div className="absolute top-12 left-2 z-50 pointer-events-none  text-elevated bg-black/50 px-2 rounded-2xl text-2xl lg:text-xl">
+              {file.name}. . . {FileHelper.formatSize(Number(file.size))}
+            </div>
+          </div>
         )
       );
 
     default:
       return (
-        <div className="w-full h-full flex justify-center items-end">
+        <div className="w-full h-full bg-black/60 rounded-xl p-4 flex justify-center items-end">
           <FileIcon size={180} />
         </div>
       );
@@ -225,7 +226,7 @@ export const DocumentFile = ({
     }
   };
 
-  return <div className="file-preview-container">{renderContent()}</div>;
+  return <div className="file-preview-container min-w-80 min-h-60 bg-black/60 rounded-xl py-10 px-3">{renderContent()}</div>;
 };
 
 const PdfPreview = ({ url }: { url: string }) => {

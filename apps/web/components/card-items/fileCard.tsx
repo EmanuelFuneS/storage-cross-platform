@@ -8,7 +8,6 @@ import {
   Trash2,
 } from "@workspace/ui/lib";
 import { File } from "@/lib/types/schema.db";
-import Image from "next/image";
 import useRestoreFile from "@/lib/hooks/useRestoreFile";
 import useHardDeleteFile from "@/lib/hooks/useHardDeleteFile";
 
@@ -52,12 +51,9 @@ const FilesCard = ({ data, option }: FileCardProps) => {
   };
 
   return (
-    <Card className="w-70 h-70 flex flex-col items-center justify-start space-y-4 p-2">
-      <div className="p-3 flex w-full items-center justify-between">
-        <Typography as="p" type="body" className="capitalize">
-          {data.name.slice(0, 18)}...
-        </Typography>
-        <div className={`${option && "flex justify-between w-18"}`}>
+    <div className="relative h-auto flex flex-col items-center justify-start">
+      <div className="p-1 flex w-full items-center justify-between">
+        <div className={`absolute top-5 left-3 z-50 ${option && "flex justify-between w-18"}`}>
           <Star
             size={20}
             className={`${data.is_starred ? "text-yellow-300" : ""}`}
@@ -70,10 +66,10 @@ const FilesCard = ({ data, option }: FileCardProps) => {
           )}
         </div>
       </div>
-      <div className="max-h-60 w-full overflow-auto p-4">
+      <div className="h-auto w-full">
         {distUrl && <FilePreview type={data?.type?.name} file={data} />}
       </div>
-    </Card>
+    </div>
   );
 };
 
