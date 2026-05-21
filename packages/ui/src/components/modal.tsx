@@ -14,19 +14,19 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center bg-black/10 backdrop-blur-xs z-50"
+      className="fixed inset-0 flex justify-center items-center bg-black/50 backdrop-blur-xs z-50"
       //onClick={onClose}
     >
-      <Card scale={false} className="relative p-8 m-4 ">
-        <Button
-          scale={true}
-          className="absolute top-2.5 right-2.5"
-          onClick={onClose}
-        >
-          <X size={20}/>
-        </Button>
+      <Button
+        scale={true}
+        className="absolute top-10 right-10"
+        onClick={onClose}
+      >
+        <X size={20} />
+      </Button>
+      <div className="relative p-8 m-4 ">
         {children}
-      </Card>
+      </div>
     </div>
   );
 };
