@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { filesTable, usersStorageTable } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 
 //hard Delete
@@ -9,7 +10,7 @@ import { NextResponse } from "next/server";
 export async function DELETE(req: Request) {
   try {
     const { fileId } = await req.json();
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
 
     if (!session)
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

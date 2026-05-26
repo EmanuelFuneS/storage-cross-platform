@@ -1,18 +1,17 @@
 "use client";
 import { fileSchema, ICreateFileForm } from "@/lib/schema/file.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input, Button } from "@workspace/ui/components";
+import { Button } from "@workspace/ui/components";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { FileMinus, FileType } from "@workspace/ui/lib";
 import useCreateFile from "@/lib/hooks/useCreateFile";
 import { IResponseApi } from "@/lib/types/common";
 import { useTypeStore } from "@/lib/stores";
 import { MIME_TO_CATEGORY } from "@/lib/types/map";
+import { useSearchParams } from "next/navigation";
 
 interface FileFormProps {
-  parentId: string;
   onClose: () => void;
 }
 
@@ -24,7 +23,9 @@ interface Response {
   deleted?: boolean;
 }
 
-const FileForm = ({ parentId, onClose }: FileFormProps) => {
+const FileForm = ({ onClose }: FileFormProps) => {
+  const searchParams = useSearchParams();
+  const parentId = searchParams.get("parent") ?? "";
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { types } = useTypeStore();
   const [typeName, setTypeName] = useState<string | null>(null);
@@ -147,7 +148,6 @@ const FileForm = ({ parentId, onClose }: FileFormProps) => {
         </ul>
       )}
 
-      <p>{parentId}</p>
       <Button type="submit" className="w-full">
         Add File
       </Button>

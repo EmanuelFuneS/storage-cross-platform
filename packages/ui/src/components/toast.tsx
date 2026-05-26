@@ -90,7 +90,7 @@ function ToastItem({ toast }: { toast: Toast }) {
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-foreground">{toast.title}</p>
         {toast.description && (
-          <p className="text-xs text-secondary mt-1 break-words">
+          <p className="text-xs text-secondary mt-1 wrap-break-word">
             {toast.description}
           </p>
         )}
@@ -118,7 +118,7 @@ const ToastContainer = ({ className }: { className?: string }) => {
     <div
       aria-live="polite"
       className={cn(
-        "fixed top-4 right-4 z-[100] flex flex-col gap-2 w-80 max-w-[calc(100vw-2rem)]",
+        "fixed top-4 right-4 z-100 flex flex-col gap-2 w-80 max-w-[calc(100vw-2rem)]",
         className,
       )}
     >

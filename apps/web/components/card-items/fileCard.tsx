@@ -28,6 +28,7 @@ const distUrl = `https://${process.env.NEXT_PUBLIC_CLOUDFRONT_DOMAIN}/`;
 
 const FilesCard = ({ data, option }: FileCardProps) => {
   const isVideo = data?.type?.name === "video";
+  const isAudio = data?.type?.name === "audio";
   const { mutateAsync: restoreFile } = useRestoreFile(data.id!);
   const { mutate: hardDelete, isPending } = useHardDeleteFile();
 
@@ -66,8 +67,16 @@ const FilesCard = ({ data, option }: FileCardProps) => {
           />
           {option && (
             <>
-              <ArchiveRestore size={20} onClick={handleRestore} />
-              <Trash2 size={20} onClick={handleDelete} />
+              <ArchiveRestore
+                size={20}
+                onClick={handleRestore}
+                className="cursor-pointer"
+              />
+              <Trash2
+                size={20}
+                onClick={handleDelete}
+                className="cursor-pointer"
+              />
             </>
           )}
         </div>
@@ -77,7 +86,7 @@ const FilesCard = ({ data, option }: FileCardProps) => {
           <FilePreview type={data?.type?.name} file={data} compact={true} />
         )}
 
-        {data.type.name !== "audio" ? (
+        {isAudio ? (
           <div className="absolute bottom-0 left-0 z-50 pointer-events-none text-elevated bg-transparent  text-xs lg:text-xl flex items-center justify-center w-full">
             <Typography as="span" type="body">
               {data.name.slice(0, 15)} . . .{" "}
