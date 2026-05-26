@@ -26,6 +26,7 @@ export interface FileCardProps {
 const distUrl = `https://${process.env.NEXT_PUBLIC_CLOUDFRONT_DOMAIN}/`;
 
 const FilesCard = ({ data, option }: FileCardProps) => {
+  const isVideo = data?.type?.name === "video";
   const { mutateAsync: restoreFile } = useRestoreFile(data.id!);
   const { mutate: hardDelete, isPending } = useHardDeleteFile();
 
@@ -51,7 +52,7 @@ const FilesCard = ({ data, option }: FileCardProps) => {
   };
 
   return (
-    <div className="relative h-auto flex flex-col items-center justify-start">
+    <div className={`relative h-80 rounded-xl overflow-hidden flex flex-col items-center justify-start ${isVideo ? "w-[31rem]" : "w-60"}`}>
       <div className="p-1 flex w-full items-center justify-between">
         <div className={`absolute top-5 left-3 z-50 ${option && "flex justify-between w-18"}`}>
           <Star
@@ -67,7 +68,7 @@ const FilesCard = ({ data, option }: FileCardProps) => {
         </div>
       </div>
       <div className="h-auto w-full">
-        {distUrl && <FilePreview type={data?.type?.name} file={data} />}
+        {distUrl && <FilePreview type={data?.type?.name} file={data} compact={true} />}
       </div>
     </div>
   );
