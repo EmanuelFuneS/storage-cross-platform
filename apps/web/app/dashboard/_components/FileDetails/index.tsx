@@ -114,8 +114,15 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
         </Button>
       </Card>
 
-      <div className="max-h-125">
+      <div className="relative max-h-125">
         {distUrl && <FilePreview type={data?.type?.name} file={data} />}
+
+        <div className="absolute left-0 z-50 pointer-events-none text-elevated bg-black  text-xs lg:text-xl flex items-center justify-center w-full">
+          <Typography as="span" type="body">
+            {data.name.slice(0, -4)} . . .{" "}
+            {FileHelper.formatSize(Number(data.size))}
+          </Typography>
+        </div>
       </div>
     </div>
   );
@@ -134,17 +141,25 @@ export const FilePreview = ({
     case "audio":
       const urlAudio = `${distUrl}${file.s3_key}`;
       return (
-        <div className="min-w-60 flex items-center justify-center bg-black/30 rounded-xl py-10 px-2">
+        <div className={`relative min-w-60 ${compact ? "rounded-xl": "rounded-t-xl"} bg-linear-to-b from-black/30  to-black/45 py-10 px-2`}>
           <audio controlsList="nodownload" controls style={{ width: "100%" }}>
             <source src={urlAudio} type={`audio/${file.extension}`} />
           </audio>
+          {compact && (
+            <div className="absolute bottom-2 left-0 z-50 pointer-events-none text-elevated bg-black/0  text-xs lg:text-xl flex items-center justify-center w-full">
+              <Typography as="span" type="body">
+                {file.name.slice(0, 15)} . . .{" "}
+                {FileHelper.formatSize(Number(file.size))}
+              </Typography>
+            </div>
+          )}
         </div>
       );
 
     case "video":
       const urlVideo = `${distUrl}${file.s3_key}`;
       return (
-        <div className="w-full h-80 bg-black/30 rounded-xl py-10 flex items-center justify-center lg:max-w-125 relative">
+        <div className="w-full h-80 bg-black rounded-t-xl flex items-center justify-center lg:max-w-125 relative">
           <video
             controlsList="nodownload"
             controls
@@ -152,9 +167,6 @@ export const FilePreview = ({
           >
             <source src={urlVideo} type={`video/${file.extension}`} />
           </video>
-          <div className="absolute top-10 left-10 z-50 pointer-events-none  text-elevated text-2xl lg:text-xl">
-            {file.name} . . . {FileHelper.formatSize(Number(file.size))}
-          </div>
         </div>
       );
 
@@ -167,7 +179,7 @@ export const FilePreview = ({
       return (
         distUrl && (
           <div
-            className={`relative flex flex-col items-center rounded-xl justify-center bg-black/30 ${compact ? "min-h-70 py-10 px-3" : "p-0"}`}
+            className={`relative flex flex-col items-center rounded-t-xl justify-center bg-linear-to-b from-black/30 to-black/60 ${compact ? "min-h-70 py-10 px-3" : "p-0"}`}
           >
             <div className="relative">
               <Image
@@ -175,14 +187,8 @@ export const FilePreview = ({
                 alt={`${file.name} Image`}
                 width={100}
                 height={100}
-                className={`object-contain  ${compact ? "w-60 h-60" : "w-full min-h-100"}`}
+                className={`object-contain  ${compact ? "w-60 h-60" : "w-full min-h-100 px-4"}`}
               />
-              <div className="absolute left-0 z-50 pointer-events-none text-elevated bg-black/50  text-xs lg:text-xl flex items-center justify-center w-full">
-                <Typography as="span" type="body">
-                  {file.name.slice(0, compact ? 7 : -4)} {" "}. . .{" "}
-                  {FileHelper.formatSize(Number(file.size))}
-                </Typography>
-              </div>
             </div>
           </div>
         )
@@ -190,7 +196,7 @@ export const FilePreview = ({
 
     default:
       return (
-        <div className="min-h-80 bg-black/30 rounded-xl p-4 flex items-center justify-center">
+        <div className="min-h-80 bg-linear-to-b from-black/30 via-black/30 to-black/60 rounded-t-xl p-4 flex items-center justify-center">
           <FileIcon size={190} />
         </div>
       );
@@ -234,7 +240,7 @@ export const DocumentFile = ({
         if (compact) {
           return (
             <div className="w-full flex justify-center">
-              <div className="w-full flex items-start min-h-60 max-h-60 max-w-60 shadow-lg rounded-xl overflow-hidden">
+              <div className="w-full flex items-start justify-center min-h-60 max-h-60 max-w-60 rounded-xs overflow-hidden">
                 <Document file={pdfUrl}>
                   <Page
                     pageNumber={1}
@@ -273,7 +279,7 @@ export const DocumentFile = ({
   };
 
   return (
-    <div className="file-preview-container z-50 bg-black/30 rounded-xl py-10 px-3">
+    <div className="file-preview-container z-50 bg-linear-to-b from-black/30 via-black/30 to-black/60 rounded-xl py-10 px-3">
       {renderContent()}
     </div>
   );
