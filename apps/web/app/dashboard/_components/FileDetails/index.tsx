@@ -77,7 +77,7 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
   return (
     <div className="min-w-100 my-5 space-y-4 capitalize">
       <Card
-        scale
+        scale={false}
         className="w-full p-3 flex flex-row items-center justify-between"
       >
         <Button
@@ -114,19 +114,27 @@ const FileDetail = ({ id, onClose }: FileDetailProps) => {
         </Button>
       </Card>
 
-      <div className=" max-h-125">
+      <div className="max-h-125">
         {distUrl && <FilePreview type={data?.type?.name} file={data} />}
       </div>
     </div>
   );
 };
 
-export const FilePreview = ({ type, file }: { type: string; file: File }) => {
+export const FilePreview = ({
+  type,
+  file,
+  compact,
+}: {
+  type: string;
+  file: File;
+  compact?: boolean;
+}) => {
   switch (type) {
     case "audio":
       const urlAudio = `${distUrl}${file.s3_key}`;
       return (
-        <div className="min-w-60 bg-black/60 rounded-xl py-10 px-2">
+        <div className="min-w-60 flex items-center justify-center bg-black/30 rounded-xl py-10 px-2">
           <audio controlsList="nodownload" controls style={{ width: "100%" }}>
             <source src={urlAudio} type={`audio/${file.extension}`} />
           </audio>
@@ -136,7 +144,7 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
     case "video":
       const urlVideo = `${distUrl}${file.s3_key}`;
       return (
-        <div className="w-full h-full bg-black/60 rounded-xl py-10 flex justify-center items-center lg:max-w-125 relative">
+        <div className="w-full h-80 bg-black/30 rounded-xl py-10 flex items-center justify-center lg:max-w-125 relative">
           <video
             controlsList="nodownload"
             controls
@@ -151,21 +159,30 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
       );
 
     case "document":
-      return <DocumentFile subType={file.extension} file={file} />;
+      return (
+        <DocumentFile subType={file.extension} file={file} compact={compact} />
+      );
 
     case "image":
       return (
         distUrl && (
-          <div className="relative bg-black/60 rounded-xl py-10 px-3">
-            <Image
-              src={distUrl + file.s3_key}
-              alt={`${file.name} Image`}
-              width={100}
-              height={100}
-              className="object-fill w-full h-full rounded-xl"
-            />
-            <div className="absolute top-12 left-2 z-50 pointer-events-none  text-elevated bg-black/50 px-2 rounded-2xl text-2xl lg:text-xl">
-              {file.name}. . . {FileHelper.formatSize(Number(file.size))}
+          <div
+            className={`relative flex flex-col items-center rounded-xl justify-center bg-black/30 ${compact ? "min-h-70 py-10 px-3" : "p-0"}`}
+          >
+            <div className="relative">
+              <Image
+                src={distUrl + file.s3_key}
+                alt={`${file.name} Image`}
+                width={100}
+                height={100}
+                className={`object-contain  ${compact ? "w-60 h-60" : "w-full min-h-100"}`}
+              />
+              <div className="absolute left-0 z-50 pointer-events-none text-elevated bg-black/50  text-xs lg:text-xl flex items-center justify-center w-full">
+                <Typography as="span" type="body">
+                  {file.name.slice(0, compact ? 7 : -4)} {" "}. . .{" "}
+                  {FileHelper.formatSize(Number(file.size))}
+                </Typography>
+              </div>
             </div>
           </div>
         )
@@ -173,8 +190,8 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
 
     default:
       return (
-        <div className="w-full h-full bg-black/60 rounded-xl p-4 flex justify-center items-end">
-          <FileIcon size={180} />
+        <div className="min-h-80 bg-black/30 rounded-xl p-4 flex items-center justify-center">
+          <FileIcon size={190} />
         </div>
       );
   }
@@ -183,9 +200,11 @@ export const FilePreview = ({ type, file }: { type: string; file: File }) => {
 export const DocumentFile = ({
   subType,
   file,
+  compact,
 }: {
   subType: string;
   file: File;
+  compact?: boolean;
 }) => {
   const [content, setContent] = useState<{ type: string; data: File } | null>(
     null,
@@ -212,7 +231,34 @@ export const DocumentFile = ({
     switch (content.type) {
       case "pdf":
         const pdfUrl = `${distUrl}${content.data.s3_key}`;
-        return <PdfPreview url={pdfUrl} />;
+        if (compact) {
+          return (
+            <div className="w-full flex justify-center">
+              <div className="w-full flex items-start min-h-60 max-h-60 max-w-60 shadow-lg rounded-xl overflow-hidden">
+                <Document file={pdfUrl}>
+                  <Page
+                    pageNumber={1}
+                    width={240}
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
+                  />
+                </Document>
+              </div>
+            </div>
+          );
+        }
+        return (
+          <div className="w-full flex justify-center">
+            <Document file={pdfUrl}>
+              <Page
+                pageNumber={1}
+                width={800}
+                renderTextLayer={false}
+                renderAnnotationLayer={false}
+              />
+            </Document>
+          </div>
+        );
       default:
         const txtUrl = `${distUrl}${content.data.s3_key}`;
         return (
@@ -226,37 +272,9 @@ export const DocumentFile = ({
     }
   };
 
-  return <div className="file-preview-container min-w-80 min-h-60 bg-black/60 rounded-xl py-10 px-3">{renderContent()}</div>;
-};
-
-const PdfPreview = ({ url }: { url: string }) => {
-  const [pageWidth, setPageWidth] = useState(200);
-
-  useEffect(() => {
-    const updateWidth = () => {
-      const container = document.getElementById("pdf-container");
-      if (container) {
-        setPageWidth(Math.min(container.clientWidth - 32, 800));
-      }
-    };
-
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
-
   return (
-    <div id="pdf-container" className="w-full flex justify-center">
-      <div className="w-full flex items-center max-h-65 md:max-h-125 shadow-lg rounded-md overflow-auto">
-        <Document file={url}>
-          <Page
-            pageNumber={1}
-            width={pageWidth}
-            renderTextLayer={false}
-            renderAnnotationLayer={false}
-          />
-        </Document>
-      </div>
+    <div className="file-preview-container z-50 bg-black/30 rounded-xl py-10 px-3">
+      {renderContent()}
     </div>
   );
 };
