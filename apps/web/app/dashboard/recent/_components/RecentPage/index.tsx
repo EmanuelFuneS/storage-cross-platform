@@ -21,7 +21,7 @@ const RecentPage = ({ data }: RecentPageProps) => {
           </Typography>
         </div>
       </section>
-      <section className="w-full h-190 flex flex-wrap overflow-y-scroll gap-4 py-5 px-2">
+      <section className="w-full h-full overflow-hidden md:h-full flex flex-col justify-center  md:flex md:flex-row md:justify-start md:flex-wrap md:overflow-y-scroll gap-1 py-2 px-2">
         {data.map((el: RecentFile, idx: number) => (
           <FilesCard key={idx} data={el.File} />
         ))}
