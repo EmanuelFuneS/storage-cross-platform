@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import useGetFolders from "@/lib/hooks/useGetFolders";
+import useGetContents from "@/lib/hooks/useGetContents";
 import { File, Folder } from "@/lib/types/schema.db";
 import { Typography, Button, Modal, Card } from "@workspace/ui/components";
 import Link from "next/link";
@@ -8,7 +8,6 @@ import React, { useCallback, useState } from "react";
 import FileForm from "../FileForm";
 import FolderForm from "../FolderForm";
 import FilterFiles from "../FilterFiles";
-import useGetFilesByFolder from "@/lib/hooks/useGetFilesByFolder";
 import FileCard from "../FileCard";
 import FolderCard from "../FolderCard";
 import { useTypeStore } from "@/lib/stores";
@@ -40,13 +39,14 @@ const FilesPage = () => {
   const [isModalFileDetailOpen, setIsModalFileDetailOpen] = useState(false);
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
 
-  const { data } = useGetFolders();
-  const { data: files } = useGetFilesByFolder();
+  const { data } = useGetContents();
   const { types } = useTypeStore();
 
+  const files = data?.files ?? [];
+
   const filteredFiles = React.useMemo(() => {
-    if (!files?.data) return [];
-    return files.data.filter((file: File) => {
+    if (!files.length) return [];
+    return files.filter((file: File) => {
       if (appliedFilter.type) {
         const typeName = types.find((t) => t.id === file.typeId)?.name;
         if (typeName !== appliedFilter.type) return false;
@@ -109,7 +109,6 @@ const FilesPage = () => {
             onClose={() => setIsModalFileOpen(false)}
           >
             <FileForm
-              parentId={parentId || ""}
               onClose={() => setIsModalFileOpen(false)}
             />
           </Modal>
@@ -166,7 +165,7 @@ const FilesPage = () => {
               ))}
           </div>
           <div className="p-5 grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-2">
-            {data?.map((folder: Folder, idx: number) => (
+            {data?.folders?.map((folder: Folder, idx: number) => (
               <FolderCard
                 key={idx}
                 folder={folder}
@@ -182,7 +181,7 @@ const FilesPage = () => {
               />
             ))}
 
-            {files ? (
+            {data ? (
               filteredFiles.length > 0 ? (
                 filteredFiles.map((file: File, idx: number) => (
                   <FileCard key={idx} data={file} modal={openDetails} />
