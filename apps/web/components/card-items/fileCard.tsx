@@ -54,7 +54,7 @@ const FilesCard = ({ data, option }: FileCardProps) => {
 
   return (
     <div
-      className={`relative h-80 rounded-xl overflow-hidden flex flex-col items-center justify-start ${isVideo ? "w-[31rem]" : "w-60"}`}
+      className={`relative h-80 rounded-xl overflow-hidden flex flex-col items-center justify-start ${isVideo ? "w-124" : "w-60"}`}
     >
       <div className="p-1 flex w-full items-center justify-between">
         <div
