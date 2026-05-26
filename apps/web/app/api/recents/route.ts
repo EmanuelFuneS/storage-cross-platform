@@ -5,7 +5,6 @@ import { db } from "@/db";
 import { recentsFileTable, usersStorageTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-
 //get all recents files
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -19,7 +18,7 @@ export async function GET(req: Request) {
 
   if (!userStorage) return NextResponse.json({ ok: false });
 
-  const recentsFiles = await db.query.recentsFileTable.findMany({
+  let recentsFiles = await db.query.recentsFileTable.findMany({
     where: eq(recentsFileTable.storageId, userStorage?.id),
     orderBy: (fields, { desc }) => [desc(fields.opened_at)],
     with: {
@@ -34,6 +33,8 @@ export async function GET(req: Request) {
       },
     },
   });
+
+  recentsFiles = recentsFiles.filter((rf) => !rf.File?.is_deleted);
 
   if (recentsFiles.length > 6) {
     const toDelete = recentsFiles.slice(6);

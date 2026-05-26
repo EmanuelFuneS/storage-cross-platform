@@ -12,6 +12,7 @@ import Typography from "@workspace/ui/components/typography";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AtSign } from "@workspace/ui/lib";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -111,9 +112,13 @@ const LoginForm = () => {
           OR CONTINUE WITH
         </Typography>
       </div>
-      <div className="w-full flex justify-between">
-        <Button>Gmail</Button>
-        <Button>Github</Button>
+      <div className="w-full ">
+        <Button scale={true} className="w-full flex justify-center space-x-1">
+          <AtSign size={18} />
+          <Typography as="p" type="body">
+            Email
+          </Typography>
+        </Button>
       </div>
     </Card>
   );
