@@ -141,7 +141,7 @@ export const FilePreview = ({
     case "audio":
       const urlAudio = `${distUrl}${file.s3_key}`;
       return (
-        <div className={`relative min-w-60 ${compact ? "rounded-xl": "rounded-t-xl"} bg-linear-to-b from-black/30  to-black/45 py-10 px-2`}>
+        <div className={`relative min-w-60 ${compact ? "rounded-xl": "rounded-t-xl"} bg-linear-to-b from-black/30  to-black/45 dark:bg-linear-to-b dark:from-black/10  dark:to-black/20 py-10 px-2`}>
           <audio controlsList="nodownload" controls style={{ width: "100%" }}>
             <source src={urlAudio} type={`audio/${file.extension}`} />
           </audio>
@@ -179,7 +179,7 @@ export const FilePreview = ({
       return (
         distUrl && (
           <div
-            className={`relative flex flex-col items-center rounded-t-xl justify-center bg-linear-to-b from-black/30 to-black/60 ${compact ? "min-h-70 py-10 px-3" : "p-0"}`}
+            className={`relative flex flex-col items-center rounded-t-xl justify-center bg-linear-to-b from-black/30 to-black/60 dark:bg-linear-to-b dark:from-black/10 dark:to-black/20 ${compact ? "min-h-70 py-10 px-3" : "p-0"}`}
           >
             <div className="relative">
               <Image
@@ -196,7 +196,7 @@ export const FilePreview = ({
 
     default:
       return (
-        <div className="min-h-80 bg-linear-to-b from-black/30 via-black/30 to-black/60 rounded-t-xl p-4 flex items-center justify-center">
+        <div className="min-h-80 bg-linear-to-b from-black/30 via-black/30 dark:bg-linear-to-b dark:from-black/10 dark:via-black/10 dark:to-black/20 rounded-t-xl p-4 flex items-center justify-center">
           <FileIcon size={190} />
         </div>
       );
@@ -212,31 +212,34 @@ export const DocumentFile = ({
   file: File;
   compact?: boolean;
 }) => {
-  const [content, setContent] = useState<{ type: string; data: File } | null>(
-    null,
-  );
+  const [content, setContent] = useState<{
+    type: string;
+    data: File | string;
+  } | null>(null);
 
   useEffect(() => {
-    handleFileType(subType, file);
-  }, []);
-
-  const handleFileType = async (subType: string, file: any) => {
-    switch (subType) {
-      case "pdf":
-        setContent({ type: "pdf", data: file });
-        break;
-
-      default:
-        const text = await file.text();
-        setContent({ type: "text", data: text });
+    if (subType === "pdf") {
+      setContent({ type: "pdf", data: file });
+    } else {
+      const loadText = async () => {
+        try {
+          const url = `${distUrl}${file.s3_key}`;
+          const response = await fetch(url);
+          const text = await response.text();
+          setContent({ type: "text", data: text });
+        } catch (error) {
+          console.error("Error loading text file:", error);
+        }
+      };
+      loadText();
     }
-  };
+  }, [subType, file]);
 
   const renderContent = () => {
     if (!content) return <>...Loading</>;
     switch (content.type) {
-      case "pdf":
-        const pdfUrl = `${distUrl}${content.data.s3_key}`;
+      case "pdf": {
+        const pdfUrl = `${distUrl}${(content.data as File).s3_key}`;
         if (compact) {
           return (
             <div className="w-full flex justify-center">
@@ -265,13 +268,13 @@ export const DocumentFile = ({
             </Document>
           </div>
         );
+      }
       default:
-        const txtUrl = `${distUrl}${content.data.s3_key}`;
         return (
           <Editor
             height={"600px"}
             defaultLanguage="plaintext"
-            value={txtUrl}
+            value={content.data as string}
             options={{ readOnly: true }}
           />
         );
@@ -279,7 +282,7 @@ export const DocumentFile = ({
   };
 
   return (
-    <div className="file-preview-container z-50 bg-linear-to-b from-black/30 via-black/30 to-black/60 rounded-xl py-10 px-3">
+    <div className="file-preview-container z-50 bg-linear-to-b from-black/30 via-black/30 to-black/60 dark:bg-linear-to-b dark:from-black/10 dark:via-black/10 dark:to-black/20 rounded-xl py-10 px-3 max-w-screen overflow-x-auto">
       {renderContent()}
     </div>
   );

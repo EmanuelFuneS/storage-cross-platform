@@ -19,15 +19,15 @@ const Features = () => {
         </Typography>
       </div>
       <div className="w-full flex flex-col md:flex-row items-center justify-center gap-4">
-        <FeatureCard title="End-to-End Encryption">
+        <FeatureCard title="End-to-End Encryption" icon="shield">
           Your data is encripted before it even leaves your device, ensuring
           total privacy and security.
         </FeatureCard>
-        <FeatureCard title="Instant Sync">
+        <FeatureCard title="Instant Sync" icon="reload">
           Changes made on one device are instantly update across all your
           connected plataforms seamlessly.
         </FeatureCard>
-        <FeatureCard title="Smart Collaboration">
+        <FeatureCard title="Smart Collaboration" icon="users">
           Share folder and work together in realtime with granular permission
           controls and activity logs.
         </FeatureCard>

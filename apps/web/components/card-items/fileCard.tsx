@@ -86,7 +86,7 @@ const FilesCard = ({ data, option }: FileCardProps) => {
           <FilePreview type={data?.type?.name} file={data} compact={true} />
         )}
 
-        {isAudio ? (
+        {!isAudio ? (
           <div className="absolute bottom-0 left-0 z-50 pointer-events-none text-elevated bg-transparent  text-xs lg:text-xl flex items-center justify-center w-full">
             <Typography as="span" type="body">
               {data.name.slice(0, 15)} . . .{" "}
