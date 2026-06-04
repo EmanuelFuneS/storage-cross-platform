@@ -282,7 +282,7 @@ export const DocumentFile = ({
   };
 
   return (
-    <div className="file-preview-container z-50 bg-linear-to-b from-black/30 via-black/30 to-black/60 dark:bg-linear-to-b dark:from-black/10 dark:via-black/10 dark:to-black/20 rounded-xl py-10 px-3">
+    <div className="file-preview-container z-50 bg-linear-to-b from-black/30 via-black/30 to-black/60 dark:bg-linear-to-b dark:from-black/10 dark:via-black/10 dark:to-black/20 rounded-xl py-10 px-3 max-w-screen overflow-x-auto">
       {renderContent()}
     </div>
   );
